@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "268555026513",
+    "project_id": "socialdemo-42af2",
+    "storage_bucket": "socialdemo-42af2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268555026513:android:1ff77be78c35ee68e1b870",
+        "android_client_info": {
+          "package_name": "ru.social.demo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfDS_GeQJTgen2GEVKhG07I-A6tKXAKjU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

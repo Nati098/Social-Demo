@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">SocialDemo</string>
+
+    <string name="nav_main">Main</string>
+    <string name="nav_library">Lib</string>
+    <string name="nav_wiki">Wiki</string>
+    <string name="nav_events">Events</string>
+    <string name="nav_profile">Profile</string>
+
+    <string name="wiki_media">Media</string>
+    <string name="wiki_media_desc">All media content in one place</string>
+    <string name="wiki_folders">Folders</string>
+    <string name="wiki_folders_desc">Let’s start sorting things out!</string>
+
+    <string name="wiki_compendium">Compendium</string>
+    <string name="wiki_event">Events</string>
+    <string name="wiki_world">Worlds</string>
+    <string name="wiki_character">Characters</string>
+    <string name="wiki_tales">Tales</string>
+
+    <string name="post_type_default">Post</string>
+    <string name="post_type_event">Event</string>
+    <string name="post_type_character">Character</string>
+</resources>
