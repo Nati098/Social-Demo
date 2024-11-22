@@ -9,7 +9,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import ru.social.demo.R
+import ru.social.demo.data.model.TEMP_POST1
 import ru.social.demo.data.model.User
+import ru.social.demo.services.FirestoreInteractor
+import ru.social.demo.services.FsPath
 import ru.social.demo.ui.components.Avatar
 import ru.social.demo.ui.components.appbars.utils.CollapsibleScaffold
 import ru.social.demo.ui.components.appbars.utils.CollapsibleTopAppBarScope
@@ -48,7 +51,8 @@ fun CAppBar(
                     CIconButtonOutlined(
                         iconId = R.drawable.ic_search,
                         bgColor = CWhite,
-                        onClick = { }
+                        onClick = { FirestoreInteractor.getInstance().setData(FsPath.POSTS, TEMP_POST1) }
+                        // TODO remove
                     )
                     CIconButtonOutlined(
                         iconId = R.drawable.ic_bell,

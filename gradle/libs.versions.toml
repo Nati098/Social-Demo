@@ -30,9 +30,9 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-material3-adaptive-navigation-suite-android = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite-android", version.ref = "material3AdaptiveNavigationSuiteAndroid" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilNetworkOkhttp" }
-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
-firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseBom" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 #junit = { group = "junit", name = "junit", version.ref = "junit" }
 #androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

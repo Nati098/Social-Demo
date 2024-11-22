@@ -1,14 +1,15 @@
 package ru.social.demo.data.model
 
 import androidx.annotation.StringRes
+import com.google.firebase.Timestamp
 import kotlinx.serialization.SerialName
 import ru.social.demo.R
 import java.io.File
 
 data class Post (
-    @SerialName("_id")
-    val id: Int,
-    val createDate: String? = null,
+    @SerialName("id")
+    val id: String = "",
+    val createDate: Timestamp? = null,
     val user: User? = null,
 //    val type: Post.TYPE? = null,
     val title: String? = null,

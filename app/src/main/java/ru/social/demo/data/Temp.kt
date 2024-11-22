@@ -1,5 +1,8 @@
 package ru.social.demo.data.model
 
+import com.google.firebase.Timestamp
+import kotlin.random.Random
+
 val TEMP_USER = User(
     id = 0,
     name = "Maria Robbins",
@@ -7,9 +10,17 @@ val TEMP_USER = User(
 )
 
 val TEMP_POST = Post(
-        id = 0,
-        createDate = "Yesterday at 10:32",
+        id = "cHJQHFCR2wbgVkU5G3hf",
+        createDate = Timestamp(seconds=1732273380, nanoseconds=24000000),
         TEMP_USER,
         title = "Lorem Ipsum",
         text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi aliquam, turpis suscipit sodales sodales, mauris ligula imperdiet tortor, et laoreet enim arcu at est. Nam eros augue, ultricies non blandit sit amet, sagittis vel ante.",
     )
+
+val TEMP_POST1 = Post(
+    id = "JcDvtaGTr6njYUei4vod",
+    createDate = Timestamp.now(),
+    TEMP_USER,
+    title = "Random God",
+    text = "tetete",
+)

@@ -31,7 +31,7 @@ import ru.social.demo.ui.theme.FgOnColor
 fun Fab(
     items: List<FabItem>,
     fabState: MutableState<FabState> = rememberFabState(),
-    stateChanged: (fabState: FabState) -> Unit = {}
+    onStateChanged: (fabState: FabState) -> Unit = {}
 ) {
     val rotation by animateFloatAsState(
         if (fabState.value == FabState.Expanded) 45f else 0f
@@ -59,7 +59,7 @@ fun Fab(
             modifier = Modifier.rotate(rotation),
             onClick = {
                 fabState.value = fabState.value.toggle()
-                stateChanged(fabState.value)
+                onStateChanged(fabState.value)
             },
             shape = CircleShape,
             containerColor = BgFab,

@@ -18,8 +18,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.google.firebase.Timestamp
 import ru.social.demo.R
 import ru.social.demo.data.model.User
+import ru.social.demo.utils.parseDate
 import ru.social.demo.ui.components.Avatar
 import ru.social.demo.ui.components.ExpandableText
 import ru.social.demo.ui.components.buttons.CIconButton
@@ -28,7 +30,7 @@ import ru.social.demo.ui.theme.FgSecondary
 import ru.social.demo.ui.theme.FgTertiary
 
 @Composable
-fun UserBlock(user: User?, createDate: String?) {
+fun UserBlock(user: User?, createDate: Timestamp?) {
     Row(
 //        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -47,10 +49,9 @@ fun UserBlock(user: User?, createDate: String?) {
                 style = MaterialTheme.typography.bodyMedium,
                 color = FgPrimary
             )
-            // TODO: date parcing
             createDate?.let {
                 Text(
-                    it,
+                    it.parseDate(),
                     style = MaterialTheme.typography.bodySmall,
                     color = FgTertiary
                 )

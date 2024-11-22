@@ -36,7 +36,7 @@ fun ExpandableText(
     val interactionSource = remember { MutableInteractionSource() }
     var isExpanded by remember { mutableStateOf(false) }
     var clickable by remember { mutableStateOf(false) }
-    var lastVisibleIndex by remember { mutableStateOf(0) }
+    var lastVisibleIndex by remember { mutableStateOf(0) }  // TODO: when I added post with 1-line string - exception!
 
     Box(
         modifier = Modifier
