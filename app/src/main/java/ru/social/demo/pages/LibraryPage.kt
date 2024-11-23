@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ru.social.demo.R
@@ -31,10 +32,7 @@ import ru.social.demo.ui.components.buttons.CIconButtonOutlined
 import ru.social.demo.ui.components.buttons.COutlinedButton
 import ru.social.demo.ui.components.buttons.CTonalButton
 import ru.social.demo.ui.components.containers.OutlinedContainer
-import ru.social.demo.ui.theme.BgActionPrimary
-import ru.social.demo.ui.theme.BgAvatarBlue
-import ru.social.demo.ui.theme.BgFab
-import ru.social.demo.ui.theme.FgOnColor
+import ru.social.demo.ui.theme.SDTheme
 
 @Composable
 fun LibraryPage() {
@@ -46,7 +44,9 @@ fun LibraryPage() {
     )
 
     val scrollState = rememberScrollState()
-    Scaffold {
+    Scaffold (
+        containerColor = SDTheme.colors.bgPrimary
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -85,17 +85,26 @@ fun LibraryPage() {
                         text = "Buttons",
                         style = MaterialTheme.typography.titleMedium
                     )
-                    CButton(label = "Click me!", onClick = { })
-                    CTonalButton(label = "Click me!", onClick = { })
-                    COutlinedButton(label = "Click me!", onClick = { })
-                    Row {
+                    Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        CButton(label = "Click me!", onClick = { })
+                        CButton(label = "Click me!", enabled = false, onClick = { })
+                    }
+                    Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        CTonalButton(label = "Click me!", onClick = { })
+                        CTonalButton(label = "Click me!", enabled = false, onClick = { })
+                    }
+                    Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        COutlinedButton(label = "Click me!", onClick = { })
+                        COutlinedButton(label = "Click me!", enabled = false, onClick = { })
+                    }
+                    Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         CIconButton(iconId = R.drawable.ic_bell, onClick = { })
-                        CIconButton(iconId = R.drawable.ic_bell, enabled = false,  contentColor = BgActionPrimary, onClick = { })
+                        CIconButton(iconId = R.drawable.ic_bell, enabled = false,  contentColor = SDTheme.colors.bgActionPrimary, onClick = { })
                         CIconButtonOutlined(iconId = R.drawable.ic_bell, onClick = { })
-                        CIconButtonOutlined(iconId = R.drawable.ic_bell, borderColor = BgActionPrimary, onClick = { })
-                        CIconButtonOutlined(iconId = R.drawable.ic_bell, contentColor = BgActionPrimary, onClick = { })
+                        CIconButtonOutlined(iconId = R.drawable.ic_bell, borderColor = SDTheme.colors.bgActionPrimary, onClick = { })
+                        CIconButtonOutlined(iconId = R.drawable.ic_bell, contentColor = SDTheme.colors.bgActionPrimary, onClick = { })
                         CIconButtonOutlined(iconId = R.drawable.ic_bell, onClick = { })
-                        CIconButtonOutlined(iconId = R.drawable.ic_bell, bgColor = BgFab, contentColor = FgOnColor, onClick = { })
+                        CIconButtonOutlined(iconId = R.drawable.ic_bell, bgColor = SDTheme.colors.bgFab, contentColor = SDTheme.colors.fgOnColor, onClick = { })
                     }
 
                 }
@@ -121,7 +130,7 @@ fun LibraryPage() {
                                     .size(40.dp)
                                     .paint(
                                         painter = painterResource(R.drawable.bg_image_3),
-                                        colorFilter = ColorFilter.tint(BgAvatarBlue),
+                                        colorFilter = ColorFilter.tint(colorResource(R.color.avatar_blue)),
                                         alpha = 0.3f
                                     )
                             )

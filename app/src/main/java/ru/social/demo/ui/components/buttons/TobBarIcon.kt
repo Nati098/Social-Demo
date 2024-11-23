@@ -2,7 +2,7 @@ package ru.social.demo.ui.components.buttons
 
 import androidx.compose.runtime.Composable
 import ru.social.demo.R
-import ru.social.demo.ui.theme.FgSecondary
+import ru.social.demo.ui.theme.SDTheme
 
 @Composable
 fun BackButton(
@@ -10,7 +10,7 @@ fun BackButton(
 ) {
     CIconButton(
         iconId = R.drawable.ic_arrow_left,
-        contentColor = FgSecondary,
+        contentColor = SDTheme.colors.fgSecondary,
         onClick = onClick
     )
 }
@@ -21,7 +21,7 @@ fun ShareButton(
 ) {
     CIconButton(
         iconId = R.drawable.ic_share,
-        contentColor = FgSecondary,
+        contentColor = SDTheme.colors.fgSecondary,
         onClick = onClick
     )
 }
@@ -32,7 +32,7 @@ fun FilterButton(
 ) {
     CIconButton(
         iconId = R.drawable.ic_filter,
-        contentColor = FgSecondary,
+        contentColor = SDTheme.colors.fgSecondary,
         onClick = onClick
     )
 }
@@ -43,7 +43,7 @@ fun UserEditButton(
 ) {
     CIconButton(
         iconId = R.drawable.ic_user_edit,
-        contentColor = FgSecondary,
+        contentColor = SDTheme.colors.fgSecondary,
         onClick = onClick
     )
 }

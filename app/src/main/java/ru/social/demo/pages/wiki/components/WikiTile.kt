@@ -1,5 +1,6 @@
 package ru.social.demo.pages.wiki.components
 
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,32 +27,27 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import ru.social.demo.R
 import ru.social.demo.ui.components.containers.OutlinedContainer
-import ru.social.demo.ui.theme.BgWikiCharacter
-import ru.social.demo.ui.theme.BgWikiCompendium
-import ru.social.demo.ui.theme.BgWikiEvent
-import ru.social.demo.ui.theme.BgWikiTale
-import ru.social.demo.ui.theme.BgWikiWorld
-import ru.social.demo.ui.theme.FgPrimary
-import ru.social.demo.ui.theme.FgSecondary
+import ru.social.demo.ui.theme.SDTheme
 
 
 enum class WikiTypeRes(
-    val color: Color,
+    @ColorRes val color: Int,
     @DrawableRes val bgImage: Int,
     @StringRes val titleId: Int,
     @StringRes val descriptionId: Int?
 ) {
-    COMPENDIUM(BgWikiCompendium, R.drawable.bg_image_1, R.string.wiki_compendium, null),
-    EVENT(BgWikiEvent, R.drawable.bg_image_7, R.string.wiki_event, null),
-    WORLD(BgWikiWorld, R.drawable.bg_image_6, R.string.wiki_world, null),
-    CHARACTER(BgWikiCharacter, R.drawable.bg_image_1, R.string.wiki_character, R.string.wiki_character),
-    TALE(BgWikiTale, R.drawable.bg_image_3, R.string.wiki_tales, null)
+    COMPENDIUM(R.color.wiki_compendium, R.drawable.bg_image_1, R.string.wiki_compendium, null),
+    EVENT(R.color.wiki_event, R.drawable.bg_image_7, R.string.wiki_event, null),
+    WORLD(R.color.wiki_world, R.drawable.bg_image_6, R.string.wiki_world, null),
+    CHARACTER(R.color.wiki_character, R.drawable.bg_image_1, R.string.wiki_character, R.string.wiki_character),
+    TALE(R.color.wiki_tale, R.drawable.bg_image_3, R.string.wiki_tales, null)
 }
 
 @Composable
@@ -92,7 +87,7 @@ fun WikiTile(type: WikiTypeRes) {
                     .size(width = bgSize, height = bgSize)
                     .align(Alignment.CenterStart)
                     .offset(x = -0.4*bgSize),
-                colorFilter = ColorFilter.tint(type.color)
+                colorFilter = ColorFilter.tint(colorResource(type.color))
             )
         }
 
@@ -114,20 +109,20 @@ fun WikiTile(type: WikiTypeRes) {
                 ) {
                     Text(
                         stringResource(type.titleId),
-                        style = MaterialTheme.typography.headlineSmall,
-                        color = FgPrimary
+                        style = SDTheme.tyrography.headingS,
+                        color = SDTheme.colors.fgPrimary
                     )
                     Image(
                         painterResource(R.drawable.ic_arrow_right),
                         null,
-                        colorFilter = ColorFilter.tint(color = FgSecondary)
+                        colorFilter = ColorFilter.tint(color = SDTheme.colors.fgSecondary)
                     )
                 }
                 type.descriptionId?.let {
                     Text(
                         stringResource(it),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = FgSecondary
+                        style = SDTheme.tyrography.bodyMediumM,
+                        color = SDTheme.colors.fgSecondary
                     )
                 }
             }

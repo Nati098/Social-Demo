@@ -4,17 +4,13 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,10 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.social.demo.ui.components.containers.OutlinedContainer
-import ru.social.demo.ui.theme.BgHighlight
-import ru.social.demo.ui.theme.FgActionEmphasis
-import ru.social.demo.ui.theme.FgPrimary
-import ru.social.demo.ui.theme.FgSecondary
+import ru.social.demo.ui.theme.SDTheme
 
 @Composable
 fun WikiAppBarTile(
@@ -46,14 +39,14 @@ fun WikiAppBarTile(
             Spacer(modifier = Modifier.size(12.dp))
             Text(
                 stringResource(titleId),
-                style = MaterialTheme.typography.headlineSmall,
-                color = FgPrimary
+                style = SDTheme.tyrography.headingS,
+                color = SDTheme.colors.fgPrimary
             )
             Spacer(modifier = Modifier.size(4.dp))
             Text(
                 stringResource(descriptionId),
-                style = MaterialTheme.typography.bodyMedium,
-                color = FgSecondary
+                style = SDTheme.tyrography.bodyMediumM,
+                color = SDTheme.colors.fgSecondary
             )
         }
     }
@@ -67,14 +60,14 @@ private fun Icon(
         modifier = Modifier
             .size(68.dp)
             .aspectRatio(1f)
-            .background(color = BgHighlight, shape = CircleShape),
+            .background(color = SDTheme.colors.bgHighlight, shape = CircleShape),
         contentAlignment = Alignment.Center
     ) {
         Image(
             painterResource(imageId),
             null,
             modifier = Modifier.padding(10.dp),
-            colorFilter = ColorFilter.tint(color = FgActionEmphasis)
+            colorFilter = ColorFilter.tint(color = SDTheme.colors.fgActionEmphasis)
         )
     }
 }

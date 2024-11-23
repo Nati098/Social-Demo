@@ -24,8 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
-import ru.social.demo.ui.theme.BgFab
-import ru.social.demo.ui.theme.FgOnColor
+import ru.social.demo.ui.theme.SDTheme
 
 @Composable
 fun Fab(
@@ -62,8 +61,8 @@ fun Fab(
                 onStateChanged(fabState.value)
             },
             shape = CircleShape,
-            containerColor = BgFab,
-            contentColor = FgOnColor
+            containerColor = SDTheme.colors.bgFab,
+            contentColor = SDTheme.colors.fgOnColor
         ) {
             Icon(Icons.Filled.Add, "New")
         }

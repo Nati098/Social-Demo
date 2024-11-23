@@ -1,5 +1,6 @@
 package ru.social.demo.ui.components
 
+import androidx.annotation.ColorRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,18 +29,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import ru.social.demo.R
-import ru.social.demo.ui.theme.BgAvatarBlue
-import ru.social.demo.ui.theme.BgAvatarGreen
-import ru.social.demo.ui.theme.BgAvatarPurple
 import ru.social.demo.ui.theme.CWhite
-import ru.social.demo.ui.theme.FilterColor
-import ru.social.demo.ui.theme.StatusGreen
-import ru.social.demo.ui.theme.StatusGrey
 
-enum class AvatarRes(val color: Color, val placeholder: Int) {
-    BLUE(BgAvatarBlue, R.drawable.bg_image_6),
-    PURPLE(BgAvatarPurple, R.drawable.bg_image_3),
-    GREEN(BgAvatarGreen, R.drawable.bg_image_9)
+enum class AvatarRes(@ColorRes val color: Int, val placeholder: Int) {
+    BLUE(R.color.avatar_blue, R.drawable.bg_image_6),
+    PURPLE(R.color.avatar_purple, R.drawable.bg_image_3),
+    GREEN(R.color.avatar_green, R.drawable.bg_image_9)
 }
 
 @Composable
@@ -48,6 +44,9 @@ fun Avatar(
     char: Char,
     inactive: Boolean? = null
 ) {
+    val statusInactive = colorResource(R.color.status_inactive)
+    val statusActive = colorResource(R.color.status_active)
+
     Box(
         modifier = Modifier
             .size(size)
@@ -79,7 +78,7 @@ fun Avatar(
                             blendMode = BlendMode.Clear
                         )
                         drawCircle(
-                            if (inactive) StatusGrey else StatusGreen,
+                            if (inactive) statusInactive else statusActive,
                             radius = 0.8f * dotSize,
                             center = Offset(
                                 x = this.size.width - dotSize,
@@ -114,9 +113,9 @@ private fun Placeholder(size: Dp, char: Char) {
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .background(color = resources.color)
+                .background(color = colorResource(resources.color))
                 .offset(x = -size/8, y = size/6),
-            colorFilter = ColorFilter.tint(FilterColor)
+            colorFilter = ColorFilter.tint(colorResource(R.color.grey_filter))
         )
         Text(
             "$char",

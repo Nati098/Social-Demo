@@ -18,8 +18,8 @@ import ru.social.demo.ui.components.appbars.utils.CollapsibleScaffold
 import ru.social.demo.ui.components.appbars.utils.CollapsibleTopAppBarScope
 import ru.social.demo.ui.components.appbars.utils.TopBar
 import ru.social.demo.ui.components.buttons.CIconButtonOutlined
-import ru.social.demo.ui.theme.BgSecondary
 import ru.social.demo.ui.theme.CWhite
+import ru.social.demo.ui.theme.SDTheme
 
 /**
  * Collapsing AppBar with fading content and LazyColumn in body
@@ -44,7 +44,7 @@ fun CAppBar(
             TopBar(
                 modifier = Modifier
                     .clip(shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
-                    .background(BgSecondary),
+                    .background(SDTheme.colors.bgSecondary),
                 title = title,
                 onBack = null,
                 actions = {

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,9 +24,7 @@ import ru.social.demo.utils.parseDate
 import ru.social.demo.ui.components.Avatar
 import ru.social.demo.ui.components.ExpandableText
 import ru.social.demo.ui.components.buttons.CIconButton
-import ru.social.demo.ui.theme.FgPrimary
-import ru.social.demo.ui.theme.FgSecondary
-import ru.social.demo.ui.theme.FgTertiary
+import ru.social.demo.ui.theme.SDTheme
 
 @Composable
 fun UserBlock(user: User?, createDate: Timestamp?) {
@@ -46,14 +43,14 @@ fun UserBlock(user: User?, createDate: Timestamp?) {
         Column {
             Text(
                 user?.name ?: "",
-                style = MaterialTheme.typography.bodyMedium,
-                color = FgPrimary
+                style = SDTheme.tyrography.bodyMediumM,
+                color = SDTheme.colors.fgPrimary
             )
             createDate?.let {
                 Text(
                     it.parseDate(),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = FgTertiary
+                    style = SDTheme.tyrography.bodyBoldS,
+                    color = SDTheme.colors.fgTertiary
                 )
             }
 
@@ -62,7 +59,7 @@ fun UserBlock(user: User?, createDate: Timestamp?) {
         Spacer(modifier = Modifier.weight(1f))
         CIconButton(
             iconId = R.drawable.ic_more,
-            contentColor = FgSecondary,
+            contentColor = SDTheme.colors.fgSecondary,
             size = 30.dp,
         ) {
             // TODO: post menu!
@@ -78,17 +75,17 @@ fun TextBlock(title: String?, body: String?) {
         title?.let {
             Text(
                 it,
-                style = MaterialTheme.typography.headlineSmall,
-                color = FgPrimary,
+                style = SDTheme.tyrography.headingS,
+                color = SDTheme.colors.fgPrimary,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
         }
         body?.let {
             ExpandableText(
                 text = it,
-                style = MaterialTheme.typography.labelLarge,
-                color = FgSecondary,
-                showMoreStyle = SpanStyle(color = FgPrimary, fontWeight = FontWeight.W500)
+                style = SDTheme.tyrography.bookL,
+                color = SDTheme.colors.fgSecondary,
+                showMoreStyle = SpanStyle(color = SDTheme.colors.fgPrimary, fontWeight = FontWeight.W500)
             )
         }
 
@@ -107,7 +104,7 @@ fun ReactionBlock(reactionsCount: Int?, commentsCount: Int?) {
                 Image(
                     painterResource(R.drawable.ic_heart),
                     null,
-                    colorFilter = ColorFilter.tint(color = FgTertiary)
+                    colorFilter = ColorFilter.tint(color = SDTheme.colors.fgTertiary)
                 )
             },
             reactionsCount ?: 0
@@ -118,7 +115,7 @@ fun ReactionBlock(reactionsCount: Int?, commentsCount: Int?) {
                 Image(
                     painterResource(R.drawable.ic_chat),
                     null,
-                    colorFilter = ColorFilter.tint(color = FgTertiary)
+                    colorFilter = ColorFilter.tint(color = SDTheme.colors.fgTertiary)
                 )
             },
             commentsCount ?: 0
@@ -136,8 +133,8 @@ private fun Counter(
         Spacer(Modifier.width(4.dp))
         Text(
             "$counter",
-            style = MaterialTheme.typography.bodySmall,
-            color = FgTertiary
+            style = SDTheme.tyrography.bodyMediumS,
+            color = SDTheme.colors.fgTertiary
         )
 
     }
