@@ -38,7 +38,7 @@ import ru.social.demo.ui.theme.SDTheme
 fun LibraryPage() {
 
     val user = User(
-        id = 0,
+        id = "0",
         imageUrl = "https://media.istockphoto.com/id/1326417862/photo/young-woman-laughing-while-relaxing-at-home.jpg?s=612x612&w=0&k=20&c=cd8e6RBGOe4b8a8vTcKW0Jo9JONv1bKSMTKcxaCra8c=",
         name = "Maria"
     )

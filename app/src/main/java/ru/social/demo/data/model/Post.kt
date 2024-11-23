@@ -7,8 +7,7 @@ import ru.social.demo.R
 import java.io.File
 
 data class Post (
-    @SerialName("id")
-    val id: String = "",
+    override var id: String = "",
     val createDate: Timestamp? = null,
     val user: User? = null,
 //    val type: Post.TYPE? = null,
@@ -21,7 +20,7 @@ data class Post (
 //    val checklist: Checklist? = null,
     var reactionCounts: Int? = null,
     val commentsCount: Int? = null,
-) {
+) : BaseModel() {
     fun containMedia() = !media.isNullOrEmpty()
 
 //    fun containAudios() = !audios.isNullOrEmpty()

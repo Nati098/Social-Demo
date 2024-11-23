@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ru.social.demo.data.model.BaseModel
 
 object FsPath {
     const val POSTS = "posts"
@@ -24,20 +25,40 @@ class FirestoreInteractor(
 
     }
 
-    fun <T : Any> setData(path: String, data: T) {
+    fun <T : BaseModel> setData(
+        path: String,
+        data: T,
+        onSuccess: () -> Unit = {},
+        onError: () -> Unit = {},
+    ) {
+        val key = db.collection(path).document().id
         db.collection(path)
-            .document().set(data)
-            .addOnSuccessListener { result -> Log.d("TEST", "updateData $result ") }
-            .addOnFailureListener { e -> Log.e("TEST","Firebase.firestore error: $e") }
+            .document(key).set(data.apply { this.id = key })
+            .addOnSuccessListener { result ->
+                Log.d("TEST", "set result: $result ")
+                onSuccess()
+            }
+            .addOnFailureListener { e ->
+                Log.e("TEST","Firebase.firestore set error: $e")
+                onError()
+            }
     }
 
-//    inline fun <reified T> readData(path: String) {
-//        db.collection(FsPath.POSTS).get()
-//            .addOnSuccessListener { result ->
-//                postsList.value = result.toObjects(Post::class.java).sortedByDescending { it.createDate }
-//            }
-//            .addOnFailureListener { e -> Log.e("TEST","Firebase.firestore error: $e") }
-//    }
+    inline fun <reified T> readData(
+        path: String,
+        crossinline onSuccess: (List<T>?) -> Unit,
+        crossinline onError: (Exception) -> Unit = {},
+    ) {
+        db.collection(path).get()
+            .addOnSuccessListener { result ->
+                Log.d("TEST", "read success ")
+                onSuccess(result.toObjects(T::class.java))
+            }
+            .addOnFailureListener { e ->
+                Log.e("TEST","Firebase.firestore read error: $e")
+                onError(e)
+            }
+    }
 
 //    inline fun <reified T> readDataContinuously(path: String) {
 //        val listener = {snapShot, e ->
@@ -46,5 +67,7 @@ class FirestoreInteractor(
 //        db.collection(FsPath.POSTS).addSnapshotListener(listener)
 //        // !!! remove listener if it's unuseful: listener.remove()
 //    }
+
+
 
 }

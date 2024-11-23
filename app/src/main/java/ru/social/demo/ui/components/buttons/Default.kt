@@ -36,7 +36,7 @@ fun CButton(
     Button(
         enabled = enabled,
         onClick = onClick,
-        shape = RoundedCornerShape(100f),
+        shape = SDTheme.shapes.buttonCorners,
         colors = ButtonColors(
             containerColor = SDTheme.colors.bgActionPrimary,
             contentColor = SDTheme.colors.fgOnColor,
@@ -61,7 +61,7 @@ fun CTonalButton(
     FilledTonalButton (
         enabled = enabled,
         onClick = onClick,
-        shape = RoundedCornerShape(100f),
+        shape = SDTheme.shapes.buttonCorners,
         colors = ButtonColors(
             containerColor = SDTheme.colors.bgHighlight,
             contentColor = SDTheme.colors.fgActionEmphasis,
@@ -86,7 +86,7 @@ fun COutlinedButton(
     OutlinedButton (
         enabled = enabled,
         onClick = onClick,
-        shape = RoundedCornerShape(100f),
+        shape = SDTheme.shapes.buttonCorners,
         border = BorderStroke(width = 1.5.dp, color = SDTheme.colors.borderColor),
         colors =  ButtonDefaults.outlinedButtonColors(
             contentColor = SDTheme.colors.fgActionEmphasis,

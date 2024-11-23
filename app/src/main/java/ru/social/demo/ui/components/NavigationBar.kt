@@ -3,7 +3,6 @@ package ru.social.demo.ui.components
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItemColors
-import androidx.compose.material3.NavigationDrawerItemColors
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.NavigationRailItemColors
 import androidx.compose.material3.Text
@@ -85,11 +84,11 @@ fun NavigationBar() {
                     icon = { Icon(
                         painter = painterResource(if (it == currentPath) it.idActive else it.idInactive),
                         contentDescription = null,
-                        tint = if (it == currentPath) Color.Unspecified else SDTheme.colors.fgPrimary.copy(alpha = 0.25f)
+                        tint = SDTheme.colors.fgPrimary.copy(alpha = if (it == currentPath) 1f else 0.25f)
                     ) },
                     label = { Text(
                         stringResource(it.label),
-                        color = if (it == currentPath) Color.Unspecified else SDTheme.colors.fgPrimary.copy(alpha = 0.25f),
+                        color = SDTheme.colors.fgPrimary.copy(alpha = if (it == currentPath) 1f else 0.25f),
                         style = SDTheme.tyrography.bodyMediumS
                     ) },
                     selected = it == currentPath,

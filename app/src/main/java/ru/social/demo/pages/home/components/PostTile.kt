@@ -9,7 +9,8 @@ import ru.social.demo.ui.components.containers.OutlinedContainer
 
 @Composable
 fun PostTile(
-    post: Post
+    post: Post,
+    onEdit: () -> Unit = {}
 ) {
     OutlinedContainer(
         parentWidth = true,
@@ -19,7 +20,7 @@ fun PostTile(
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            UserBlock(post.user, post.createDate)
+            UserBlock(post.user, post.createDate, onEdit)
 
             TextBlock(post.title, post.text)
 

@@ -2,6 +2,7 @@ package ru.social.demo.ui.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,12 +24,14 @@ import ru.social.demo.ui.theme.SDTheme
 fun ArrowTile(
     title: String,
     description: String? = null,
-    @DrawableRes iconId: Int? = null
+    @DrawableRes iconId: Int? = null,
+    onClick: () -> Unit = {}
 ) {
     val image = if (iconId == null) {
         ArrowTileInternal(
             title = title,
-            description = description
+            description = description,
+            onClick = onClick
         )
     } else {
         ArrowTileInternal(
@@ -40,7 +43,8 @@ fun ArrowTile(
                     null,
                     Modifier.size(24.dp)
                 )
-            }
+            },
+            onClick = onClick
         )
     }
 }
@@ -49,12 +53,14 @@ fun ArrowTile(
 fun ArrowTile(
     title: String,
     description: String? = null,
-    icon: (@Composable () -> Unit)? = null
+    icon: (@Composable () -> Unit)? = null,
+    onClick: () -> Unit = {}
 ) {
     ArrowTileInternal(
         title = title,
         description = description,
-        icon = icon
+        icon = icon,
+        onClick = onClick
     )
 }
 
@@ -62,13 +68,15 @@ fun ArrowTile(
 private fun ArrowTileInternal(
     title: String,
     description: String? = null,
-    icon: (@Composable () -> Unit)? = null
+    icon: (@Composable () -> Unit)? = null,
+    onClick: () -> Unit
 ) {
 
     Row(
         modifier = Modifier
             .padding(vertical = 16.dp, horizontal = 16.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {

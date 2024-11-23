@@ -42,7 +42,7 @@ fun FabItemButton(item: FabItem) {
                 text = stringResource(it),
                 style = SDTheme.tyrography.bodyMediumS,
                 modifier = Modifier
-                    .clip(shape = SDTheme.shapes.cornersStyle)
+                    .clip(shape = SDTheme.shapes.corners)
                     .background(SDTheme.colors.bgSecondary)
                     .padding(4.dp)
             )

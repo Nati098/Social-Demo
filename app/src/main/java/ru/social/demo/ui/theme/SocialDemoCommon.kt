@@ -43,7 +43,8 @@ data class SDTypography(
 )
 
 data class SDShape(
-    val cornersStyle: Shape
+    val corners: Shape,
+    val buttonCorners: Shape
 )
 
 object SDTheme {

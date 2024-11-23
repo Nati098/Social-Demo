@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,19 +16,19 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import ru.social.demo.R
 import ru.social.demo.data.model.Post
 import ru.social.demo.data.model.TEMP_USER
 import ru.social.demo.pages.EmptyPage
 import ru.social.demo.pages.home.components.PostTile
+import ru.social.demo.services.FirestoreInteractor
 import ru.social.demo.services.FsPath
 import ru.social.demo.ui.components.buttons.fab.Fab
 import ru.social.demo.ui.components.appbars.CAppBar
@@ -40,15 +41,18 @@ fun HomePage() {
     val postsList = remember { mutableStateOf(emptyList<Post>()) }
     val postsListState = rememberLazyListState()
 
-//   TODO: FirestoreInteractor.getInstance().readData<Post>(FsPath.POSTS)
-    Firebase.firestore.collection(FsPath.POSTS).addSnapshotListener { snapShot, e ->
-        postsList.value = snapShot?.toObjects(Post::class.java)?.sortedByDescending { it.createDate } ?: emptyList()
+    LaunchedEffect(Unit) {
+        FirestoreInteractor.getInstance().readData<Post>(
+            path = FsPath.POSTS,
+            onSuccess = { result ->
+                postsList.value = result?.sortedByDescending { it.createDate } ?: emptyList()
+            }
+        )
     }
 
     Scaffold(
         floatingActionButton = { FabMain() }
     ) { _ ->
-
         CAppBar(
             title = "Main",
             user = TEMP_USER,
@@ -56,6 +60,7 @@ fun HomePage() {
             topBarContent = { Carousel() },
             columnContent = { insets ->
                 LazyColumn(
+                    modifier = Modifier.fillMaxHeight(),
                     state = postsListState,
                     contentPadding = insets
                 ) {
