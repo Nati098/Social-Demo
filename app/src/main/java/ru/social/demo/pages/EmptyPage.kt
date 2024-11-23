@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,8 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ru.social.demo.R
-import ru.social.demo.ui.theme.FgPrimary
-import ru.social.demo.ui.theme.FgSecondary
+import ru.social.demo.ui.theme.SDTheme
 
 @Composable
 fun EmptyPage(
@@ -31,14 +29,14 @@ fun EmptyPage(
         Spacer(modifier = Modifier.height(24.dp))
         Text(
             title,
-            style = MaterialTheme.typography.headlineMedium,
-            color = FgPrimary
+            style = SDTheme.tyrography.headingM,
+            color = SDTheme.colors.fgPrimary
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             description,
-            style = MaterialTheme.typography.labelLarge,
-            color = FgSecondary,
+            style = SDTheme.tyrography.bookL,
+            color = SDTheme.colors.fgSecondary,
             textAlign = TextAlign.Center
         )
     }

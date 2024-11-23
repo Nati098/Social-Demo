@@ -10,7 +10,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import ru.social.demo.ui.components.appbars.utils.CustomScaffold
 import ru.social.demo.ui.components.appbars.utils.TopBar
-import ru.social.demo.ui.theme.BgSecondary
+import ru.social.demo.ui.theme.SDTheme
 
 /**
  * TopBar with back button, title and some functions
@@ -31,7 +31,7 @@ fun CTopBar(
             TopBar(
                 modifier = Modifier
                     .clip(shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
-                    .background(BgSecondary),
+                    .background(SDTheme.colors.bgSecondary),
                 title = title,
                 onBack = { },
                 actions = actions

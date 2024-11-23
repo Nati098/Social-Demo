@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,10 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.social.demo.ui.components.buttons.CIconButtonFilled
-import ru.social.demo.ui.theme.BgActionPrimary
-import ru.social.demo.ui.theme.BgFab
-import ru.social.demo.ui.theme.BgSecondary
-import ru.social.demo.ui.theme.FgOnColor
+import ru.social.demo.ui.theme.SDTheme
 
 class FabItem(
     val id: String,
@@ -44,18 +40,18 @@ fun FabItemButton(item: FabItem) {
         item.label?.let {
             Text(
                 text = stringResource(it),
-                style = MaterialTheme.typography.bodySmall,
+                style = SDTheme.tyrography.bodyMediumS,
                 modifier = Modifier
-                    .clip(shape = RoundedCornerShape(20f))
-                    .background(BgSecondary)
+                    .clip(shape = SDTheme.shapes.cornersStyle)
+                    .background(SDTheme.colors.bgSecondary)
                     .padding(4.dp)
             )
         }
 
         CIconButtonFilled(
             item.iconId,
-            bgColor = BgFab,
-            contentColor = FgOnColor,
+            bgColor = SDTheme.colors.bgFab,
+            contentColor = SDTheme.colors.fgOnColor,
             onClick = { item.onClick() }
         )
     }

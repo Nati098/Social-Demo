@@ -14,8 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import ru.social.demo.ui.theme.BgPrimary
-import ru.social.demo.ui.theme.BorderSecondary
+import ru.social.demo.ui.theme.SDTheme
 
 @Composable
 fun OutlinedContainer(
@@ -43,11 +42,11 @@ fun OutlinedContainer(
         modifier = modifierr
             .border(
                 1.5.dp,
-                BorderSecondary,
-                shape = RoundedCornerShape(20f)
+                SDTheme.colors.borderColor,
+                shape = SDTheme.shapes.cornersStyle
             )
-            .clip(shape = RoundedCornerShape(20f))
-            .background(color = BgPrimary)
+            .clip(shape = SDTheme.shapes.cornersStyle)
+            .background(color = SDTheme.colors.bgPrimary)
             .padding(horizontal = paddingHorizontal, vertical = paddingVertical),
         contentAlignment = Alignment.TopCenter,
         content = content

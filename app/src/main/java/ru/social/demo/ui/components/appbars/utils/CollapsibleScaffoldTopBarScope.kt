@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -26,6 +25,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import ru.social.demo.ui.components.buttons.BackButton
+import ru.social.demo.ui.theme.SDTheme
 import kotlin.math.min
 
 
@@ -115,7 +115,7 @@ private fun TopBarInternal(
 
             Text(
                 text = title,
-                style = MaterialTheme.typography.headlineLarge
+                style = SDTheme.tyrography.headingL
             )
 
             Spacer(modifier = Modifier.weight(1f))

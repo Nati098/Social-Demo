@@ -1,7 +1,6 @@
 package ru.social.demo.pages.home
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +25,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ru.social.demo.R
 import ru.social.demo.data.model.Post
-import ru.social.demo.data.model.TEMP_POST
 import ru.social.demo.data.model.TEMP_USER
 import ru.social.demo.pages.EmptyPage
 import ru.social.demo.pages.home.components.PostTile

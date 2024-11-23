@@ -2,8 +2,13 @@ package ru.social.demo.ui.components
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarItemColors
+import androidx.compose.material3.NavigationDrawerItemColors
+import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.NavigationRailItemColors
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,7 +25,7 @@ import ru.social.demo.pages.home.HomePage
 import ru.social.demo.pages.LibraryPage
 import ru.social.demo.pages.ProfilePage
 import ru.social.demo.pages.wiki.WikiPage
-import ru.social.demo.ui.theme.FgPrimary
+import ru.social.demo.ui.theme.SDTheme
 
 enum class NavPath(val label: Int, val idActive: Int, val idInactive: Int) {
     LIBRARY(R.string.nav_library, R.drawable.wiki_filled, R.drawable.wiki),
@@ -34,32 +39,70 @@ enum class NavPath(val label: Int, val idActive: Int, val idInactive: Int) {
 fun NavigationBar() {
     var currentPath by rememberSaveable { mutableStateOf(NavPath.LIBRARY) }
 
+    val unselectedColor = SDTheme.colors.fgPrimary.copy(alpha = 0.25f)
+    val barItemColors = NavigationBarItemColors(
+        selectedIndicatorColor = Color.Transparent,
+        selectedIconColor = Color.Unspecified,
+        selectedTextColor = Color.Unspecified,
+        unselectedIconColor = unselectedColor,
+        unselectedTextColor = unselectedColor,
+        disabledIconColor = unselectedColor,
+        disabledTextColor = unselectedColor
+    )
+    val railItemColors = NavigationRailItemColors(
+        selectedIndicatorColor = Color.Transparent,
+        selectedIconColor = Color.Unspecified,
+        selectedTextColor = Color.Unspecified,
+        unselectedIconColor = unselectedColor,
+        unselectedTextColor = unselectedColor,
+        disabledIconColor = unselectedColor,
+        disabledTextColor = unselectedColor
+    )
+    val drawerItemColors = NavigationDrawerItemDefaults.colors(
+        selectedContainerColor = Color.Transparent,
+        unselectedContainerColor = Color.Transparent,
+        selectedIconColor = Color.Unspecified,
+        selectedTextColor = Color.Unspecified,
+        selectedBadgeColor = Color.Unspecified,
+        unselectedIconColor = unselectedColor,
+        unselectedTextColor = unselectedColor,
+        unselectedBadgeColor = unselectedColor
+    )
+
     NavigationSuiteScaffold(
         modifier = Modifier.fillMaxSize(),
+        navigationSuiteColors = NavigationSuiteDefaults.colors(
+            navigationBarContainerColor = SDTheme.colors.bgPrimary,
+            navigationBarContentColor = SDTheme.colors.fgPrimary,
+            navigationRailContainerColor = SDTheme.colors.bgPrimary,
+            navigationRailContentColor = SDTheme.colors.fgPrimary,
+            navigationDrawerContainerColor = SDTheme.colors.bgPrimary,
+            navigationDrawerContentColor = SDTheme.colors.fgPrimary
+        ),
         navigationSuiteItems = {
             NavPath.entries.forEach {
                 item(
                     icon = { Icon(
                         painter = painterResource(if (it == currentPath) it.idActive else it.idInactive),
                         contentDescription = null,
-                        tint = if (it == currentPath) Color.Unspecified else FgPrimary.copy(alpha = 0.25f)
+                        tint = if (it == currentPath) Color.Unspecified else SDTheme.colors.fgPrimary.copy(alpha = 0.25f)
                     ) },
                     label = { Text(
                         stringResource(it.label),
-                        color = if (it == currentPath) Color.Unspecified else FgPrimary.copy(alpha = 0.25f),
-                        style = MaterialTheme.typography.bodySmall
+                        color = if (it == currentPath) Color.Unspecified else SDTheme.colors.fgPrimary.copy(alpha = 0.25f),
+                        style = SDTheme.tyrography.bodyMediumS
                     ) },
                     selected = it == currentPath,
+                    colors = NavigationSuiteItemColors(
+                        navigationBarItemColors = barItemColors,
+                        navigationRailItemColors = railItemColors,
+                        navigationDrawerItemColors = drawerItemColors
+                    ),
                     onClick = { currentPath = it }
                 )
             }
         }
     ) {
-//        Scaffold {
-//            Box(modifier = Modifier.padding(it).fillMaxSize()) {
-//
-//            }
-//        }
 
         when(currentPath) {
             NavPath.MAIN -> HomePage()

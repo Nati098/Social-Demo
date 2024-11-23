@@ -1,5 +1,6 @@
 package ru.social.demo.ui.components.buttons
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,9 +11,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,14 +23,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import ru.social.demo.ui.theme.BgActionPrimary
-import ru.social.demo.ui.theme.BgHighlight
-import ru.social.demo.ui.theme.BgTertiary
-import ru.social.demo.ui.theme.BorderSecondary
-import ru.social.demo.ui.theme.FgActionEmphasis
-import ru.social.demo.ui.theme.FgActionPrimary
-import ru.social.demo.ui.theme.FgPrimary
-import ru.social.demo.ui.theme.FgTertiary
+import ru.social.demo.ui.theme.SDTheme
 
 
 @Composable
@@ -42,12 +36,18 @@ fun CButton(
     Button(
         enabled = enabled,
         onClick = onClick,
-        shape = RoundedCornerShape(100f)
+        shape = RoundedCornerShape(100f),
+        colors = ButtonColors(
+            containerColor = SDTheme.colors.bgActionPrimary,
+            contentColor = SDTheme.colors.fgOnColor,
+            disabledContainerColor = SDTheme.colors.bgActionPrimary.copy(alpha = 0.5f),
+            disabledContentColor = SDTheme.colors.fgOnColor
+        )
     ) {
         if (iconId != null)
             Image(painter = painterResource(iconId), null)
         if (label != null)
-            Text("$label", style = MaterialTheme.typography.bodyLarge)
+            Text("$label", style = SDTheme.tyrography.bodyBoldL)
     }
 }
 
@@ -63,16 +63,16 @@ fun CTonalButton(
         onClick = onClick,
         shape = RoundedCornerShape(100f),
         colors = ButtonColors(
-            containerColor = BgHighlight,
-            contentColor = FgActionEmphasis,
-            disabledContainerColor = BgTertiary,
-            disabledContentColor = FgTertiary
+            containerColor = SDTheme.colors.bgHighlight,
+            contentColor = SDTheme.colors.fgActionEmphasis,
+            disabledContainerColor = SDTheme.colors.bgTertiary,
+            disabledContentColor = SDTheme.colors.fgTertiary
         )
     ) {
         if (iconId != null)
             Image(painter = painterResource(iconId), null)
         if (label != null)
-            Text("$label", style = MaterialTheme.typography.bodyLarge)
+            Text("$label", style = SDTheme.tyrography.bodyBoldL)
     }
 }
 
@@ -86,12 +86,17 @@ fun COutlinedButton(
     OutlinedButton (
         enabled = enabled,
         onClick = onClick,
-        shape = RoundedCornerShape(100f)
+        shape = RoundedCornerShape(100f),
+        border = BorderStroke(width = 1.5.dp, color = SDTheme.colors.borderColor),
+        colors =  ButtonDefaults.outlinedButtonColors(
+            contentColor = SDTheme.colors.fgActionEmphasis,
+            disabledContentColor = SDTheme.colors.fgTertiary
+        )
     ) {
         if (iconId != null)
             Image(painter = painterResource(iconId), null)
         if (label != null)
-            Text("$label", style = MaterialTheme.typography.bodyLarge)
+            Text("$label", style = SDTheme.tyrography.bodyBoldL)
     }
 }
 
@@ -101,7 +106,7 @@ fun CIconButton(
     iconId: Int,
     enabled: Boolean = true,
     size: Dp = 40.dp,
-    contentColor: Color = FgPrimary,
+    contentColor: Color = SDTheme.colors.fgPrimary,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
@@ -122,8 +127,8 @@ fun CIconButtonFilled(
     iconId: Int,
     enabled: Boolean = true,
     size: Dp = 40.dp,
-    bgColor: Color = BgActionPrimary,
-    contentColor: Color = FgActionPrimary,
+    bgColor: Color = SDTheme.colors.bgActionPrimary,
+    contentColor: Color = SDTheme.colors.fgActionPrimary,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
@@ -145,8 +150,8 @@ fun CIconButtonOutlined(
     enabled: Boolean = true,
     size: Dp = 40.dp,
     bgColor: Color = Color.Transparent,
-    borderColor: Color = BorderSecondary,
-    contentColor: Color = FgPrimary,
+    borderColor: Color = SDTheme.colors.borderColor,
+    contentColor: Color = SDTheme.colors.fgPrimary,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
