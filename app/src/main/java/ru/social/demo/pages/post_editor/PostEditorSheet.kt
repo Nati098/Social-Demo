@@ -26,18 +26,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import ru.social.demo.R
 import ru.social.demo.data.model.Post
 import ru.social.demo.ui.components.appbars.CTopBar
-import ru.social.demo.ui.components.buttons.CreateButton
+import ru.social.demo.ui.components.buttons.CTextButton
 import ru.social.demo.ui.components.text.CTextField
 import ru.social.demo.ui.theme.SDTheme
 
+enum class PostEditorMode { CREATE, EDIT }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostEditorSheet(
-    modifier: Modifier =  Modifier,
     post: Post,
+    mode: PostEditorMode = PostEditorMode.CREATE,
+    modifier: Modifier =  Modifier,
     onDismissRequest: () -> Unit = {}
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -59,7 +62,11 @@ fun PostEditorSheet(
             bgColor = SDTheme.colors.bgPrimary,
             topInset = false,
             actions = {
-                CreateButton(
+                CTextButton(
+                    label = when(mode) {
+                        PostEditorMode.CREATE -> stringResource(R.string.post_create)
+                        PostEditorMode.EDIT -> stringResource(R.string.post_edit)
+                    },
                     enabled = text.isNotEmpty(),
                     onClick = { }
                 )

@@ -151,11 +151,14 @@ fun LibraryPage() {
                 }
             }
 
-            WikiTile(
-                type = WikiTypeRes.CHARACTER,
+            WikiTile(type = WikiTypeRes.CHARACTER)
+
+            ArrowTile(
+                title = "ModalBottomSheet Test",
+                description = "Click to show",
+                iconId = R.drawable.ic_calendar,
                 onClick = { showPostEditorSheet = true }
             )
-
             if (showPostEditorSheet)
                 PostEditorSheet(
                     post = TEMP_POST1,

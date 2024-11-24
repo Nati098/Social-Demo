@@ -35,6 +35,7 @@ import ru.social.demo.data.model.Post
 import ru.social.demo.data.model.TEMP_USER
 import ru.social.demo.pages.EmptyPage
 import ru.social.demo.pages.home.components.PostTile
+import ru.social.demo.pages.post_editor.PostEditorMode
 import ru.social.demo.pages.post_editor.PostEditorSheet
 import ru.social.demo.services.FirestoreInteractor
 import ru.social.demo.services.FsPath
@@ -98,17 +99,18 @@ fun HomePage() {
                     }
 
                 }
-
-//                if (showPostEditorSheet)
-//                    PostEditorSheet(
-//                        post = postsList.value.filter { it.id == postToEditId }[0],
-//                        onDismissRequest = { showPostEditorSheet = false },
-//                        modifier = Modifier
-//                            .heightIn(max = LocalConfiguration.current.screenHeightDp.dp - 60.dp)
-//                            .fillMaxHeight()
-//                    )
             }
         )
+
+        if (showPostEditorSheet)
+            PostEditorSheet(
+                post = postsList.value.filter { it.id == postToEditId }[0],
+                mode = PostEditorMode.EDIT,
+                onDismissRequest = { showPostEditorSheet = false },
+                modifier = Modifier
+                    .heightIn(max = LocalConfiguration.current.screenHeightDp.dp - 60.dp)
+                    .fillMaxHeight()
+            )
     }
 }
 
@@ -116,16 +118,20 @@ fun HomePage() {
 private fun FabMain() {
     Fab(
         items = listOf(
-            FabItem(
+            object : FabItem(
                 id = "new_post_default",
                 iconId = R.drawable.ic_plus_circle,
                 label = R.string.post_type_default
-            ),
-            FabItem(
+            ) {
+                override fun onClick() { }
+            },
+            object : FabItem(
                 id = "new_post_event",
                 iconId = R.drawable.ic_calendar,
                 label = R.string.post_type_event
-            )
+            ) {
+                override fun onClick() { }
+            }
         )
     )
 }

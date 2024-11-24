@@ -35,21 +35,27 @@ fun WikiPage() {
         floatingActionButton = {
             Fab(
                 items = listOf(
-                    FabItem(
+                    object : FabItem(
                         id = "new_post_default",
                         iconId = R.drawable.ic_plus_circle,
                         label = R.string.post_type_default
-                    ),
-                    FabItem(
+                    ) {
+                        override fun onClick() { }
+                    },
+                    object : FabItem(
                         id = "new_post_event",
                         iconId = R.drawable.ic_calendar,
                         label = R.string.post_type_event
-                    ),
-                    FabItem(
+                    ) {
+                        override fun onClick() { }
+                    },
+                    object : FabItem(
                         id = "new_post_event",
                         iconId = R.drawable.ic_user_edit,
                         label = R.string.post_type_character
-                    )
+                    ) {
+                        override fun onClick() { }
+                    }
                 )
             )
         }

@@ -18,16 +18,12 @@ import androidx.compose.ui.unit.dp
 import ru.social.demo.ui.components.buttons.CIconButtonFilled
 import ru.social.demo.ui.theme.SDTheme
 
-class FabItem(
+abstract class FabItem(
     val id: String,
     @DrawableRes val iconId: Int,
     @StringRes val label: Int?
 ) {
-
-    fun onClick() {
-        // go to page with parameter postType = id
-    }
-
+    abstract fun onClick()
 }
 
 @Composable
