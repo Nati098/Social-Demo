@@ -4,7 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -13,15 +16,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ru.social.demo.R
+import ru.social.demo.data.model.TEMP_POST1
+import ru.social.demo.data.model.TEMP_USER
 import ru.social.demo.data.model.User
+import ru.social.demo.pages.post_editor.PostEditorSheet
 import ru.social.demo.pages.wiki.components.WikiTile
 import ru.social.demo.pages.wiki.components.WikiTypeRes
 import ru.social.demo.ui.components.ArrowTile
@@ -30,6 +41,7 @@ import ru.social.demo.ui.components.buttons.CButton
 import ru.social.demo.ui.components.buttons.CIconButton
 import ru.social.demo.ui.components.buttons.CIconButtonOutlined
 import ru.social.demo.ui.components.buttons.COutlinedButton
+import ru.social.demo.ui.components.buttons.CTextButton
 import ru.social.demo.ui.components.buttons.CTonalButton
 import ru.social.demo.ui.components.containers.OutlinedContainer
 import ru.social.demo.ui.theme.SDTheme
@@ -37,11 +49,7 @@ import ru.social.demo.ui.theme.SDTheme
 @Composable
 fun LibraryPage() {
 
-    val user = User(
-        id = "0",
-        imageUrl = "https://media.istockphoto.com/id/1326417862/photo/young-woman-laughing-while-relaxing-at-home.jpg?s=612x612&w=0&k=20&c=cd8e6RBGOe4b8a8vTcKW0Jo9JONv1bKSMTKcxaCra8c=",
-        name = "Maria"
-    )
+    var showPostEditorSheet by remember { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
     Scaffold (
@@ -67,10 +75,10 @@ fun LibraryPage() {
                         style = MaterialTheme.typography.titleMedium
                     )
                     Row {
-                        Avatar(imgUrl = user.imageUrl, char = user.name!![0], size = 96.dp)
+                        Avatar(imgUrl = TEMP_USER.imageUrl, char = TEMP_USER.name!![0], size = 96.dp)
                         Avatar(char = 'A', size = 64.dp)
                         Avatar(char = 'B', size = 44.dp, inactive = false)
-                        Avatar(imgUrl = user.imageUrl, char = user.name!![0], size = 40.dp, inactive = true)
+                        Avatar(imgUrl = TEMP_USER.imageUrl, char = TEMP_USER.name!![0], size = 40.dp, inactive = true)
                     }
                 }
             }
@@ -96,6 +104,10 @@ fun LibraryPage() {
                     Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         COutlinedButton(label = "Click me!", onClick = { })
                         COutlinedButton(label = "Click me!", enabled = false, onClick = { })
+                    }
+                    Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        CTextButton(label = "Click me!", onClick = { })
+                        CTextButton(label = "Click me!", enabled = false, onClick = { })
                     }
                     Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         CIconButton(iconId = R.drawable.ic_bell, onClick = { })
@@ -139,7 +151,16 @@ fun LibraryPage() {
                 }
             }
 
-            WikiTile(type = WikiTypeRes.CHARACTER)
+            WikiTile(
+                type = WikiTypeRes.CHARACTER,
+                onClick = { showPostEditorSheet = true }
+            )
+
+            if (showPostEditorSheet)
+                PostEditorSheet(
+                    post = TEMP_POST1,
+                    onDismissRequest = { showPostEditorSheet = false }
+                )
 
         }
     }

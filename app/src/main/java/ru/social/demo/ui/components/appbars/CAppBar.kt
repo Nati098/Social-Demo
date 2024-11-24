@@ -34,16 +34,18 @@ fun CAppBar(
     title: String = "",
     user: User,
     state: LazyListState,
+    topInset: Boolean = true,
     topBarContent: @Composable CollapsibleTopAppBarScope.() -> Unit,
     columnContent: @Composable (insets: PaddingValues) -> Unit
 ) {
     CollapsibleScaffold(
         state = state,
+        topInset = topInset,
         content = columnContent,
         topBar = {
             TopBar(
                 modifier = Modifier
-                    .clip(shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
+                    .clip(shape = SDTheme.shapes.appBarCorners)
                     .background(SDTheme.colors.bgSecondary),
                 title = title,
                 onBack = null,

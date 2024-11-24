@@ -1,7 +1,9 @@
 package ru.social.demo.data.model
 
+import kotlinx.serialization.SerialName
+
 data class User(
-    override var id: String = "",
-    val imageUrl: String? = null,
-    val name: String? = null
+    @SerialName("id") override var id: String = "",
+    @SerialName("imageUrl") val imageUrl: String? = null,
+    @SerialName("name") val name: String? = null
 ) : BaseModel()

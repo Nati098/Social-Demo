@@ -27,11 +27,11 @@ import ru.social.demo.pages.wiki.WikiPage
 import ru.social.demo.ui.theme.SDTheme
 
 enum class NavPath(val label: Int, val idActive: Int, val idInactive: Int) {
-    LIBRARY(R.string.nav_library, R.drawable.wiki_filled, R.drawable.wiki),
-    WIKI(R.string.nav_wiki, R.drawable.wiki_filled, R.drawable.wiki),
-    MAIN(R.string.nav_main, R.drawable.main_filled, R.drawable.main),
-    EVENTS(R.string.nav_events, R.drawable.events_filled, R.drawable.events),
-    PROFILE(R.string.nav_profile, R.drawable.profile_filled, R.drawable.profile)
+    LIBRARY(R.string.library, R.drawable.wiki_filled, R.drawable.wiki),
+    WIKI(R.string.wiki, R.drawable.wiki_filled, R.drawable.wiki),
+    MAIN(R.string.main, R.drawable.main_filled, R.drawable.main),
+    EVENTS(R.string.events, R.drawable.events_filled, R.drawable.events),
+    PROFILE(R.string.profile, R.drawable.profile_filled, R.drawable.profile)
 }
 
 @Composable

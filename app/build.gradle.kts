@@ -76,9 +76,4 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.analytics)
 
-//    testImplementation(libs.junit)
-//    androidTestImplementation(libs.androidx.junit)
-//    androidTestImplementation(libs.androidx.ui.test.junit4)
-//    androidTestImplementation(libs.androidx.espresso.core)
-//    debugImplementation(libs.androidx.ui.test.manifest)
 }

@@ -12,8 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import ru.social.demo.R
 import ru.social.demo.ui.components.appbars.CTopBar
 import ru.social.demo.ui.components.buttons.ShareButton
 import ru.social.demo.ui.components.buttons.UserEditButton
@@ -24,7 +26,7 @@ fun ProfilePage() {
 
     val listState = rememberLazyListState()
     CTopBar(
-        title = "Profile",
+        title = stringResource(R.string.profile),
         actions = {
             UserEditButton(onClick = { })
             ShareButton(onClick = { })

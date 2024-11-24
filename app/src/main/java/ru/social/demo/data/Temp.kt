@@ -1,7 +1,6 @@
 package ru.social.demo.data.model
 
 import com.google.firebase.Timestamp
-import kotlin.random.Random
 
 val TEMP_USER = User(
     id = "0",

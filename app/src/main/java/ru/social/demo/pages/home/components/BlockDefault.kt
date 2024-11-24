@@ -22,14 +22,13 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.firebase.Timestamp
 import ru.social.demo.R
 import ru.social.demo.data.model.User
 import ru.social.demo.utils.parseDate
 import ru.social.demo.ui.components.Avatar
-import ru.social.demo.ui.components.ExpandableText
+import ru.social.demo.ui.components.text.ExpandableText
 import ru.social.demo.ui.components.LabelTile
 import ru.social.demo.ui.components.LabelType
 import ru.social.demo.ui.components.buttons.CIconButton

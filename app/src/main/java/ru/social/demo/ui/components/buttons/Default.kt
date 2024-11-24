@@ -16,6 +16,7 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -97,6 +98,25 @@ fun COutlinedButton(
             Image(painter = painterResource(iconId), null)
         if (label != null)
             Text("$label", style = SDTheme.tyrography.bodyBoldL)
+    }
+}
+
+@Composable
+fun CTextButton(
+    label: String,
+    enabled: Boolean = true,
+    contentColor: Color = SDTheme.colors.fgActionEmphasis,
+    onClick: () -> Unit
+) {
+    TextButton (
+        enabled = enabled,
+        onClick = onClick,
+        colors =  ButtonDefaults.outlinedButtonColors(
+            contentColor = contentColor,
+            disabledContentColor = SDTheme.colors.fgTertiary
+        )
+    ) {
+        Text(label, style = SDTheme.tyrography.bodyBoldL)
     }
 }
 

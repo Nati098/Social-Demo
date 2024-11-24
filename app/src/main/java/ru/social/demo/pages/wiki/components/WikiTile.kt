@@ -4,6 +4,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,8 +52,13 @@ enum class WikiTypeRes(
 }
 
 @Composable
-fun WikiTile(type: WikiTypeRes) {
-    OutlinedContainer {
+fun WikiTile(
+    type: WikiTypeRes,
+    onClick: () -> Unit = {}
+) {
+    OutlinedContainer(
+        modifier = Modifier.clickable { onClick() }
+    ) {
 
         val tileHeight = 108.dp
         val bgSize = 160.dp

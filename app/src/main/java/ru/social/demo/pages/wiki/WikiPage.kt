@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.social.demo.R
 import ru.social.demo.data.model.TEMP_USER
@@ -54,7 +55,7 @@ fun WikiPage() {
         }
     ) { _ ->
         CAppBar(
-            title = "Wiki",
+            title = stringResource(R.string.wiki),
             user = TEMP_USER,
             state = listState,
             topBarContent = {

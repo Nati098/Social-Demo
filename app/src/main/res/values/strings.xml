@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">SocialDemo</string>
 
-    <string name="nav_main">Main</string>
-    <string name="nav_library">Lib</string>
-    <string name="nav_wiki">Wiki</string>
-    <string name="nav_events">Events</string>
-    <string name="nav_profile">Profile</string>
+    <string name="main">Main</string>
+    <string name="library">Lib</string>
+    <string name="wiki">Wiki</string>
+    <string name="events">Events</string>
+    <string name="profile">Profile</string>
+    <string name="post">Post</string>
 
     <string name="wiki_media">Media</string>
     <string name="wiki_media_desc">All media content in one place</string>
@@ -21,4 +22,7 @@
     <string name="post_type_default">Post</string>
     <string name="post_type_event">Event</string>
     <string name="post_type_character">Character</string>
+
+    <string name="post_create">Create</string>
+    <string name="post_create_placeholder">Enter text here</string>
 </resources>

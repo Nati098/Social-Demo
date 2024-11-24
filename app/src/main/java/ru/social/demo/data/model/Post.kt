@@ -7,19 +7,19 @@ import ru.social.demo.R
 import java.io.File
 
 data class Post (
-    override var id: String = "",
-    val createDate: Timestamp? = null,
-    val user: User? = null,
-//    val type: Post.TYPE? = null,
-    val title: String? = null,
-    val text: String? = null,
-    val media: List<File>? = null,
+    @SerialName("id") override var id: String = "",
+    @SerialName("createDate") val createDate: Timestamp? = null,
+    @SerialName("user") val user: User? = null,
+    @SerialName("type") val type: Post.TYPE? = null,
+    @SerialName("title") val title: String? = null,
+    @SerialName("text") val text: String? = null,
+    @SerialName("media") val media: List<File>? = null,
 //    val audios: List<File>? = null,
 //    val files: List<File>? = null,
 //    val survey: Survey? = null,
 //    val checklist: Checklist? = null,
-    var reactionCounts: Int? = null,
-    val commentsCount: Int? = null,
+    @SerialName("reactionCounts") var reactionCounts: Int? = null,
+    @SerialName("commentsCount") val commentsCount: Int? = null,
 ) : BaseModel() {
     fun containMedia() = !media.isNullOrEmpty()
 
