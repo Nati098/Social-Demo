@@ -8,6 +8,7 @@ import ru.social.demo.data.model.BaseModel
 
 object FsPath {
     const val POSTS = "posts"
+    const val USERS = "users"
 }
 
 class FirestoreInteractor(
