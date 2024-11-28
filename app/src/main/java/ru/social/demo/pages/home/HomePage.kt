@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import ru.social.demo.R
 import ru.social.demo.base.BaseViewState
 import ru.social.demo.data.model.Post
@@ -48,6 +49,7 @@ import ru.social.demo.ui.components.buttons.fab.FabItem
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomePage(
+    navController: NavController,
     viewModel: HomeViewModel = viewModel()
 ) {
 
@@ -55,12 +57,13 @@ fun HomePage(
     val postsListState = rememberLazyListState()
 
     Scaffold(
-        floatingActionButton = { FabMain() }
+        floatingActionButton = { FabButton() }
     ) { _ ->
         CAppBar(
             title = stringResource(R.string.main),
             user = TEMP_USER,
             state = postsListState,
+            navController = navController,
             topBarContent = { Carousel() },
             columnContent = { insets ->
                 when(viewState) {
@@ -79,7 +82,7 @@ fun HomePage(
         )
     }
 
-    LaunchedEffect(key1 = viewState) {
+    LaunchedEffect(Unit) {
         viewModel.handle(HomeEvent.LoadData)
     }
 
@@ -155,7 +158,7 @@ private fun Carousel() {
 }
 
 @Composable
-private fun FabMain() {
+private fun FabButton() {
     Fab(
         items = listOf(
             object : FabItem(

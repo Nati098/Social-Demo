@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import ru.social.demo.ui.components.*
+import ru.social.demo.ui.components.BottomBar
 import ru.social.demo.ui.theme.SocialDemoTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,18 +14,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SocialDemoTheme {
-                NavigationBar()
+                BottomBar()
             }
         }
     }
 }
-
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    SocialDemoTheme {
-//        Greeting("Android", counter = null)
-//    }
-//}
