@@ -1,39 +1,35 @@
 package ru.social.demo.ui.components
 
-import android.util.Log
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
-import androidx.compose.material3.NavigationDrawerItemDefaults
-import androidx.compose.material3.NavigationRailItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ru.social.demo.base.AppState
 import ru.social.demo.base.NavBarPath
-import ru.social.demo.base.NavPath
-import ru.social.demo.pages.EventsPage
-import ru.social.demo.pages.home.HomePage
-import ru.social.demo.pages.LibraryPage
-import ru.social.demo.pages.ProfilePage
-import ru.social.demo.pages.wiki.WikiPage
+import ru.social.demo.pages.events.eventsFlow
+import ru.social.demo.pages.home.homeFlow
+import ru.social.demo.pages.library.libraryFlow
+import ru.social.demo.pages.wiki.wikiFlow
 import ru.social.demo.ui.theme.SDTheme
+import ru.social.demo.utils.topBorder
 
-@Preview
 @Composable
 fun BottomBar() {
     val navController = rememberNavController()
@@ -55,12 +51,13 @@ fun BottomBar() {
         bottomBar = {
             if (appState.isBottomBarVisible) {
                 NavigationBar (
+                    modifier = Modifier.topBorder(width = (0.5).dp, color = SDTheme.colors.borderColor),
                     containerColor = SDTheme.colors.bgPrimary,
                     contentColor = SDTheme.colors.fgPrimary,
-                    tonalElevation = 8.dp
+                    tonalElevation = 100.dp
                 ) {
                     NavBarPath.entries.forEach {
-                        val isSelected = it.route == appState.currentRoute
+                        val isSelected = it.route == appState.parentRoute
                         NavigationBarItem(
                             icon = { Icon(
                                 painterResource(if (isSelected) it.idActive else it.idInactive),
@@ -76,19 +73,24 @@ fun BottomBar() {
             }
         }
     ) { insets ->
-        Log.d("TEST", "Main insets = $insets")
-        NavHost(
-            navController = navController,
-            startDestination = NavPath.library
+        Box(
+            modifier = Modifier.padding(
+                start = insets.calculateStartPadding(LayoutDirection.Ltr),
+                end = insets.calculateEndPadding(LayoutDirection.Ltr),
+                bottom = insets.calculateBottomPadding()
+            )
         ) {
+            NavHost(
+                navController = navController,
+                startDestination = NavBarPath.LIBRARY.route
+            ) {
 
-            composable(NavPath.main) { HomePage(navController) }
-            composable(NavPath.library) { LibraryPage() }
-            composable(NavPath.wiki) { WikiPage(navController) }
-            composable(NavPath.events) { EventsPage() }
+                homeFlow(navController)
+                libraryFlow()
+                wikiFlow(navController)
+                eventsFlow()
 
-            composable(NavPath.profile) { ProfilePage(navController) }
-
+            }
         }
     }
 }

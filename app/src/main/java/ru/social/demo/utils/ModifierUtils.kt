@@ -6,11 +6,16 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Dp
 import kotlin.math.max
 
 fun Modifier.verticalScrollbar(
@@ -48,3 +53,22 @@ fun Modifier.verticalScrollbar(
         }
     }
 }
+
+
+fun Modifier.topBorder(
+    width: Dp,
+    color: Color
+) =
+    drawWithContent {
+        val strokeWidth = width.toPx()
+        drawContent()
+
+        if (strokeWidth == 0f) return@drawWithContent
+
+        drawLine(
+            color = color,
+            start = Offset(0f, 0f),
+            end = Offset(size.width, strokeWidth / 2),
+            strokeWidth = strokeWidth
+        )
+    }

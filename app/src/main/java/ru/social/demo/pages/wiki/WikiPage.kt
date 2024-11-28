@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ru.social.demo.R
-import ru.social.demo.data.model.TEMP_USER
 import ru.social.demo.pages.wiki.components.WikiAppBarTile
 import ru.social.demo.pages.wiki.components.WikiTile
 import ru.social.demo.pages.wiki.components.WikiTypeRes
@@ -39,7 +38,6 @@ fun WikiPage(
     ) { _ ->
         CAppBar(
             title = stringResource(R.string.wiki),
-            user = TEMP_USER,
             state = listState,
             navController = navController,
             topBarContent = { TopBarContent() },
@@ -53,7 +51,7 @@ fun WikiPage(
                         HorizontalDivider(thickness = 10.dp, color = Color.Transparent)
                     }
                     item {
-                        Spacer(Modifier.size(60.dp))
+                        Spacer(Modifier.size(90.dp))
                     }
                 }
             }

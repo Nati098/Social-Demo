@@ -52,11 +52,28 @@ class FirestoreInteractor(
     ) {
         db.collection(path).get()
             .addOnSuccessListener { result ->
-                Log.d("TEST", "read success ")
+                Log.d("TEST", "$path - read success ")
                 onSuccess(result.toObjects(T::class.java))
             }
             .addOnFailureListener { e ->
-                Log.e("TEST","Firebase.firestore read error: $e")
+                Log.e("TEST","$path - Firebase.firestore read error: $e")
+                onError(e)
+            }
+    }
+
+    inline fun <reified T> readData(
+        path: String,
+        docId: String,
+        crossinline onSuccess: (T?) -> Unit,
+        crossinline onError: (Exception) -> Unit = {},
+    ) {
+        db.collection(path).document(docId).get()
+            .addOnSuccessListener { result ->
+                Log.d("TEST", "$path - read success ")
+                onSuccess(result.toObject(T::class.java))
+            }
+            .addOnFailureListener { e ->
+                Log.e("TEST","$path - Firebase.firestore read error: $e")
                 onError(e)
             }
     }

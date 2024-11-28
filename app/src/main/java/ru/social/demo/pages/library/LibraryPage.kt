@@ -1,13 +1,10 @@
-package ru.social.demo.pages
+package ru.social.demo.pages.library
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -24,13 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.google.firebase.Timestamp
 import ru.social.demo.R
-import ru.social.demo.data.model.TEMP_POST1
-import ru.social.demo.data.model.TEMP_USER
+import ru.social.demo.data.model.Post
 import ru.social.demo.data.model.User
 import ru.social.demo.pages.post_editor.PostEditorSheet
 import ru.social.demo.pages.wiki.components.WikiTile
@@ -45,6 +41,21 @@ import ru.social.demo.ui.components.buttons.CTextButton
 import ru.social.demo.ui.components.buttons.CTonalButton
 import ru.social.demo.ui.components.containers.OutlinedContainer
 import ru.social.demo.ui.theme.SDTheme
+
+private val TEMP_USER = User(
+    id = "0",
+    name = "Maria Robbins",
+    imageUrl = "https://media.istockphoto.com/id/1326417862/photo/young-woman-laughing-while-relaxing-at-home.jpg?s=612x612&w=0&k=20&c=cd8e6RBGOe4b8a8vTcKW0Jo9JONv1bKSMTKcxaCra8c="
+)
+
+private val TEMP_POST1 = Post(
+    id = "",
+    createDate = Timestamp.now(),
+    TEMP_USER,
+    title = "Random God",
+    text = "tetete",
+)
+
 
 @Composable
 fun LibraryPage() {

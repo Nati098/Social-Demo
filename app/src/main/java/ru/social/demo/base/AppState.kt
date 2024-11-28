@@ -1,13 +1,12 @@
 package ru.social.demo.base
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavDestination
-import androidx.navigation.NavGraph
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 class AppState(
-    val navController: NavHostController
+    private val navController: NavHostController
 ) {
 
     val bottomBarTabs = NavBarPath.entries.toTypedArray()
@@ -16,29 +15,26 @@ class AppState(
     val isBottomBarVisible: Boolean
         @Composable get() = navController
             .currentBackStackEntryAsState()
-            .value?.destination?.route in bottomBarPaths
+            .value?.destination?.parent?.route in bottomBarPaths
+                && navController
+            .currentBackStackEntryAsState()
+            .value?.destination?.route == NavPath.main
 
     val currentRoute: String?
         get() = navController.currentDestination?.route
+    val parentRoute: String?
+        get() = navController.currentDestination?.parent?.route
 
     fun navigateToBottomBarTab(route: String) {
         if (route != currentRoute) {
             navController.navigate(route) {
-                launchSingleTop = true
-                restoreState = true
-                navController.graph
-                popUpTo(findStartDestination(navController.graph).id) {
+                popUpTo(navController.graph.findStartDestination().route.toString()) {
                     saveState = true
                 }
+                launchSingleTop = true
+                restoreState = true
             }
         }
-    }
-
-    private tailrec fun findStartDestination(graph: NavDestination): NavDestination {
-        return if (graph is NavGraph)
-            findStartDestination(graph.findNode(graph.startDestinationId)!!)
-        else
-            graph
     }
 
 }

@@ -19,7 +19,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -31,12 +30,9 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import ru.social.demo.R
-import ru.social.demo.base.BaseViewState
 import ru.social.demo.data.model.Post
-import ru.social.demo.data.model.TEMP_USER
 import ru.social.demo.pages.EmptyPage
 import ru.social.demo.pages.home.components.PostTile
 import ru.social.demo.pages.post_editor.PostEditorMode
@@ -50,26 +46,24 @@ import ru.social.demo.ui.components.buttons.fab.FabItem
 @Composable
 fun HomePage(
     navController: NavController,
-    viewModel: HomeViewModel = viewModel()
+    viewModel: HomeViewModel
 ) {
-
-    val viewState by viewModel.homeViewState.observeAsState()
+    val viewState by viewModel.postsViewState.observeAsState()
     val postsListState = rememberLazyListState()
 
     Scaffold(
         floatingActionButton = { FabButton() }
     ) { _ ->
         CAppBar(
-            title = stringResource(R.string.main),
-            user = TEMP_USER,
+            title = stringResource(R.string.home),
             state = postsListState,
             navController = navController,
             topBarContent = { Carousel() },
             columnContent = { insets ->
                 when(viewState) {
-                    is BaseViewState.Loading -> CProgressIndicator()
-                    is BaseViewState.Success<Post> -> Feed(
-                        (viewState as BaseViewState.Success<Post>).data,
+                    is HomeContract.State.LoadingData -> CProgressIndicator()
+                    is HomeContract.State.SuccessData -> Feed(
+                        (viewState as HomeContract.State.SuccessData).data,
                         insets,
                         postsListState
                     )
@@ -80,10 +74,6 @@ fun HomePage(
                 }
             }
         )
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.handle(HomeEvent.LoadData)
     }
 
 }
