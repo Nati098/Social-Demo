@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Path
@@ -117,14 +116,14 @@ fun WikiTile(
                 Column {
                     Text(
                         stringResource(type.titleId),
-                        style = SDTheme.tyrography.headingS,
+                        style = SDTheme.typography.headingS,
                         color = SDTheme.colors.fgPrimary
                     )
                     type.descriptionId?.let {
                         Spacer(Modifier.height(4.dp))
                         Text(
                             stringResource(it),
-                            style = SDTheme.tyrography.bodyMediumM,
+                            style = SDTheme.typography.bodyMediumM,
                             color = SDTheme.colors.fgSecondary,
                             maxLines = 2
                         )

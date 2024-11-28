@@ -54,7 +54,7 @@ object SDTheme {
         @Composable
         get() = LocalSDColors.current
 
-    val tyrography: SDTypography
+    val typography: SDTypography
         @Composable
         get() = LocalSDTypography.current
 

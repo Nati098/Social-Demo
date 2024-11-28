@@ -88,13 +88,13 @@ private fun ArrowTileInternal(
         Column {
             Text(
                 title,
-                style = SDTheme.tyrography.bodyBoldL,
+                style = SDTheme.typography.bodyBoldL,
                 color = SDTheme.colors.fgPrimary
             )
             description?.let {
                 Text(
                     it,
-                    style = SDTheme.tyrography.bodyMediumS,
+                    style = SDTheme.typography.bodyMediumS,
                     color = SDTheme.colors.fgSecondary
                 )
             }

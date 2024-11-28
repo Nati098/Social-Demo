@@ -27,7 +27,7 @@ class HomeViewModel : ViewModel(), EventHandler<HomeEvent> {
 
     private fun handleSuccess(event: HomeEvent, state: BaseViewState.Success<Post>) {
         when(event) {
-            HomeEvent.LoadData -> fetchPosts()
+            HomeEvent.LoadData -> {}
             HomeEvent.UserClicked -> onUserClick()
             else -> throw NotImplementedError("Invalid event ($event) for state $state")
         }

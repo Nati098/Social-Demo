@@ -115,7 +115,7 @@ private fun TopBarInternal(
 
             Text(
                 text = title,
-                style = SDTheme.tyrography.headingL
+                style = SDTheme.typography.headingL
             )
 
             Spacer(modifier = Modifier.weight(1f))

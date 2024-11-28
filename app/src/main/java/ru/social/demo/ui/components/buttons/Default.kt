@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -48,7 +47,7 @@ fun CButton(
         if (iconId != null)
             Image(painter = painterResource(iconId), null)
         if (label != null)
-            Text("$label", style = SDTheme.tyrography.bodyBoldL)
+            Text("$label", style = SDTheme.typography.bodyBoldL)
     }
 }
 
@@ -73,7 +72,7 @@ fun CTonalButton(
         if (iconId != null)
             Image(painter = painterResource(iconId), null)
         if (label != null)
-            Text("$label", style = SDTheme.tyrography.bodyBoldL)
+            Text("$label", style = SDTheme.typography.bodyBoldL)
     }
 }
 
@@ -97,7 +96,7 @@ fun COutlinedButton(
         if (iconId != null)
             Image(painter = painterResource(iconId), null)
         if (label != null)
-            Text("$label", style = SDTheme.tyrography.bodyBoldL)
+            Text("$label", style = SDTheme.typography.bodyBoldL)
     }
 }
 
@@ -116,7 +115,7 @@ fun CTextButton(
             disabledContentColor = SDTheme.colors.fgTertiary
         )
     ) {
-        Text(label, style = SDTheme.tyrography.bodyBoldL)
+        Text(label, style = SDTheme.typography.bodyBoldL)
     }
 }
 

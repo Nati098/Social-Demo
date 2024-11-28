@@ -74,7 +74,7 @@ fun LibraryPage() {
                         text = "Avatar",
                         style = MaterialTheme.typography.titleMedium
                     )
-                    Row {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Avatar(imgUrl = TEMP_USER.imageUrl, char = TEMP_USER.name!![0], size = 96.dp)
                         Avatar(char = 'A', size = 64.dp)
                         Avatar(char = 'B', size = 44.dp, inactive = false)
