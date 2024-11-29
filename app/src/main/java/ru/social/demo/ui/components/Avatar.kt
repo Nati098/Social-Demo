@@ -42,13 +42,14 @@ fun Avatar(
     size: Dp,
     imgUrl: String? = null,
     char: Char,
-    inactive: Boolean? = null
+    inactive: Boolean? = null,
+    modifier: Modifier = Modifier
 ) {
     val statusInactive = colorResource(R.color.status_inactive)
     val statusActive = colorResource(R.color.status_active)
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(size)
             .graphicsLayer {
                 compositingStrategy = CompositingStrategy.Offscreen

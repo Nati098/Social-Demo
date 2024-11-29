@@ -41,7 +41,6 @@ fun UserBlock(
     onEdit: () -> Unit = {}
 ) {
     Row(
-//        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -55,13 +54,13 @@ fun UserBlock(
         Column {
             Text(
                 user?.name ?: "",
-                style = SDTheme.tyrography.bodyMediumM,
+                style = SDTheme.typography.bodyMediumM,
                 color = SDTheme.colors.fgPrimary
             )
             createDate?.let {
                 Text(
                     it.parseDate(),
-                    style = SDTheme.tyrography.bodyBoldS,
+                    style = SDTheme.typography.bodyBoldS,
                     color = SDTheme.colors.fgTertiary
                 )
             }
@@ -104,7 +103,7 @@ fun TextBlock(title: String?, body: String?) {
         title?.let {
             Text(
                 it,
-                style = SDTheme.tyrography.headingS,
+                style = SDTheme.typography.headingS,
                 color = SDTheme.colors.fgPrimary,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
@@ -112,7 +111,7 @@ fun TextBlock(title: String?, body: String?) {
         body?.let {
             ExpandableText(
                 text = it,
-                style = SDTheme.tyrography.bookL,
+                style = SDTheme.typography.bookL,
                 color = SDTheme.colors.fgSecondary,
                 showMoreStyle = SpanStyle(color = SDTheme.colors.fgPrimary, fontWeight = FontWeight.W500)
             )
@@ -162,7 +161,7 @@ private fun Counter(
         Spacer(Modifier.width(4.dp))
         Text(
             "$counter",
-            style = SDTheme.tyrography.bodyMediumS,
+            style = SDTheme.typography.bodyMediumS,
             color = SDTheme.colors.fgTertiary
         )
 

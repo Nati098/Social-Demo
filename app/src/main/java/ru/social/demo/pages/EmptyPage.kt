@@ -33,13 +33,13 @@ fun EmptyPage(
         Spacer(modifier = Modifier.height(24.dp))
         Text(
             title,
-            style = SDTheme.tyrography.headingM,
+            style = SDTheme.typography.headingM,
             color = SDTheme.colors.fgPrimary
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             description,
-            style = SDTheme.tyrography.bookL,
+            style = SDTheme.typography.bookL,
             color = SDTheme.colors.fgSecondary,
             textAlign = TextAlign.Center
         )

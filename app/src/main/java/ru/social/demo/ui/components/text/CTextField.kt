@@ -50,7 +50,7 @@ fun CTextField(
                 }
 
             },
-            textStyle = SDTheme.tyrography.bookL.copy(
+            textStyle = SDTheme.typography.bookL.copy(
                 color = SDTheme.colors.fgPrimary
             ),
             cursorBrush = SolidColor(SDTheme.colors.fgPrimary)

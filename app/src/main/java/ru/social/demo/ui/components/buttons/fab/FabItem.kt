@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,7 +35,7 @@ fun FabItemButton(item: FabItem) {
         item.label?.let {
             Text(
                 text = stringResource(it),
-                style = SDTheme.tyrography.bodyMediumS,
+                style = SDTheme.typography.bodyMediumS,
                 modifier = Modifier
                     .clip(shape = SDTheme.shapes.corners)
                     .background(SDTheme.colors.bgSecondary)

@@ -26,6 +26,7 @@ fun CTopBar(
     bgColor: Color = SDTheme.colors.bgSecondary,
     modifier: Modifier = Modifier,
     topInset: Boolean = true,
+    onBack: (() -> Unit)? = null,
     actions: @Composable (RowScope.() -> Unit)? = null,
     content: @Composable (insets: PaddingValues) -> Unit
 ) {
@@ -39,7 +40,7 @@ fun CTopBar(
                     .clip(shape = SDTheme.shapes.appBarCorners)
                     .background(bgColor),
                 title = title,
-                onBack = { },
+                onBack = onBack,
                 actions = actions
             )
         }
