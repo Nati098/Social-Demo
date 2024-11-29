@@ -1,5 +1,6 @@
 package ru.social.demo.pages
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,12 +11,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import ru.social.demo.R
 import ru.social.demo.ui.components.appbars.CTopBar
 import ru.social.demo.ui.components.buttons.ShareButton
@@ -24,13 +25,13 @@ import ru.social.demo.ui.components.containers.OutlinedContainer
 
 @Composable
 fun ProfilePage(
-    navController: NavController
+    navigateBack: () -> Unit
 ) {
 
     val listState = rememberLazyListState()
     CTopBar(
         title = stringResource(R.string.profile),
-        onBack = { navController.navigateUp() },
+        onBack = navigateBack,
         actions = {
             UserEditButton(onClick = { })
             ShareButton(onClick = { })
@@ -59,5 +60,9 @@ fun ProfilePage(
             }
         }
     )
+
+    LaunchedEffect(Unit) {
+        Log.d("TEST", "Profile, homeVM is $viewModel}")
+    }
 
 }

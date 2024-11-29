@@ -1,6 +1,8 @@
 package ru.social.demo.pages.home
 
 import android.annotation.SuppressLint
+import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +21,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -27,10 +30,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import ru.social.demo.MainViewModel
 import ru.social.demo.R
 import ru.social.demo.data.model.Post
 import ru.social.demo.pages.EmptyPage
@@ -48,6 +55,8 @@ fun HomePage(
     navController: NavController,
     viewModel: HomeViewModel
 ) {
+    val mainViewModel: MainViewModel = viewModel(LocalContext.current as ComponentActivity)
+
     val viewState by viewModel.postsViewState.observeAsState()
     val postsListState = rememberLazyListState()
 
@@ -74,6 +83,11 @@ fun HomePage(
                 }
             }
         )
+    }
+
+    LaunchedEffect(Unit) {
+        Log.d("TEST", "Home, viewModel is $viewModel, mainVM $mainViewModel")
+        viewModel.handle(HomeContract.Event.LoadData)
     }
 
 }

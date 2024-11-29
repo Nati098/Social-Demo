@@ -1,27 +1,28 @@
 package ru.social.demo.ui.components.appbars
 
+import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import ru.social.demo.MainContract
+import ru.social.demo.MainViewModel
 import ru.social.demo.R
-import ru.social.demo.base.BaseViewState
 import ru.social.demo.base.NavPath
-import ru.social.demo.data.model.User
-import ru.social.demo.pages.home.HomeContract
-import ru.social.demo.pages.home.HomeViewModel
-import ru.social.demo.services.FirestoreInteractor
-import ru.social.demo.services.FsPath
 import ru.social.demo.ui.components.Avatar
 import ru.social.demo.ui.components.appbars.utils.CollapsibleScaffold
 import ru.social.demo.ui.components.appbars.utils.CollapsibleTopAppBarScope
@@ -48,8 +49,8 @@ fun CAppBar(
     topBarContent: @Composable CollapsibleTopAppBarScope.() -> Unit,
     columnContent: @Composable (insets: PaddingValues) -> Unit
 ) {
-    val viewModel = hiltViewModel<HomeViewModel>()
-    val viewState by viewModel.userViewState.observeAsState()
+    val mainViewModel: MainViewModel = viewModel(LocalContext.current as ComponentActivity)
+    val userViewState by mainViewModel.userViewState.observeAsState()
 
     CollapsibleScaffold(
         state = state,
@@ -75,13 +76,13 @@ fun CAppBar(
                         bgColor = CWhite,
                         onClick = { }
                     )
-                    when (viewState) {
-                        is HomeContract.State.SuccessUser -> UserAvatar(
-                            navController,
-                            imgUrl = (viewState as HomeContract.State.SuccessUser).data?.imageUrl,
-                            char = (viewState as HomeContract.State.SuccessUser).data?.name?.get(0)
+                    when (userViewState) {
+                        is MainContract.State.SuccessUser -> UserAvatar(
+                            imgUrl = (userViewState as MainContract.State.SuccessUser).data?.imageUrl,
+                            char = (userViewState as MainContract.State.SuccessUser).data?.name?.get(0),
+                            onClick = { navController?.navigate(NavPath.profile) }
                         )
-                        else -> UserAvatar(navController)
+                        else -> UserAvatar(onClick = { navController?.navigate(NavPath.profile) })
                     }
                 },
                 content = topBarContent
@@ -89,15 +90,23 @@ fun CAppBar(
         }
     )
 
+    LaunchedEffect(Unit) {
+        Log.d("TEST", "AppBar, mainViewModel is $mainViewModel")
+        if (userViewState !is MainContract.State.SuccessUser) {
+            mainViewModel.handle(MainContract.Event.LoadUser)
+        }
+    }
+
 }
 
 @Composable
-private fun UserAvatar(navController: NavController?, imgUrl: String? = null, char: Char? = null) {
+private fun UserAvatar(imgUrl: String? = null, char: Char? = null, onClick: () -> Unit) {
     Avatar(
         modifier = Modifier.clickable(
             interactionSource = remember { MutableInteractionSource() },
-            indication = null
-        ) { navController?.navigate(NavPath.profile) },
+            indication = null,
+            onClick = onClick
+        ),
         imgUrl = imgUrl,
         char = char ?: 'U',
         size = 44.dp
