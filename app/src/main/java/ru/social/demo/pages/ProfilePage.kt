@@ -61,8 +61,8 @@ fun ProfilePage(
         }
     )
 
-    LaunchedEffect(Unit) {
-        Log.d("TEST", "Profile, homeVM is $viewModel}")
-    }
+//    LaunchedEffect(Unit) {
+//        Log.d("TEST", "Profile, homeVM is $viewModel}")
+//    }
 
 }

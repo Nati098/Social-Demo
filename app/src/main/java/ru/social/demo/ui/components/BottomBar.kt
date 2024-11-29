@@ -51,7 +51,7 @@ fun BottomBar() {
         bottomBar = {
             if (appState.isBottomBarVisible) {
                 NavigationBar (
-                    modifier = Modifier.topBorder(width = (0.5).dp, color = SDTheme.colors.borderColor),
+                    modifier = Modifier.topBorder(width = 1.dp, color = SDTheme.colors.borderColor),
                     containerColor = SDTheme.colors.bgPrimary,
                     contentColor = SDTheme.colors.fgPrimary,
                     tonalElevation = 100.dp
