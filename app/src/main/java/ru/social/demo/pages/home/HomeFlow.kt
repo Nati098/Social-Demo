@@ -32,7 +32,7 @@ fun NavGraphBuilder.homeFlow(
             )
         }
         bottomSheet(
-            "${NavPath.POST_EDITOR}/{${POST}}",
+            NavPath.POST_EDITOR,
             arguments = listOf(
                 navArgument(POST) {
                     type = PostCNavType()
@@ -41,9 +41,7 @@ fun NavGraphBuilder.homeFlow(
                 }
             )
         ) {
-            PostEditorSheet(
-                post = it.arguments?.getParcelable<Post>(POST)
-            )
+            PostEditorSheet(post = it.arguments?.getParcelable<Post>(POST))
         }
     }
 }
