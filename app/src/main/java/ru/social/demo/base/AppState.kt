@@ -9,7 +9,7 @@ class AppState(
     private val navController: NavHostController
 ) {
 
-    val bottomBarTabs = NavBarPath.entries.toTypedArray()
+    private val bottomBarTabs = NavBarPath.entries.toTypedArray()
     private val bottomBarPaths = bottomBarTabs.map { it.route }
 
     val isBottomBarVisible: Boolean
@@ -18,7 +18,7 @@ class AppState(
             .value?.destination?.parent?.route in bottomBarPaths
                 && navController
             .currentBackStackEntryAsState()
-            .value?.destination?.route == NavPath.main
+            .value?.destination?.route == NavPath.MAIN
 
     val currentRoute: String?
         get() = navController.currentDestination?.route

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.navigation.rememberBottomSheetNavigator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -32,7 +33,9 @@ import ru.social.demo.utils.topBorder
 
 @Composable
 fun BottomBar() {
-    val navController = rememberNavController()
+    val bsNavigator = rememberBottomSheetNavigator()
+    val navController = rememberNavController(bsNavigator)
+
     val appState = remember(rememberNavController()) { AppState(navController) }
 
     val unselectedColor = SDTheme.colors.fgPrimary.copy(alpha = 0.25f)
@@ -86,7 +89,7 @@ fun BottomBar() {
             ) {
 
                 homeFlow(navController)
-                libraryFlow()
+                libraryFlow(navController)
                 wikiFlow(navController)
                 eventsFlow()
 

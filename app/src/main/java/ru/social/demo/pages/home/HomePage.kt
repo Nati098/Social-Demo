@@ -1,6 +1,7 @@
 package ru.social.demo.pages.home
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
@@ -34,15 +35,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import ru.social.demo.MainViewModel
 import ru.social.demo.R
+import ru.social.demo.base.NavPath
 import ru.social.demo.data.model.Post
 import ru.social.demo.pages.EmptyPage
 import ru.social.demo.pages.home.components.PostTile
-import ru.social.demo.pages.post_editor.PostEditorMode
+import ru.social.demo.pages.post_editor.POST
 import ru.social.demo.pages.post_editor.PostEditorSheet
 import ru.social.demo.ui.components.CProgressIndicator
 import ru.social.demo.ui.components.buttons.fab.Fab
@@ -74,7 +75,8 @@ fun HomePage(
                     is HomeContract.State.SuccessData -> Feed(
                         (viewState as HomeContract.State.SuccessData).data,
                         insets,
-                        postsListState
+                        postsListState,
+                        navController
                     )
                     else -> EmptyPage(
                         title = "Oops!",
@@ -97,10 +99,9 @@ fun HomePage(
 fun Feed(
     data: List<Post>?,
     insets: PaddingValues,
-    postsListState: LazyListState
+    postsListState: LazyListState,
+    navController: NavController
 ) {
-    var showPostEditorSheet by remember { mutableStateOf(false) }
-    var postToEditId by remember { mutableStateOf("") }
 
     LazyColumn(
         modifier = Modifier.fillMaxHeight(),
@@ -115,29 +116,24 @@ fun Feed(
                 )
             }
         } else {
-            items(data) {
+            items(data) { post ->
                 PostTile(
-                    it,
+                    post,
                     onEdit = {
-                        showPostEditorSheet = true
-                        postToEditId = it.id
+//                        navController
+//                            .apply {
+//                                Bundle().apply {
+//                                    putParcelable(POST, data.filter { post.id == postToEditId }[0])
+//                                }
+//                            }
+//                            .navigate(NavPath.POST_EDITOR)
                     }
                 )
                 HorizontalDivider(thickness = 10.dp, color = Color.Transparent)
             }
         }
-
     }
 
-    if (showPostEditorSheet)
-        PostEditorSheet(
-            post = data!!.filter { it.id == postToEditId }[0],
-            mode = PostEditorMode.EDIT,
-            onDismissRequest = { showPostEditorSheet = false },
-            modifier = Modifier
-                .heightIn(max = LocalConfiguration.current.screenHeightDp.dp - 60.dp)
-                .fillMaxHeight()
-        )
 }
 
 @Composable

@@ -1,5 +1,6 @@
 package ru.social.demo.pages.library
 
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,10 +25,13 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.google.firebase.Timestamp
 import ru.social.demo.R
+import ru.social.demo.base.NavPath
 import ru.social.demo.data.model.Post
 import ru.social.demo.data.model.User
+import ru.social.demo.pages.post_editor.POST
 import ru.social.demo.pages.post_editor.PostEditorSheet
 import ru.social.demo.pages.wiki.components.WikiTile
 import ru.social.demo.pages.wiki.components.WikiTypeRes
@@ -58,9 +62,9 @@ private val TEMP_POST1 = Post(
 
 
 @Composable
-fun LibraryPage() {
-
-    var showPostEditorSheet by remember { mutableStateOf(false) }
+fun LibraryPage(
+    navController: NavController
+) {
 
     val scrollState = rememberScrollState()
     Scaffold (
@@ -165,16 +169,34 @@ fun LibraryPage() {
             WikiTile(type = WikiTypeRes.CHARACTER)
 
             ArrowTile(
-                title = "ModalBottomSheet Test",
-                description = "Click to show",
+                title = "ModalBottomSheet. New post",
+                description = "Click to show. Post = null",
                 iconId = R.drawable.ic_calendar,
-                onClick = { showPostEditorSheet = true }
+                onClick = {
+                    navController
+                        .apply {
+                            Bundle().apply {
+                                putParcelable(POST, TEMP_POST1)
+                            }
+                        }
+                        .navigate(NavPath.POST_EDITOR)
+                }
             )
-            if (showPostEditorSheet)
-                PostEditorSheet(
-                    post = TEMP_POST1,
-                    onDismissRequest = { showPostEditorSheet = false }
-                )
+
+            ArrowTile(
+                title = "ModalBottomSheet. Edit post",
+                description = "Click to show. Post = TEMP_POST1",
+                iconId = R.drawable.ic_calendar,
+                onClick = {
+                    navController
+                        .apply {
+                            Bundle().apply {
+                                putParcelable(POST, TEMP_POST1)
+                            }
+                        }
+                        .navigate(NavPath.POST_EDITOR)
+                }
+            )
 
         }
     }

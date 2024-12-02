@@ -7,8 +7,8 @@ import ru.social.demo.base.NavBarPath
 import ru.social.demo.base.NavPath
 
 fun NavGraphBuilder.eventsFlow() {
-    navigation(route = NavBarPath.EVENTS.route, startDestination = NavPath.main) {
-        composable(NavPath.main) {
+    navigation(route = NavBarPath.EVENTS.route, startDestination = NavPath.MAIN) {
+        composable(NavPath.MAIN) {
             EventsPage()
         }
     }

@@ -10,9 +10,10 @@ object NavPath {
 //    val home = NavBarPath.HOME.route
 //    val events = NavBarPath.EVENTS.route
 
-    const val main = "main"
+    const val MAIN = "main"
 
-    const val profile = "profile"
+    const val PROFILE = "profile"
+    const val POST_EDITOR = "postEditor"
 
 }
 

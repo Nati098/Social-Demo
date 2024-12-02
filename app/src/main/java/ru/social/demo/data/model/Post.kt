@@ -1,11 +1,14 @@
 package ru.social.demo.data.model
 
+import android.os.Parcelable
 import androidx.annotation.StringRes
 import com.google.firebase.Timestamp
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import ru.social.demo.R
 import java.io.File
 
+@Parcelize
 data class Post (
     @SerialName("id") override var id: String = "",
     @SerialName("createDate") val createDate: Timestamp? = null,
@@ -20,7 +23,7 @@ data class Post (
 //    val checklist: Checklist? = null,
     @SerialName("reactionCounts") var reactionCounts: Int? = null,
     @SerialName("commentsCount") val commentsCount: Int? = null,
-) : BaseModel() {
+) : BaseModel(), Parcelable {
     fun containMedia() = !media.isNullOrEmpty()
 
 //    fun containAudios() = !audios.isNullOrEmpty()

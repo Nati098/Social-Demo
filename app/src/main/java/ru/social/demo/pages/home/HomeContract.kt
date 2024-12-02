@@ -6,16 +6,16 @@ import ru.social.demo.data.model.Post
 
 class HomeContract {
 
-    sealed class Event : BaseEvent {
-        object LoadData : Event()
-        object ReloadData : Event()
-        object UserClicked : Event()
+    sealed interface Event : BaseEvent {
+        object LoadData : Event
+        object ReloadData : Event
+        object UserClicked : Event
     }
 
-    sealed class State : BaseViewState {
-        data class SuccessData(val data: List<Post>) : Success, State()
-        object LoadingData : State()
-        object Error : State()
+    sealed interface State : BaseViewState {
+        data class SuccessData(val data: List<Post>) : Success, State
+        object LoadingData : State
+        object Error : State
 
         interface Success
     }

@@ -10,8 +10,8 @@ import ru.social.demo.base.NavPath
 fun NavGraphBuilder.wikiFlow(
     navController: NavController
 ) {
-    navigation(route = NavBarPath.WIKI.route, startDestination = NavPath.main) {
-        composable(NavPath.main) {
+    navigation(route = NavBarPath.WIKI.route, startDestination = NavPath.MAIN) {
+        composable(NavPath.MAIN) {
             WikiPage(navController)
         }
     }
