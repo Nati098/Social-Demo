@@ -1,6 +1,7 @@
 package ru.social.demo.ui.components.buttons
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import ru.social.demo.R
 import ru.social.demo.ui.theme.SDTheme
 
@@ -11,6 +12,7 @@ fun BackButton(
     CIconButton(
         iconId = R.drawable.ic_arrow_left,
         contentColor = SDTheme.colors.fgSecondary,
+        size = 44.dp,
         onClick = onClick
     )
 }

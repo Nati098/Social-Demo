@@ -6,4 +6,5 @@ import androidx.compose.ui.unit.dp
 val Shape = SDShape(
     corners = RoundedCornerShape(20.dp),
     buttonCorners = RoundedCornerShape(100.dp),
+    appBarCorners = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)
 )

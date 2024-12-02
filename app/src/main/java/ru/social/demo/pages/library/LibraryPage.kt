@@ -1,5 +1,6 @@
-package ru.social.demo.pages
+package ru.social.demo.pages.library
 
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -20,8 +25,14 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.google.firebase.Timestamp
 import ru.social.demo.R
+import ru.social.demo.base.NavPath
+import ru.social.demo.data.model.Post
 import ru.social.demo.data.model.User
+import ru.social.demo.pages.post_editor.POST
+import ru.social.demo.pages.post_editor.PostEditorSheet
 import ru.social.demo.pages.wiki.components.WikiTile
 import ru.social.demo.pages.wiki.components.WikiTypeRes
 import ru.social.demo.ui.components.ArrowTile
@@ -30,18 +41,30 @@ import ru.social.demo.ui.components.buttons.CButton
 import ru.social.demo.ui.components.buttons.CIconButton
 import ru.social.demo.ui.components.buttons.CIconButtonOutlined
 import ru.social.demo.ui.components.buttons.COutlinedButton
+import ru.social.demo.ui.components.buttons.CTextButton
 import ru.social.demo.ui.components.buttons.CTonalButton
 import ru.social.demo.ui.components.containers.OutlinedContainer
 import ru.social.demo.ui.theme.SDTheme
 
-@Composable
-fun LibraryPage() {
+private val TEMP_USER = User(
+    id = "0",
+    name = "Maria Robbins",
+    imageUrl = "https://media.istockphoto.com/id/1326417862/photo/young-woman-laughing-while-relaxing-at-home.jpg?s=612x612&w=0&k=20&c=cd8e6RBGOe4b8a8vTcKW0Jo9JONv1bKSMTKcxaCra8c="
+)
 
-    val user = User(
-        id = "0",
-        imageUrl = "https://media.istockphoto.com/id/1326417862/photo/young-woman-laughing-while-relaxing-at-home.jpg?s=612x612&w=0&k=20&c=cd8e6RBGOe4b8a8vTcKW0Jo9JONv1bKSMTKcxaCra8c=",
-        name = "Maria"
-    )
+private val TEMP_POST1 = Post(
+    id = "",
+    createDate = Timestamp.now(),
+    TEMP_USER,
+    title = "Random God",
+    text = "tetete",
+)
+
+
+@Composable
+fun LibraryPage(
+    navController: NavController
+) {
 
     val scrollState = rememberScrollState()
     Scaffold (
@@ -66,11 +89,11 @@ fun LibraryPage() {
                         text = "Avatar",
                         style = MaterialTheme.typography.titleMedium
                     )
-                    Row {
-                        Avatar(imgUrl = user.imageUrl, char = user.name!![0], size = 96.dp)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Avatar(imgUrl = TEMP_USER.imageUrl, char = TEMP_USER.name!![0], size = 96.dp)
                         Avatar(char = 'A', size = 64.dp)
                         Avatar(char = 'B', size = 44.dp, inactive = false)
-                        Avatar(imgUrl = user.imageUrl, char = user.name!![0], size = 40.dp, inactive = true)
+                        Avatar(imgUrl = TEMP_USER.imageUrl, char = TEMP_USER.name!![0], size = 40.dp, inactive = true)
                     }
                 }
             }
@@ -96,6 +119,10 @@ fun LibraryPage() {
                     Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         COutlinedButton(label = "Click me!", onClick = { })
                         COutlinedButton(label = "Click me!", enabled = false, onClick = { })
+                    }
+                    Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        CTextButton(label = "Click me!", onClick = { })
+                        CTextButton(label = "Click me!", enabled = false, onClick = { })
                     }
                     Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         CIconButton(iconId = R.drawable.ic_bell, onClick = { })
@@ -140,6 +167,36 @@ fun LibraryPage() {
             }
 
             WikiTile(type = WikiTypeRes.CHARACTER)
+
+            ArrowTile(
+                title = "ModalBottomSheet. New post",
+                description = "Click to show. Post = null",
+                iconId = R.drawable.ic_calendar,
+                onClick = {
+                    navController
+                        .apply {
+                            Bundle().apply {
+                                putParcelable(POST, TEMP_POST1)
+                            }
+                        }
+                        .navigate(NavPath.POST_EDITOR)
+                }
+            )
+
+            ArrowTile(
+                title = "ModalBottomSheet. Edit post",
+                description = "Click to show. Post = TEMP_POST1",
+                iconId = R.drawable.ic_calendar,
+                onClick = {
+                    navController
+                        .apply {
+                            Bundle().apply {
+                                putParcelable(POST, TEMP_POST1)
+                            }
+                        }
+                        .navigate(NavPath.POST_EDITOR)
+                }
+            )
 
         }
     }

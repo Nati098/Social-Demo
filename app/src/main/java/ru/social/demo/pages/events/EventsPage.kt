@@ -1,4 +1,4 @@
-package ru.social.demo.pages
+package ru.social.demo.pages.events
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,9 +14,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import ru.social.demo.data.model.TEMP_USER
+import ru.social.demo.R
 import ru.social.demo.ui.components.appbars.CAppBar
 import ru.social.demo.ui.components.containers.OutlinedContainer
 
@@ -25,8 +26,7 @@ fun EventsPage() {
 
     val listState = rememberLazyListState()
     CAppBar(
-        title = "Events",
-        user = TEMP_USER,
+        title = stringResource(R.string.events),
         state = listState,
         topBarContent = {
 //            val fraction = this.fraction

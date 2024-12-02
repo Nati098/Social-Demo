@@ -39,13 +39,13 @@ fun WikiAppBarTile(
             Spacer(modifier = Modifier.size(12.dp))
             Text(
                 stringResource(titleId),
-                style = SDTheme.tyrography.headingS,
+                style = SDTheme.typography.headingS,
                 color = SDTheme.colors.fgPrimary
             )
             Spacer(modifier = Modifier.size(4.dp))
             Text(
                 stringResource(descriptionId),
-                style = SDTheme.tyrography.bodyMediumM,
+                style = SDTheme.typography.bodyMediumM,
                 color = SDTheme.colors.fgSecondary
             )
         }

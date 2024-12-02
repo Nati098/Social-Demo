@@ -44,7 +44,8 @@ data class SDTypography(
 
 data class SDShape(
     val corners: Shape,
-    val buttonCorners: Shape
+    val buttonCorners: Shape,
+    val appBarCorners: Shape,
 )
 
 object SDTheme {
@@ -53,7 +54,7 @@ object SDTheme {
         @Composable
         get() = LocalSDColors.current
 
-    val tyrography: SDTypography
+    val typography: SDTypography
         @Composable
         get() = LocalSDTypography.current
 

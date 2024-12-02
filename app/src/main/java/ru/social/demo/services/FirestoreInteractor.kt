@@ -8,6 +8,7 @@ import ru.social.demo.data.model.BaseModel
 
 object FsPath {
     const val POSTS = "posts"
+    const val USERS = "users"
 }
 
 class FirestoreInteractor(
@@ -51,11 +52,28 @@ class FirestoreInteractor(
     ) {
         db.collection(path).get()
             .addOnSuccessListener { result ->
-                Log.d("TEST", "read success ")
+                Log.d("TEST", "$path - read success ")
                 onSuccess(result.toObjects(T::class.java))
             }
             .addOnFailureListener { e ->
-                Log.e("TEST","Firebase.firestore read error: $e")
+                Log.e("TEST","$path - Firebase.firestore read error: $e")
+                onError(e)
+            }
+    }
+
+    inline fun <reified T> readData(
+        path: String,
+        docId: String,
+        crossinline onSuccess: (T?) -> Unit,
+        crossinline onError: (Exception) -> Unit = {},
+    ) {
+        db.collection(path).document(docId).get()
+            .addOnSuccessListener { result ->
+                Log.d("TEST", "$path - read success ")
+                onSuccess(result.toObject(T::class.java))
+            }
+            .addOnFailureListener { e ->
+                Log.e("TEST","$path - Firebase.firestore read error: $e")
                 onError(e)
             }
     }
@@ -69,5 +87,22 @@ class FirestoreInteractor(
 //    }
 
 
+//    fun <T : BaseModel> updateData(
+//        path: String,
+//        data: T,
+//        onSuccess: () -> Unit = {},
+//        onError: () -> Unit = {},
+//    ) {
+//        db.collection(path).document(data.id)
+//            .update(data)
+//            .addOnSuccessListener { result ->
+//                Log.d("TEST", "set result: $result ")
+//                onSuccess()
+//            }
+//            .addOnFailureListener { e ->
+//                Log.e("TEST","Firebase.firestore set error: $e")
+//                onError()
+//            }
+//    }
 
 }

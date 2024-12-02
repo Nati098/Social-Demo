@@ -34,9 +34,9 @@ fun LabelTile(
     }
 
     val textStyle = when(type) {
-        LabelType.SMALL -> SDTheme.tyrography.bodyMediumS
-        LabelType.MEDIUM -> SDTheme.tyrography.bodyMediumM
-        LabelType.LARGE -> SDTheme.tyrography.bodyMediumL
+        LabelType.SMALL -> SDTheme.typography.bodyMediumS
+        LabelType.MEDIUM -> SDTheme.typography.bodyMediumM
+        LabelType.LARGE -> SDTheme.typography.bodyMediumL
     }
 
     Row(

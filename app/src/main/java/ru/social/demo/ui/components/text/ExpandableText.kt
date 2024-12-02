@@ -1,4 +1,4 @@
-package ru.social.demo.ui.components
+package ru.social.demo.ui.components.text
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
@@ -9,6 +9,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,7 +37,7 @@ fun ExpandableText(
     val interactionSource = remember { MutableInteractionSource() }
     var isExpanded by remember { mutableStateOf(false) }
     var clickable by remember { mutableStateOf(false) }
-    var lastVisibleIndex by remember { mutableStateOf(0) }  // TODO: when I added post with 1-line string - exception!
+    var lastVisibleIndex by remember { mutableIntStateOf(0) }  // TODO: when I added post with 1-line string - exception!
 
     Box(
         modifier = Modifier
