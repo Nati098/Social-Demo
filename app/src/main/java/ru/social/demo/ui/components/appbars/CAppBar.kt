@@ -76,12 +76,13 @@ fun CAppBar(
                         onClick = { }
                     )
                     when (userViewState) {
-                        is MainContract.State.SuccessUser -> UserAvatar(
+                        is MainContract.State.SuccessUser -> Avatar(
+                            size = 44.dp,
                             imgUrl = (userViewState as MainContract.State.SuccessUser).data?.imageUrl,
                             char = (userViewState as MainContract.State.SuccessUser).data?.name?.get(0),
                             onClick = { navController?.navigate(NavPath.PROFILE) }
                         )
-                        else -> UserAvatar(onClick = { navController?.navigate(NavPath.PROFILE) })
+                        else -> Avatar(size = 44.dp, onClick = { navController?.navigate(NavPath.PROFILE) })
                     }
                 },
                 content = topBarContent
@@ -96,18 +97,4 @@ fun CAppBar(
         }
     }
 
-}
-
-@Composable
-private fun UserAvatar(imgUrl: String? = null, char: Char? = null, onClick: () -> Unit) {
-    Avatar(
-        modifier = Modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = onClick
-        ),
-        imgUrl = imgUrl,
-        char = char ?: 'U',
-        size = 44.dp
-    )
 }

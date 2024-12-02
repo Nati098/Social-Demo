@@ -96,7 +96,7 @@ fun HomePage(
 
 
 @Composable
-fun Feed(
+private fun Feed(
     data: List<Post>?,
     insets: PaddingValues,
     postsListState: LazyListState,

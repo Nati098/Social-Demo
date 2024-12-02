@@ -34,4 +34,11 @@
     <string name="post_create">Create</string>
     <string name="post_edit">Edit</string>
     <string name="post_create_placeholder">Enter text here</string>
+
+    <string name="share_profile">Share profile…</string>
+    <string name="add_friend">Add to friends</string>
+    <string name="details">Details</string>
+    <string name="gender">Gender: %1$s</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
 </resources>

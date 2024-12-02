@@ -51,6 +51,7 @@ fun BottomBar() {
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        containerColor = SDTheme.colors.bgPrimary,
         bottomBar = {
             if (appState.isBottomBarVisible) {
                 NavigationBar (
