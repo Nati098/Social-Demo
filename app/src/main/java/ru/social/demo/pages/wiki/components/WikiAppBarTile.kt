@@ -2,23 +2,15 @@ package ru.social.demo.pages.wiki.components
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import ru.social.demo.ui.components.CIcon
 import ru.social.demo.ui.components.containers.OutlinedContainer
 import ru.social.demo.ui.theme.SDTheme
 
@@ -35,7 +27,12 @@ fun WikiAppBarTile(
         paddingHorizontal = 20.dp
     ) {
         Column {
-            Icon(imageId)
+            CIcon(
+                size = 68.dp,
+                bgColor = SDTheme.colors.bgHighlight,
+                imageId = imageId,
+                imageColor = SDTheme.colors.fgActionEmphasis
+            )
             Spacer(modifier = Modifier.size(12.dp))
             Text(
                 stringResource(titleId),
@@ -49,25 +46,5 @@ fun WikiAppBarTile(
                 color = SDTheme.colors.fgSecondary
             )
         }
-    }
-}
-
-@Composable
-private fun Icon(
-    @DrawableRes imageId: Int
-) {
-    Box(
-        modifier = Modifier
-            .size(68.dp)
-            .aspectRatio(1f)
-            .background(color = SDTheme.colors.bgHighlight, shape = CircleShape),
-        contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painterResource(imageId),
-            null,
-            modifier = Modifier.padding(10.dp),
-            colorFilter = ColorFilter.tint(color = SDTheme.colors.fgActionEmphasis)
-        )
     }
 }

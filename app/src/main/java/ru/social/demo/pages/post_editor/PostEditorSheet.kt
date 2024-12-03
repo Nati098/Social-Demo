@@ -65,7 +65,7 @@ fun PostEditorSheet(
         contentWindowInsets = { WindowInsets(0,0,0,0) },
     ) {
         CTopBar(
-            title = stringResource((post?.type ?: Post.TYPE.POST).idString),
+            title = stringResource((post?.type ?: Post.Type.POST).idString),
             modifier = Modifier.clip(shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)),
             bgColor = SDTheme.colors.bgPrimary,
             topInset = false,

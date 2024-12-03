@@ -3,15 +3,12 @@ package ru.social.demo.ui.components.appbars
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -76,12 +73,13 @@ fun CAppBar(
                         onClick = { }
                     )
                     when (userViewState) {
-                        is MainContract.State.SuccessUser -> UserAvatar(
+                        is MainContract.State.SuccessUser -> Avatar(
+                            size = 44.dp,
                             imgUrl = (userViewState as MainContract.State.SuccessUser).data?.imageUrl,
                             char = (userViewState as MainContract.State.SuccessUser).data?.name?.get(0),
                             onClick = { navController?.navigate(NavPath.PROFILE) }
                         )
-                        else -> UserAvatar(onClick = { navController?.navigate(NavPath.PROFILE) })
+                        else -> Avatar(size = 44.dp, onClick = { navController?.navigate(NavPath.PROFILE) })
                     }
                 },
                 content = topBarContent
@@ -96,18 +94,4 @@ fun CAppBar(
         }
     }
 
-}
-
-@Composable
-private fun UserAvatar(imgUrl: String? = null, char: Char? = null, onClick: () -> Unit) {
-    Avatar(
-        modifier = Modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = onClick
-        ),
-        imgUrl = imgUrl,
-        char = char ?: 'U',
-        size = 44.dp
-    )
 }

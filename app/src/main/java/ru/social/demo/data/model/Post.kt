@@ -13,7 +13,7 @@ data class Post (
     @SerialName("id") override var id: String = "",
     @SerialName("createDate") val createDate: Timestamp? = null,
     @SerialName("user") val user: User? = null,
-    @SerialName("type") val type: Post.TYPE? = null,
+    @SerialName("type") val type: Post.Type? = null,
     @SerialName("title") val title: String? = null,
     @SerialName("text") val text: String? = null,
     @SerialName("media") val media: List<File>? = null,
@@ -32,7 +32,7 @@ data class Post (
 //
 //    fun containTags() = !tags.isNullOrEmpty()
 
-    enum class TYPE(val value: String, @StringRes val idString: Int) {
+    enum class Type(val value: String, @StringRes val idString: Int) {
         @SerialName("post") POST("post", R.string.post_type_default),
         @SerialName("event") EVENT("event", R.string.post_type_event)
     }
