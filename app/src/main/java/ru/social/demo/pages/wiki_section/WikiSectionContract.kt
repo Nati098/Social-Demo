@@ -1,15 +1,14 @@
-package ru.social.demo.pages.home
+package ru.social.demo.pages.wiki_section
 
 import ru.social.demo.base.BaseEvent
 import ru.social.demo.base.BaseViewState
 import ru.social.demo.data.model.Post
 
-class HomeContract {
+class WikiSectionContract {
 
     sealed interface Event : BaseEvent {
         object LoadData : Event
-        object ReloadData : Event
-        object UserClicked : Event
+        object Reload : Event
     }
 
     sealed interface State : BaseViewState {
