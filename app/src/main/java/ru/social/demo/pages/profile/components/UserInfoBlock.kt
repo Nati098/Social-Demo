@@ -1,15 +1,12 @@
 package ru.social.demo.pages.profile.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ru.social.demo.R
 import ru.social.demo.data.model.User
@@ -19,18 +16,10 @@ import ru.social.demo.utils.calculateAge
 import ru.social.demo.utils.parseBirthdayDate
 
 @Composable
-fun UserInfoBlock(user: User? = null) {
-    Column(
-        modifier = Modifier
-            .wrapContentHeight()
-            .padding(20.dp)
-    ) {
-        Text(
-            stringResource(R.string.details),
-            style = SDTheme.typography.headingS,
-            color = SDTheme.colors.fgPrimary,
-            textAlign = TextAlign.Center
-        )
+fun UserInfoBlock(
+    user: User? = null
+) {
+    InfoBlock(title = stringResource(R.string.details)) {
         DetailsDataItem(
             iconId = R.drawable.ic_cake,
             { Text(
@@ -67,10 +56,9 @@ fun UserInfoBlock(user: User? = null) {
 @Composable
 private fun DetailsDataItem(
     iconId: Int,
-    vararg textBlocks: @Composable () -> Unit,
+    vararg textBlocks: @Composable () -> Unit
 ) {
     Row(
-        modifier = Modifier.padding(top = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         CIcon(

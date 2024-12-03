@@ -2,20 +2,31 @@ package ru.social.demo.pages.library
 
 import android.os.Bundle
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
@@ -40,6 +51,7 @@ import ru.social.demo.ui.components.buttons.CTextButton
 import ru.social.demo.ui.components.buttons.CTonalButton
 import ru.social.demo.ui.components.containers.OutlinedContainer
 import ru.social.demo.ui.theme.SDTheme
+import java.lang.reflect.Field
 
 private val TEMP_USER = User(
     id = "0",
@@ -56,11 +68,13 @@ private val TEMP_POST1 = Post(
 )
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LibraryPage(
     navController: NavController
 ) {
 
+    val resources = loadDrawables(R.drawable::class.java)
     val scrollState = rememberScrollState()
     Scaffold (
         containerColor = SDTheme.colors.bgPrimary
@@ -90,6 +104,49 @@ fun LibraryPage(
                         Avatar(char = 'B', size = 44.dp, inactive = false)
                         Avatar(imgUrl = TEMP_USER.imageUrl, char = TEMP_USER.name!![0], size = 40.dp, inactive = true)
                     }
+                }
+            }
+
+            OutlinedContainer(
+                parentWidth = true,
+                paddingHorizontal = 16.dp,
+                paddingVertical = 16.dp
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "Icons",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    LazyVerticalGrid (
+                        modifier = Modifier.heightIn(max = 1000.dp),
+                        columns = GridCells.Fixed(6),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+
+                        items(resources) { res ->
+                            TooltipBox(
+                                tooltip = { Text(
+                                    text = res.first,
+                                    modifier = Modifier
+                                        .clip(shape = SDTheme.shapes.corners)
+                                        .background(SDTheme.colors.bgSecondary)
+                                        .padding(4.dp)
+                                ) },
+                                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                                state = rememberTooltipState()
+                            ) {
+                                Icon(
+                                    painterResource(res.second),
+                                    res.first,
+                                    modifier = Modifier.size(36.dp)
+                                )
+                            }
+
+                        }
+
+                    }
+
                 }
             }
 
@@ -137,7 +194,10 @@ fun LibraryPage(
                 paddingHorizontal = 16.dp,
                 paddingVertical = 16.dp
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    Modifier.padding(horizontal = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     ArrowTile(title = "Tile 1", iconId = null)
                     ArrowTile(title = "Tile 2", description = "Description", icon = null)
                     ArrowTile(title = "Tile 3", iconId = R.drawable.ic_user_edit)
@@ -196,4 +256,19 @@ fun LibraryPage(
         }
     }
 
+}
+
+private fun loadDrawables(clz: Class<*>): List<Pair<String, Int>> {
+    val res = mutableListOf<Pair<String, Int>>()
+    val fields: Array<Field> = clz.declaredFields
+    for (field in fields) {
+        val drawableId: Int
+        try {
+            drawableId = field.getInt(clz)
+            res.add(Pair(field.name, drawableId))
+        } catch (e: Exception) {
+            continue
+        }
+    }
+    return res
 }

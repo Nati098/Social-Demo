@@ -8,6 +8,7 @@
     <string name="profile">Profile</string>
     <string name="post">Post</string>
 
+
     <string name="wiki_media">Media</string>
     <string name="wiki_media_desc">All media content in one place</string>
     <string name="wiki_folders">Folders</string>
@@ -24,8 +25,6 @@
     <string name="wiki_tales">Legendarium</string>
     <string name="wiki_tales_desc">A collection of legends and fairy tales</string>
 
-    <string name="no_posts_decs">As soon as you or your friends do something in the application, it will be here</string>
-    <string name="error_loading_desc">Error while loading data</string>
 
     <string name="post_type_default">Post</string>
     <string name="post_type_event">Event</string>
@@ -35,10 +34,21 @@
     <string name="post_edit">Edit</string>
     <string name="post_create_placeholder">Enter text here</string>
 
+
     <string name="share_profile">Share profile…</string>
-    <string name="add_friend">Add to friends</string>
-    <string name="details">Details</string>
+    <string name="add_friends">Add friends</string>
+    <string name="add_to_friends">Add to friends</string>
     <string name="gender">Gender: %1$s</string>
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
+    <string name="details">Details</string>
+    <string name="friends">Friends</string>
+    <string name="teams">Teams</string>
+    <string name="worlds">Worlds</string>
+    <string name="characters">Characters</string>
+
+
+    <string name="no_posts_decs">As soon as you or your friends do something in the application, it will be here</string>
+    <string name="no_friends_desc">No friends yet</string>
+    <string name="error_loading_desc">Error while loading data</string>
 </resources>

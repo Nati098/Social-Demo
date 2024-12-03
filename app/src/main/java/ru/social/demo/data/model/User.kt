@@ -13,8 +13,11 @@ data class User(
     @SerialName("id") override var id: String = "",
     @SerialName("imageUrl") val imageUrl: String? = null,
     @SerialName("name") val name: String? = null,
+    @SerialName("about") val about: String? = null,
     @SerialName("gender") val gender: User.Gender? = null,
-    @SerialName("birthday") val birthday: Timestamp? = null
+    @SerialName("birthday") val birthday: Timestamp? = null,
+    @SerialName("friends") val friends: List<String>? = null,
+    @SerialName("favGenres") val genres: List<String>? = null
 ) : BaseModel(), Parcelable {
 
     enum class Gender(val value: String, @StringRes val stringId: Int, @DrawableRes val iconId: Int) {

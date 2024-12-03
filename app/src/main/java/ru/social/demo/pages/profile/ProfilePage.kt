@@ -2,14 +2,15 @@ package ru.social.demo.pages.profile
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,12 +28,14 @@ import ru.social.demo.MainContract
 import ru.social.demo.MainViewModel
 import ru.social.demo.R
 import ru.social.demo.data.model.User
+import ru.social.demo.pages.profile.components.FriendsInfoBlock
 import ru.social.demo.pages.profile.components.UserInfoBlock
+import ru.social.demo.ui.components.ArrowTile
 import ru.social.demo.ui.components.Avatar
 import ru.social.demo.ui.components.appbars.CTopBar
-import ru.social.demo.ui.components.buttons.CButton
 import ru.social.demo.ui.components.buttons.ShareButton
 import ru.social.demo.ui.components.buttons.UserEditButton
+import ru.social.demo.ui.components.containers.RefreshContainer
 import ru.social.demo.ui.theme.SDTheme
 
 @Composable
@@ -58,24 +61,36 @@ fun ProfilePage(
             )
         },
         content = { insets ->
-            LazyColumn(
-                state = listState,
-                contentPadding = insets
+            RefreshContainer(
+                onRefresh = { mainViewModel.handle(MainContract.Event.Reload) }
             ) {
-                when (userViewState) {
-                    is MainContract.State.SuccessUser -> item {
-                        HeaderBlock((userViewState as MainContract.State.SuccessUser).data)
+                LazyColumn(
+                    state = listState,
+                    contentPadding = insets
+                ) {
+                    when (userViewState) {
+                        is MainContract.State.SuccessUser -> item {
+                            HeaderBlock((userViewState as MainContract.State.SuccessUser).data)
+                        }
+                        else -> item { HeaderBlock() }
                     }
-                    else -> item { HeaderBlock() }
-                }
 
-                when (userViewState) {
-                    is MainContract.State.SuccessUser -> item {
-                        DetailsBlock((userViewState as MainContract.State.SuccessUser).data)
+                    item { DetailsSpacer() }
+
+                    when (userViewState) {
+                        is MainContract.State.SuccessUser -> item {
+                            DetailsBlock((userViewState as MainContract.State.SuccessUser).data)
+                        }
+                        else -> item { DetailsBlock() }
                     }
-                    else -> item { DetailsBlock() }
+
+                    item { DetailsSpacer() }
+
+                    items(userSections()) { it.invoke() }
+
                 }
             }
+
         }
     )
 
@@ -88,7 +103,8 @@ private fun HeaderBlock(user: User? = null) {
         modifier = Modifier
             .wrapContentHeight()
             .fillMaxWidth()
-            .padding(vertical = 32.dp),
+            .padding(vertical = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Avatar(
@@ -98,7 +114,6 @@ private fun HeaderBlock(user: User? = null) {
             onClick = {}
         )
         user?.let {
-            Spacer(Modifier.height(12.dp))
             Text(
                 "${it.name}",
                 style = SDTheme.typography.headingS,
@@ -106,12 +121,18 @@ private fun HeaderBlock(user: User? = null) {
                 textAlign = TextAlign.Center
             )
         }
-        Spacer(Modifier.height(12.dp))
-        CButton(
-            modifier = Modifier.width(260.dp),
-            label = stringResource(R.string.add_friend)
-        ) { }
-
+        if(!user?.about.isNullOrBlank())
+            Text(
+                user?.about!!,
+                style = SDTheme.typography.bodyMediumM,
+                color = SDTheme.colors.fgTertiary,
+                textAlign = TextAlign.Center
+            )
+//        Spacer(Modifier.height(12.dp))
+//        CButton(
+//            modifier = Modifier.width(260.dp),
+//            label = stringResource(R.string.add_friends)
+//        ) { }
     }
 
 }
@@ -121,18 +142,27 @@ private fun DetailsBlock(user: User? = null) {
     Column(
         modifier = Modifier
             .wrapContentHeight()
-            .padding(20.dp)
+            .padding(vertical = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         UserInfoBlock(user)
         DetailsSpacer()
+        FriendsInfoBlock(user?.friends)
     }
 }
 
+private fun userSections(): List<@Composable () -> Unit> = listOf(
+    { ArrowTile(title = stringResource(R.string.teams), iconId = R.drawable.profile) },
+    { ArrowTile(title = stringResource(R.string.worlds), iconId = R.drawable.ic_image) },
+    { ArrowTile(title = stringResource(R.string.characters), iconId = R.drawable.ic_bird) },
+)
+
 @Composable
 private fun DetailsSpacer() {
-    Spacer(Modifier
-        .padding(vertical = 20.dp)
-        .background(SDTheme.colors.borderColor)
-        .height(2.dp)
+    Spacer(
+        Modifier
+            .height(1.dp)
+            .fillMaxWidth()
+            .background(SDTheme.colors.bgSecondary)
     )
 }
