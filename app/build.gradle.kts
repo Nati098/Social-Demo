@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.hilt.android)
 
+    kotlin("plugin.serialization") version "2.0.21"
     id("kotlin-parcelize")
 }
 
@@ -85,6 +86,9 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.analytics)
+
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
 
 }
 

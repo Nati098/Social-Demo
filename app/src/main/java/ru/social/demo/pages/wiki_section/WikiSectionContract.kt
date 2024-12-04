@@ -2,19 +2,50 @@ package ru.social.demo.pages.wiki_section
 
 import ru.social.demo.base.BaseEvent
 import ru.social.demo.base.BaseViewState
-import ru.social.demo.data.model.Post
+import ru.social.demo.data.model.rpg.RpgClass
+import ru.social.demo.data.model.rpg.RpgRace
+import ru.social.demo.data.model.rpg.ShortInfo
 
 class WikiSectionContract {
 
     sealed interface Event : BaseEvent {
-        object LoadData : Event
-        object Reload : Event
+        data class LoadData<T>(val type: T): Event
+        data class Reload<T>(val type: T): Event
+        data class TabChanged(val idx: Int): Event
     }
 
-    sealed interface State : BaseViewState {
-        data class SuccessData(val data: List<Post>) : State
-        object LoadingData : State
-        object Error : State
+    data class State(
+        val selectedTab: Int,
+        val classes: List<RpgClass>?,
+        val races: List<RpgRace>?,
+        val monsters: List<ShortInfo>?,
+        val isClassesLoading: Boolean,
+        val isRacesLoading: Boolean,
+        val isMonstersLoading: Boolean,
+        val isError: Boolean
+    ): BaseViewState {
+
+        fun copyObj(
+            selectedTab: Int = this.selectedTab,
+            classes: List<RpgClass>? = this.classes,
+            races: List<RpgRace>? = this.races,
+            monsters: List<ShortInfo>? = this.monsters,
+            isClassesLoading: Boolean = this.isClassesLoading,
+            isRacesLoading: Boolean = this.isRacesLoading,
+            isMonstersLoading: Boolean = this.isMonstersLoading,
+            isError: Boolean = this.isError,
+        ): State =
+            State(
+                selectedTab,
+                classes,
+                races,
+                monsters,
+                isClassesLoading,
+                isRacesLoading,
+                isMonstersLoading,
+                isError
+            )
+
     }
 
 }

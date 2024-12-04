@@ -1,15 +1,14 @@
 package ru.social.demo.pages.wiki_section
 
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import ru.social.demo.R
+import ru.social.demo.pages.EmptyPage
 import ru.social.demo.pages.wiki.components.WikiTypeRes
+import ru.social.demo.pages.wiki_section.components.CompendiumPage
 import ru.social.demo.ui.components.appbars.CTopBar
 import ru.social.demo.ui.components.buttons.FilterButton
-import ru.social.demo.ui.components.containers.RefreshContainer
 
 const val WIKI_SECTION_TYPE = "wikiSectionType"
 
@@ -20,9 +19,6 @@ fun WikiSectionPage(
     navigateBack: () -> Unit
 ) {
 
-    val dataViewSTate = viewModel.dataViewState.observeAsState()
-    val listState = rememberLazyListState()
-
     CTopBar(
         title = stringResource(type.titleId),
         bgColor = colorResource(type.color),
@@ -31,16 +27,12 @@ fun WikiSectionPage(
             FilterButton(onClick = { })
         },
         content = { insets ->
-            RefreshContainer(
-                onRefresh = { viewModel.handle(WikiSectionContract.Event.Reload) }
-            ) {
-                LazyColumn(
-                    state = listState,
-                    contentPadding = insets
-                ) {
-
-
-                }
+            when(type) {
+                WikiTypeRes.COMPENDIUM -> CompendiumPage(insets, viewModel)
+                else -> EmptyPage(
+                    stringResource(R.string.empty_title),
+                    String.format(stringResource(R.string.no_desc), "data")
+                )
             }
 
         }
