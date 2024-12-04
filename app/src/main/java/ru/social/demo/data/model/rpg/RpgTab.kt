@@ -3,6 +3,10 @@ package ru.social.demo.data.model.rpg
 import java.util.Locale
 
 enum class RpgTab {
+    ALL {
+        override fun ids(): List<String> = emptyList()
+    },
+
     CLASS {
         override fun ids(): List<String> = listOf(
             "barbarian", "bard", "cleric",

@@ -43,6 +43,7 @@ class WikiSectionViewModel @Inject constructor() : ViewModel(), EventHandler<Wik
 
     private fun handleType(event: WikiSectionContract.Event.LoadData<*>) {
         when(event.type) {
+            RpgTab.ALL -> viewModelScope.launch { fetchAll() }
             RpgTab.CLASS -> viewModelScope.launch { fetchClasses() }
             RpgTab.RACE -> viewModelScope.launch { fetchRaces() }
             RpgTab.MONSTER -> viewModelScope.launch { fetchMonsters() }
@@ -51,6 +52,7 @@ class WikiSectionViewModel @Inject constructor() : ViewModel(), EventHandler<Wik
 
     private fun handleType(event: WikiSectionContract.Event.Reload<*>) {
         when(event.type) {
+            RpgTab.ALL -> viewModelScope.launch { fetchAll(true) }
             RpgTab.CLASS -> viewModelScope.launch { fetchClasses(true) }
             RpgTab.RACE -> viewModelScope.launch { fetchRaces(true) }
             RpgTab.MONSTER -> viewModelScope.launch { fetchMonsters(true) }
@@ -59,6 +61,12 @@ class WikiSectionViewModel @Inject constructor() : ViewModel(), EventHandler<Wik
 
     private fun handleTabChanged(idx: Int?) {
         _compendiumState.postValue(_compendiumState.value?.copyObj(selectedTab = idx ?: 0))
+    }
+
+    private suspend fun fetchAll(isRefresh: Boolean = false) {
+        fetchClasses(isRefresh)
+        fetchRaces(isRefresh)
+        fetchMonsters(isRefresh)
     }
 
     private suspend fun fetchClasses(isRefresh: Boolean = false) {

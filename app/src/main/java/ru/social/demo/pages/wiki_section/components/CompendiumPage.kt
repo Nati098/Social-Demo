@@ -1,5 +1,6 @@
 package ru.social.demo.pages.wiki_section.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +28,7 @@ import ru.social.demo.ui.components.containers.RefreshContainer
 @Composable
 fun CompendiumPage(
     insets: PaddingValues,
+    isTabsVisible: Boolean,
     viewModel: WikiSectionViewModel
 ) {
     val tabs = RpgTab.entries
@@ -39,19 +41,24 @@ fun CompendiumPage(
         }
     ) {
         Column(Modifier.padding(insets).fillMaxSize()) {
-            CTabRow(
-                tabs = tabs,
-                tabTitle = { item -> item.label() },
-                onClick = { index, item ->
-                    viewModel.handle(WikiSectionContract.Event.LoadData(type = item))
-                    viewModel.handle(WikiSectionContract.Event.TabChanged(idx = index))
-                }
-            )
+
+            AnimatedVisibility(isTabsVisible) {
+                CTabRow(
+                    tabs = tabs,
+                    tabTitle = { item -> item.label() },
+                    onClick = { index, item ->
+                        viewModel.handle(WikiSectionContract.Event.LoadData(type = item))
+                        viewModel.handle(WikiSectionContract.Event.TabChanged(idx = index))
+                    }
+                )
+
+            }
 
             when(dataViewState.value?.selectedTab) {
-                0 -> ClassesList(dataViewState.value?.classes)
-                1 -> RacesList(dataViewState.value?.races)
-                2 -> MonstersList(dataViewState.value?.monsters)
+                0 -> AllList(dataViewState.value)
+                1 -> ClassesList(dataViewState.value?.classes)
+                2 -> RacesList(dataViewState.value?.races)
+                3 -> MonstersList(dataViewState.value?.monsters)
             }
         }
     }
@@ -65,6 +72,30 @@ fun CompendiumPage(
     }
 
 }
+
+@Composable
+private fun AllList(state: WikiSectionContract.State?) {
+    if (state == null || state.isEmptyState()) {
+        EmptyState("data")
+    } else {
+        val listState = rememberLazyListState()
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = listState
+        ) {
+            items(state.classes ?: emptyList()) {
+                ArrowTile(title = "${it.name}", description = "Class", icon = null)
+            }
+            items(state.races ?: emptyList()) {
+                ArrowTile(title = "${it.name}", description = "Race", icon = null)
+            }
+            items(state.monsters ?: emptyList()) {
+                ArrowTile(title = "${it.name}", description = "Monster", icon = null)
+            }
+        }
+    }
+}
+
 
 @Composable
 private fun ClassesList(list: List<RpgClass>?) {

@@ -25,6 +25,9 @@ class WikiSectionContract {
         val isError: Boolean
     ): BaseViewState {
 
+        fun isEmptyState() =
+            classes.isNullOrEmpty() && races.isNullOrEmpty() && monsters.isNullOrEmpty()
+
         fun copyObj(
             selectedTab: Int = this.selectedTab,
             classes: List<RpgClass>? = this.classes,

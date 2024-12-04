@@ -1,6 +1,10 @@
 package ru.social.demo.pages.wiki_section
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import ru.social.demo.R
@@ -18,17 +22,18 @@ fun WikiSectionPage(
     viewModel: WikiSectionViewModel,
     navigateBack: () -> Unit
 ) {
+    var isFilterTabsVisible by remember { mutableStateOf(false) }
 
     CTopBar(
         title = stringResource(type.titleId),
         bgColor = colorResource(type.color),
         onBack = navigateBack,
         actions = {
-            FilterButton(onClick = { })
+            FilterButton(onClick = { isFilterTabsVisible = !isFilterTabsVisible })
         },
         content = { insets ->
             when(type) {
-                WikiTypeRes.COMPENDIUM -> CompendiumPage(insets, viewModel)
+                WikiTypeRes.COMPENDIUM -> CompendiumPage(insets, isFilterTabsVisible, viewModel)
                 else -> EmptyPage(
                     stringResource(R.string.empty_title),
                     String.format(stringResource(R.string.no_desc), "data")
