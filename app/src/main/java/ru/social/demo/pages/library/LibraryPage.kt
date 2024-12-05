@@ -22,8 +22,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.firebase.Timestamp
+import kotlinx.coroutines.launch
 import ru.social.demo.R
 import ru.social.demo.base.NavPath
 import ru.social.demo.data.model.Post
@@ -43,6 +50,7 @@ import ru.social.demo.pages.wiki.components.WikiTile
 import ru.social.demo.pages.wiki.components.WikiTypeRes
 import ru.social.demo.ui.components.ArrowTile
 import ru.social.demo.ui.components.Avatar
+import ru.social.demo.ui.components.InfoBottomSheet
 import ru.social.demo.ui.components.buttons.CButton
 import ru.social.demo.ui.components.buttons.CIconButton
 import ru.social.demo.ui.components.buttons.CIconButtonOutlined
@@ -68,7 +76,6 @@ private val TEMP_POST1 = Post(
 )
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LibraryPage(
     navController: NavController
@@ -112,42 +119,7 @@ fun LibraryPage(
                 paddingHorizontal = 16.dp,
                 paddingVertical = 16.dp
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "Icons",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    LazyVerticalGrid (
-                        modifier = Modifier.heightIn(max = 1000.dp),
-                        columns = GridCells.Fixed(6),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-
-                        items(resources) { res ->
-                            TooltipBox(
-                                tooltip = { Text(
-                                    text = res.first,
-                                    modifier = Modifier
-                                        .clip(shape = SDTheme.shapes.corners)
-                                        .background(SDTheme.colors.bgSecondary)
-                                        .padding(4.dp)
-                                ) },
-                                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                                state = rememberTooltipState()
-                            ) {
-                                Icon(
-                                    painterResource(res.second),
-                                    res.first,
-                                    modifier = Modifier.size(36.dp)
-                                )
-                            }
-
-                        }
-
-                    }
-
-                }
+                IconsGrid(resources)
             }
 
             OutlinedContainer(
@@ -223,6 +195,8 @@ fun LibraryPage(
 
             WikiTile(type = WikiTypeRes.CHARACTER)
 
+            TestInfoBottomSheet(resources)
+
             ArrowTile(
                 title = "ModalBottomSheet. New post",
                 description = "Click to show. Post = null",
@@ -256,6 +230,78 @@ fun LibraryPage(
         }
     }
 
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun IconsGrid(resources: List<Pair<String, Int>>) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = "Icons",
+            style = MaterialTheme.typography.titleMedium
+        )
+        LazyVerticalGrid (
+            modifier = Modifier.heightIn(max = 1000.dp),
+            columns = GridCells.Fixed(6),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+
+            items(resources) { res ->
+                TooltipBox(
+                    tooltip = { Text(
+                        text = res.first,
+                        modifier = Modifier
+                            .clip(shape = SDTheme.shapes.corners)
+                            .background(SDTheme.colors.bgSecondary)
+                            .padding(4.dp)
+                    ) },
+                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                    state = rememberTooltipState()
+                ) {
+                    Icon(
+                        painterResource(res.second),
+                        res.first,
+                        modifier = Modifier.size(36.dp)
+                    )
+                }
+
+            }
+
+        }
+
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TestInfoBottomSheet(resources: List<Pair<String, Int>>) {
+    val coroutineScope = rememberCoroutineScope()
+    var isBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    ArrowTile(
+        title = "InfoBottomSheet Test",
+        description = "Click to show",
+        iconId = R.drawable.ic_calendar,
+        onClick = {
+            coroutineScope.launch {
+                isBottomSheetVisible = true
+                sheetState.expand()
+            }
+        }
+    )
+
+    InfoBottomSheet(
+        isBottomSheetVisible = isBottomSheetVisible,
+        sheetState = sheetState,
+        onDismissRequest = { coroutineScope
+            .launch { sheetState.hide() }
+            .invokeOnCompletion { isBottomSheetVisible = false }
+        }
+    ) {
+        IconsGrid(resources)
+    }
 }
 
 private fun loadDrawables(clz: Class<*>): List<Pair<String, Int>> {

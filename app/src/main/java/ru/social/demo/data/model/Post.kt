@@ -4,25 +4,25 @@ import android.os.Parcelable
 import androidx.annotation.StringRes
 import com.google.firebase.Timestamp
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 import ru.social.demo.R
 import java.io.File
 
 @Parcelize
 data class Post (
-    @SerialName("id") override var id: String = "",
-    @SerialName("createDate") val createDate: Timestamp? = null,
-    @SerialName("user") val user: User? = null,
-    @SerialName("type") val type: Post.Type? = null,
-    @SerialName("title") val title: String? = null,
-    @SerialName("text") val text: String? = null,
-    @SerialName("media") val media: List<File>? = null,
+    @SerializedName("id") override var id: String = "",
+    @SerializedName("createDate") val createDate: Timestamp? = null,
+    @SerializedName("user") val user: User? = null,
+    @SerializedName("type") val type: Post.Type? = null,
+    @SerializedName("title") val title: String? = null,
+    @SerializedName("text") val text: String? = null,
+    @SerializedName("media") val media: List<File>? = null,
 //    val audios: List<File>? = null,
 //    val files: List<File>? = null,
 //    val survey: Survey? = null,
 //    val checklist: Checklist? = null,
-    @SerialName("reactionCounts") var reactionCounts: Int? = null,
-    @SerialName("commentsCount") val commentsCount: Int? = null,
+    @SerializedName("reactionCounts") var reactionCounts: Int? = null,
+    @SerializedName("commentsCount") val commentsCount: Int? = null,
 ) : BaseModel(), Parcelable {
     fun containMedia() = !media.isNullOrEmpty()
 
@@ -33,8 +33,8 @@ data class Post (
 //    fun containTags() = !tags.isNullOrEmpty()
 
     enum class Type(val value: String, @StringRes val idString: Int) {
-        @SerialName("post") POST("post", R.string.post_type_default),
-        @SerialName("event") EVENT("event", R.string.post_type_event)
+        @SerializedName("post") POST("post", R.string.post_type_default),
+        @SerializedName("event") EVENT("event", R.string.post_type_event)
     }
 
 }

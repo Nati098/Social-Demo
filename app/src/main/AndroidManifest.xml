@@ -20,7 +20,9 @@
             android:exported="true"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity">
+            android:enableOnBackInvokedCallback="true"
+            tools:ignore="LockedOrientationActivity"
+            tools:targetApi="tiramisu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

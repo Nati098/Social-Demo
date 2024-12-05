@@ -12,8 +12,10 @@ object NavPath {
 
     const val MAIN = "main"
 
-    const val PROFILE = "profile"
     const val POST_EDITOR = "postEditor"
+    const val PROFILE = "profile"
+
+    const val WIKI_SECTION = "wikiSection"
 
 }
 

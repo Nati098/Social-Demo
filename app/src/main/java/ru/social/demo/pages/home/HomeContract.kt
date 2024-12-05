@@ -13,11 +13,9 @@ class HomeContract {
     }
 
     sealed interface State : BaseViewState {
-        data class SuccessData(val data: List<Post>) : Success, State
+        data class SuccessData(val data: List<Post>) : State
         object LoadingData : State
         object Error : State
-
-        interface Success
     }
 
 }
