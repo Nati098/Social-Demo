@@ -4,6 +4,8 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.Scaffold
@@ -19,6 +21,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import ru.social.demo.ui.theme.SDTheme
 import kotlin.math.absoluteValue
@@ -27,6 +30,7 @@ import kotlin.math.absoluteValue
 fun CollapsibleScaffold(
     state: ScrollState,
     modifier: Modifier = Modifier,
+    topInset: Boolean = true,
     topBarMaxHeight: Dp = CollapsibleTopAppBarDefaults.maxHeightLarge,
     topBar: @Composable CollapsibleScaffoldTopBarScope.() -> Unit = {},
     content: @Composable (insets: PaddingValues) -> Unit
@@ -35,6 +39,7 @@ fun CollapsibleScaffold(
         offsetState = rememberOffsetScrollState(state),
         modifier = modifier,
         topBarMaxHeight = topBarMaxHeight,
+        needTopInset = topInset,
         topBar = topBar,
         content = content
     )
@@ -44,6 +49,7 @@ fun CollapsibleScaffold(
 fun CollapsibleScaffold(
     state: LazyListState,
     modifier: Modifier = Modifier,
+    topInset: Boolean = true,
     topBarMaxHeight: Dp = CollapsibleTopAppBarDefaults.maxHeightLarge,
     topBar: @Composable CollapsibleScaffoldTopBarScope.() -> Unit = {},
     content: @Composable (insets: PaddingValues) -> Unit
@@ -52,6 +58,7 @@ fun CollapsibleScaffold(
         offsetState = rememberOffsetScrollState(state),
         modifier = modifier,
         topBarMaxHeight = topBarMaxHeight,
+        needTopInset = topInset,
         topBar = topBar,
         content = content
     )
@@ -63,6 +70,7 @@ private fun CollapsibleScaffoldInternal(
     offsetState: State<Int?>,
     modifier: Modifier = Modifier,
     topBarMaxHeight: Dp,
+    needTopInset: Boolean,
     topBar: @Composable CollapsibleScaffoldTopBarScope.() -> Unit = {},
     content: @Composable (insets: PaddingValues) -> Unit
 ) {
@@ -70,6 +78,7 @@ private fun CollapsibleScaffoldInternal(
         modifier = modifier,
         containerColor = Color.Transparent
     ) { insets ->
+        val topInset = if (needTopInset) insets.calculateTopPadding() else 0.dp
         Box(
             Modifier.background(color = SDTheme.colors.bgPrimary)
         ) {
@@ -78,7 +87,7 @@ private fun CollapsibleScaffoldInternal(
             ) {
                 content(
                     PaddingValues(
-                        top = topBarMaxHeight - CollapsibleTopAppBarDefaults.minHeight + insets.calculateTopPadding() + 20.dp,
+                        top = topBarMaxHeight - CollapsibleTopAppBarDefaults.minHeight + topInset + 20.dp,
                         start = 20.dp,
                         end = 20.dp,
                         bottom = 20.dp
@@ -87,8 +96,13 @@ private fun CollapsibleScaffoldInternal(
             }
             CompositionLocalProvider(
                 TopAppBarScrollOffset provides offsetState,
-                TopAppBarInsets provides insets,
-                TopAppBarMaxHeight provides topBarMaxHeight
+                TopAppBarMaxHeight provides topBarMaxHeight,
+                TopAppBarInsets provides PaddingValues(
+                    top = topInset,
+                    bottom = insets.calculateBottomPadding(),
+                    start = insets.calculateStartPadding(LayoutDirection.Ltr),
+                    end = insets.calculateEndPadding(LayoutDirection.Ltr),
+                )
             ) {
                 CollapsibleScaffoldTopBarScope.topBar()
             }

@@ -1,6 +1,10 @@
 package ru.social.demo.ui.components.buttons
 
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import ru.social.demo.R
 import ru.social.demo.ui.theme.SDTheme
 
@@ -11,18 +15,30 @@ fun BackButton(
     CIconButton(
         iconId = R.drawable.ic_arrow_left,
         contentColor = SDTheme.colors.fgSecondary,
+        size = 44.dp,
         onClick = onClick
     )
 }
 
 @Composable
 fun ShareButton(
-    onClick: () -> Unit,
+    context: Context,
+    extras: Bundle = Bundle()
 ) {
     CIconButton(
         iconId = R.drawable.ic_share,
         contentColor = SDTheme.colors.fgSecondary,
-        onClick = onClick
+        onClick = {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtras(extras)
+            }
+            context.startActivity(
+                Intent.createChooser(
+                    intent, context.getString(R.string.share_profile)
+                )
+            )
+        }
     )
 }
 

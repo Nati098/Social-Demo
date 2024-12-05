@@ -1,8 +1,11 @@
 package ru.social.demo.pages
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +23,8 @@ fun EmptyPage(
     description: String
 ) {
     Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
@@ -29,13 +34,13 @@ fun EmptyPage(
         Spacer(modifier = Modifier.height(24.dp))
         Text(
             title,
-            style = SDTheme.tyrography.headingM,
+            style = SDTheme.typography.headingM,
             color = SDTheme.colors.fgPrimary
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             description,
-            style = SDTheme.tyrography.bookL,
+            style = SDTheme.typography.bookL,
             color = SDTheme.colors.fgSecondary,
             textAlign = TextAlign.Center
         )

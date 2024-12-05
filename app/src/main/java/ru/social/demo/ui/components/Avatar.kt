@@ -3,11 +3,14 @@ package ru.social.demo.ui.components
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -41,14 +44,21 @@ enum class AvatarRes(@ColorRes val color: Int, val placeholder: Int) {
 fun Avatar(
     size: Dp,
     imgUrl: String? = null,
-    char: Char,
-    inactive: Boolean? = null
+    char: Char? = null,
+    inactive: Boolean? = null,
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
     val statusInactive = colorResource(R.color.status_inactive)
     val statusActive = colorResource(R.color.status_active)
 
     Box(
-        modifier = Modifier
+        modifier = modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            )
             .size(size)
             .graphicsLayer {
                 compositingStrategy = CompositingStrategy.Offscreen
@@ -97,7 +107,7 @@ fun Avatar(
                 contentScale = ContentScale.Crop
             )
         } else {
-            Placeholder(size, char)
+            Placeholder(size, char ?: 'U')
         }
 
     }

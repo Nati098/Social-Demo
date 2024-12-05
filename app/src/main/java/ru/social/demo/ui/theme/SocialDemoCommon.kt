@@ -11,6 +11,7 @@ data class SDColors(
     val bgActionPrimary: Color,
     val bgHighlight: Color,
     val bgSecondary: Color,
+    val bgSecondaryLight: Color,
     val bgTertiary: Color,
     val bgFab: Color,
 
@@ -43,7 +44,9 @@ data class SDTypography(
 )
 
 data class SDShape(
-    val cornersStyle: Shape
+    val corners: Shape,
+    val buttonCorners: Shape,
+    val appBarCorners: Shape,
 )
 
 object SDTheme {
@@ -52,7 +55,7 @@ object SDTheme {
         @Composable
         get() = LocalSDColors.current
 
-    val tyrography: SDTypography
+    val typography: SDTypography
         @Composable
         get() = LocalSDTypography.current
 

@@ -3,9 +3,11 @@ package ru.social.demo.utils
 import android.text.format.DateUtils
 import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
-const val DATE_FORMAT = "dd MMMM HH:mm"
+const val POST_DATE_FORMAT = "dd MMMM HH:mm"
+const val BIRTHDAY_DATE_FORMAT = "dd MMMM yyyy"
 const val HOUR_FORMAT = "HH:mm"
 
 fun Timestamp.parseDate(): String {
@@ -16,6 +18,17 @@ fun Timestamp.parseDate(): String {
         DateUtils.isToday(date.time + DateUtils.DAY_IN_MILLIS) ->
             "Yesterday at ${SimpleDateFormat(HOUR_FORMAT, Locale.getDefault()).format(this.toDate())}"
         else ->
-            SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(this.toDate())
+            SimpleDateFormat(POST_DATE_FORMAT, Locale.getDefault()).format(this.toDate())
     }
+}
+
+fun Timestamp.parseBirthdayDate(): String =
+    SimpleDateFormat(BIRTHDAY_DATE_FORMAT, Locale.getDefault()).format(this.toDate())
+
+fun Timestamp.calculateAge(): Int {
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+    val year = Calendar.getInstance()
+        .apply { time = this@calculateAge.toDate() }
+        .get(Calendar.YEAR)
+    return currentYear - year
 }

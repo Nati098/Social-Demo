@@ -43,9 +43,9 @@ fun OutlinedContainer(
             .border(
                 1.5.dp,
                 SDTheme.colors.borderColor,
-                shape = SDTheme.shapes.cornersStyle
+                shape = SDTheme.shapes.corners
             )
-            .clip(shape = SDTheme.shapes.cornersStyle)
+            .clip(shape = SDTheme.shapes.corners)
             .background(color = SDTheme.colors.bgPrimary)
             .padding(horizontal = paddingHorizontal, vertical = paddingVertical),
         contentAlignment = Alignment.TopCenter,

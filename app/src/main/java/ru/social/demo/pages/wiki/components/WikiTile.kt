@@ -4,23 +4,27 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Path
@@ -30,6 +34,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import ru.social.demo.R
@@ -43,16 +48,25 @@ enum class WikiTypeRes(
     @StringRes val titleId: Int,
     @StringRes val descriptionId: Int?
 ) {
-    COMPENDIUM(R.color.wiki_compendium, R.drawable.bg_image_1, R.string.wiki_compendium, null),
-    EVENT(R.color.wiki_event, R.drawable.bg_image_7, R.string.wiki_event, null),
-    WORLD(R.color.wiki_world, R.drawable.bg_image_6, R.string.wiki_world, null),
-    CHARACTER(R.color.wiki_character, R.drawable.bg_image_1, R.string.wiki_character, R.string.wiki_character),
-    TALE(R.color.wiki_tale, R.drawable.bg_image_3, R.string.wiki_tales, null)
+    COMPENDIUM(R.color.wiki_compendium, R.drawable.bg_image_1, R.string.wiki_compendium, R.string.wiki_compendium_desc),
+    EVENT(R.color.wiki_event, R.drawable.bg_image_7, R.string.wiki_event, R.string.wiki_event_desc),
+    WORLD(R.color.wiki_world, R.drawable.bg_image_6, R.string.wiki_world, R.string.wiki_world_desc),
+    CHARACTER(R.color.wiki_character, R.drawable.bg_image_1, R.string.wiki_character, R.string.wiki_character_desc),
+    TALE(R.color.wiki_tale, R.drawable.bg_image_3, R.string.wiki_tales, R.string.wiki_tales_desc)
 }
 
 @Composable
-fun WikiTile(type: WikiTypeRes) {
-    OutlinedContainer {
+fun WikiTile(
+    type: WikiTypeRes,
+    onClick: () -> Unit = {}
+) {
+    OutlinedContainer(
+        modifier = Modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = onClick
+        )
+    ) {
 
         val tileHeight = 108.dp
         val bgSize = 160.dp
@@ -100,31 +114,36 @@ fun WikiTile(type: WikiTypeRes) {
                 null,
                 modifier = Modifier.size(imgSize).padding(horizontal = 12.dp)
             )
-            Column(
-                modifier = Modifier.padding(start = 12.dp, end = 20.dp)
+            Row(
+                modifier = Modifier
+                    .padding(top = 20.dp, bottom = 20.dp, start = 12.dp, end = 20.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
+                Column(Modifier.weight(9f)) {
                     Text(
                         stringResource(type.titleId),
-                        style = SDTheme.tyrography.headingS,
+                        style = SDTheme.typography.headingS,
                         color = SDTheme.colors.fgPrimary
                     )
-                    Image(
-                        painterResource(R.drawable.ic_arrow_right),
-                        null,
-                        colorFilter = ColorFilter.tint(color = SDTheme.colors.fgSecondary)
-                    )
+                    type.descriptionId?.let {
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            stringResource(it),
+                            style = SDTheme.typography.bodyMediumM,
+                            color = SDTheme.colors.fgSecondary,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
-                type.descriptionId?.let {
-                    Text(
-                        stringResource(it),
-                        style = SDTheme.tyrography.bodyMediumM,
-                        color = SDTheme.colors.fgSecondary
-                    )
-                }
+                Image(
+                    painterResource(R.drawable.ic_arrow_right),
+                    null,
+                    colorFilter = ColorFilter.tint(color = SDTheme.colors.fgSecondary),
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
 
