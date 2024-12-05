@@ -73,29 +73,6 @@ fun UserBlock(
 }
 
 @Composable
-fun MoreButton(onEdit: () -> Unit = {}) {
-    var expandedMore by remember { mutableStateOf(false) }
-
-    Column {
-        CIconButton(
-            iconId = R.drawable.ic_more,
-            contentColor = SDTheme.colors.fgSecondary,
-            size = 30.dp,
-        ) { expandedMore = !expandedMore }
-
-        DropdownMenu(
-            modifier = Modifier.wrapContentSize(),
-            expanded = expandedMore,
-            onDismissRequest = { expandedMore = false },
-            shape = SDTheme.shapes.corners,
-            containerColor = SDTheme.colors.bgPrimary
-        ) {
-            LabelTile(type = LabelType.SMALL, label = "Edit", iconId = R.drawable.ic_edit, onClick = onEdit)
-        }
-    }
-}
-
-@Composable
 fun TextBlock(title: String?, body: String?) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -148,6 +125,30 @@ fun ReactionBlock(reactionsCount: Int?, commentsCount: Int?) {
             },
             commentsCount ?: 0
         )
+    }
+}
+
+
+@Composable
+private fun MoreButton(onEdit: () -> Unit = {}) {
+    var expandedMore by remember { mutableStateOf(false) }
+
+    Column {
+        CIconButton(
+            iconId = R.drawable.ic_more,
+            contentColor = SDTheme.colors.fgSecondary,
+            size = 30.dp,
+        ) { expandedMore = !expandedMore }
+
+        DropdownMenu(
+            modifier = Modifier.wrapContentSize(),
+            expanded = expandedMore,
+            onDismissRequest = { expandedMore = false },
+            shape = SDTheme.shapes.corners,
+            containerColor = SDTheme.colors.bgPrimary
+        ) {
+            LabelTile(type = LabelType.SMALL, label = "Edit", iconId = R.drawable.ic_edit, onClick = onEdit)
+        }
     }
 }
 
