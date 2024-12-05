@@ -1,6 +1,7 @@
 package ru.social.demo.pages.wiki
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,9 +20,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ru.social.demo.R
+import ru.social.demo.base.NavPath
 import ru.social.demo.pages.wiki.components.WikiAppBarTile
 import ru.social.demo.pages.wiki.components.WikiTile
 import ru.social.demo.pages.wiki.components.WikiTypeRes
+import ru.social.demo.pages.wiki_section.WIKI_SECTION_TYPE
 import ru.social.demo.ui.components.appbars.CAppBar
 import ru.social.demo.ui.components.buttons.fab.Fab
 import ru.social.demo.ui.components.buttons.fab.FabItem
@@ -48,12 +50,22 @@ fun WikiPage(
                     contentPadding = insets
                 ) {
                     items(WikiTypeRes.entries.toTypedArray()) { type ->
-                        WikiTile(type = type)
+                        WikiTile(
+                            type = type,
+                            onClick = {
+                                navController
+                                    .apply {
+                                        Bundle().apply {
+                                            putString(WIKI_SECTION_TYPE, type.toString())
+                                        }
+                                    }
+                                    .navigate("${NavPath.WIKI_SECTION}/$type")
+                            }
+                        )
                         HorizontalDivider(thickness = 10.dp, color = Color.Transparent)
                     }
-                    item {
-                        Spacer(Modifier.size(90.dp))
-                    }
+
+                    item { Spacer(Modifier.size(90.dp)) }
                 }
             }
         )

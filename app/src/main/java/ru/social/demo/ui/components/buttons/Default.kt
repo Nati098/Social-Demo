@@ -28,12 +28,14 @@ import ru.social.demo.ui.theme.SDTheme
 
 @Composable
 fun CButton(
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    onClick: () -> Unit,
     iconId: Int? = null,
-    label: String? = null
+    label: String? = null,
+    onClick: () -> Unit
 ) {
     Button(
+        modifier = modifier,
         enabled = enabled,
         onClick = onClick,
         shape = SDTheme.shapes.buttonCorners,

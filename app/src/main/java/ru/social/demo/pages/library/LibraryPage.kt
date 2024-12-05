@@ -2,24 +2,37 @@ package ru.social.demo.pages.library
 
 import android.os.Bundle
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
@@ -27,16 +40,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.firebase.Timestamp
+import kotlinx.coroutines.launch
 import ru.social.demo.R
 import ru.social.demo.base.NavPath
 import ru.social.demo.data.model.Post
 import ru.social.demo.data.model.User
 import ru.social.demo.pages.post_editor.POST
-import ru.social.demo.pages.post_editor.PostEditorSheet
 import ru.social.demo.pages.wiki.components.WikiTile
 import ru.social.demo.pages.wiki.components.WikiTypeRes
 import ru.social.demo.ui.components.ArrowTile
 import ru.social.demo.ui.components.Avatar
+import ru.social.demo.ui.components.InfoBottomSheet
 import ru.social.demo.ui.components.buttons.CButton
 import ru.social.demo.ui.components.buttons.CIconButton
 import ru.social.demo.ui.components.buttons.CIconButtonOutlined
@@ -45,6 +59,7 @@ import ru.social.demo.ui.components.buttons.CTextButton
 import ru.social.demo.ui.components.buttons.CTonalButton
 import ru.social.demo.ui.components.containers.OutlinedContainer
 import ru.social.demo.ui.theme.SDTheme
+import java.lang.reflect.Field
 
 private val TEMP_USER = User(
     id = "0",
@@ -66,6 +81,7 @@ fun LibraryPage(
     navController: NavController
 ) {
 
+    val resources = loadDrawables(R.drawable::class.java)
     val scrollState = rememberScrollState()
     Scaffold (
         containerColor = SDTheme.colors.bgPrimary
@@ -96,6 +112,14 @@ fun LibraryPage(
                         Avatar(imgUrl = TEMP_USER.imageUrl, char = TEMP_USER.name!![0], size = 40.dp, inactive = true)
                     }
                 }
+            }
+
+            OutlinedContainer(
+                parentWidth = true,
+                paddingHorizontal = 16.dp,
+                paddingVertical = 16.dp
+            ) {
+                IconsGrid(resources)
             }
 
             OutlinedContainer(
@@ -142,7 +166,10 @@ fun LibraryPage(
                 paddingHorizontal = 16.dp,
                 paddingVertical = 16.dp
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    Modifier.padding(horizontal = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     ArrowTile(title = "Tile 1", iconId = null)
                     ArrowTile(title = "Tile 2", description = "Description", icon = null)
                     ArrowTile(title = "Tile 3", iconId = R.drawable.ic_user_edit)
@@ -167,6 +194,8 @@ fun LibraryPage(
             }
 
             WikiTile(type = WikiTypeRes.CHARACTER)
+
+            TestInfoBottomSheet(resources)
 
             ArrowTile(
                 title = "ModalBottomSheet. New post",
@@ -201,4 +230,91 @@ fun LibraryPage(
         }
     }
 
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun IconsGrid(resources: List<Pair<String, Int>>) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = "Icons",
+            style = MaterialTheme.typography.titleMedium
+        )
+        LazyVerticalGrid (
+            modifier = Modifier.heightIn(max = 1000.dp),
+            columns = GridCells.Fixed(6),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+
+            items(resources) { res ->
+                TooltipBox(
+                    tooltip = { Text(
+                        text = res.first,
+                        modifier = Modifier
+                            .clip(shape = SDTheme.shapes.corners)
+                            .background(SDTheme.colors.bgSecondary)
+                            .padding(4.dp)
+                    ) },
+                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                    state = rememberTooltipState()
+                ) {
+                    Icon(
+                        painterResource(res.second),
+                        res.first,
+                        modifier = Modifier.size(36.dp)
+                    )
+                }
+
+            }
+
+        }
+
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TestInfoBottomSheet(resources: List<Pair<String, Int>>) {
+    val coroutineScope = rememberCoroutineScope()
+    var isBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    ArrowTile(
+        title = "InfoBottomSheet Test",
+        description = "Click to show",
+        iconId = R.drawable.ic_calendar,
+        onClick = {
+            coroutineScope.launch {
+                isBottomSheetVisible = true
+                sheetState.expand()
+            }
+        }
+    )
+
+    InfoBottomSheet(
+        isBottomSheetVisible = isBottomSheetVisible,
+        sheetState = sheetState,
+        onDismissRequest = { coroutineScope
+            .launch { sheetState.hide() }
+            .invokeOnCompletion { isBottomSheetVisible = false }
+        }
+    ) {
+        IconsGrid(resources)
+    }
+}
+
+private fun loadDrawables(clz: Class<*>): List<Pair<String, Int>> {
+    val res = mutableListOf<Pair<String, Int>>()
+    val fields: Array<Field> = clz.declaredFields
+    for (field in fields) {
+        val drawableId: Int
+        try {
+            drawableId = field.getInt(clz)
+            res.add(Pair(field.name, drawableId))
+        } catch (e: Exception) {
+            continue
+        }
+    }
+    return res
 }

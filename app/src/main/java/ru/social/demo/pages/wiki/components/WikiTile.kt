@@ -5,6 +5,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,8 +16,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -31,6 +34,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import ru.social.demo.R
@@ -57,7 +61,11 @@ fun WikiTile(
     onClick: () -> Unit = {}
 ) {
     OutlinedContainer(
-        modifier = Modifier.clickable { onClick() }
+        modifier = Modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = onClick
+        )
     ) {
 
         val tileHeight = 108.dp
@@ -113,7 +121,7 @@ fun WikiTile(
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column {
+                Column(Modifier.weight(9f)) {
                     Text(
                         stringResource(type.titleId),
                         style = SDTheme.typography.headingS,
@@ -125,14 +133,16 @@ fun WikiTile(
                             stringResource(it),
                             style = SDTheme.typography.bodyMediumM,
                             color = SDTheme.colors.fgSecondary,
-                            maxLines = 2
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
                 }
                 Image(
                     painterResource(R.drawable.ic_arrow_right),
                     null,
-                    colorFilter = ColorFilter.tint(color = SDTheme.colors.fgSecondary)
+                    colorFilter = ColorFilter.tint(color = SDTheme.colors.fgSecondary),
+                    modifier = Modifier.weight(1f)
                 )
             }
         }

@@ -11,6 +11,7 @@ data class SDColors(
     val bgActionPrimary: Color,
     val bgHighlight: Color,
     val bgSecondary: Color,
+    val bgSecondaryLight: Color,
     val bgTertiary: Color,
     val bgFab: Color,
 

@@ -12,7 +12,7 @@ import ru.social.demo.base.NavBarPath
 import ru.social.demo.base.NavPath
 import ru.social.demo.data.model.Post
 import ru.social.demo.data.model.PostCNavType
-import ru.social.demo.pages.ProfilePage
+import ru.social.demo.pages.profile.ProfilePage
 import ru.social.demo.pages.post_editor.POST
 import ru.social.demo.pages.post_editor.PostEditorSheet
 

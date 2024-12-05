@@ -4,7 +4,6 @@ import androidx.compose.ui.graphics.Color
 
 val CBlack = Color.Black
 val CWhite = Color.White
-//val BgSecondaryLight = Color(0xFFF9F3EE)
 //val BorderPrimary = Color(0x1F1F120A)
 
 val LightColorScheme = SDColors(
@@ -12,6 +11,7 @@ val LightColorScheme = SDColors(
     bgActionPrimary = Color(0xFFF37D56),
     bgHighlight = Color(0x14FC8E6B),
     bgSecondary = Color(0xFFF3E2D5),
+    bgSecondaryLight = Color(0xFFF9F3EE),
     bgTertiary = Color(0x0D1F120A),
     bgFab = Color(0xFF084243),
 

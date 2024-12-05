@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.social.demo.base.EventHandler
 import ru.social.demo.data.model.User
-import ru.social.demo.services.FirestoreInteractor
+import ru.social.demo.services.FirestoreClient
 import ru.social.demo.services.FsPath
 import ru.social.demo.utils.NetworkUtils
 import javax.inject.Inject
@@ -46,7 +46,7 @@ class MainViewModel @Inject constructor(): ViewModel(), EventHandler<MainContrac
 
     private suspend fun fetchUser() {
         NetworkUtils.makeCall {
-            FirestoreInteractor.getInstance().readData<User>(
+            FirestoreClient.getInstance().readData<User>(
                 path = FsPath.USERS,
                 docId = USER_ID,
                 onSuccess = { result ->
