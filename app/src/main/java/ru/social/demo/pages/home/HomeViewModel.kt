@@ -9,7 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.social.demo.base.EventHandler
 import ru.social.demo.data.model.Post
-import ru.social.demo.services.FirestoreInteractor
+import ru.social.demo.services.FirestoreClient
 import ru.social.demo.services.FsPath
 import ru.social.demo.utils.NetworkUtils
 import javax.inject.Inject
@@ -51,7 +51,7 @@ class HomeViewModel @Inject constructor(): ViewModel(), EventHandler<HomeContrac
         }
 
         NetworkUtils.makeCall {
-            FirestoreInteractor.getInstance().readData<Post>(
+            FirestoreClient.getInstance().readData<Post>(
                 path = FsPath.POSTS,
                 onSuccess = { result ->
                     val data = result?.sortedByDescending { it.createDate } ?: emptyList()

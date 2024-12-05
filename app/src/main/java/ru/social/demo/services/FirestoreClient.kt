@@ -11,17 +11,17 @@ object FsPath {
     const val USERS = "users"
 }
 
-class FirestoreInteractor(
+class FirestoreClient(
     val db: FirebaseFirestore
 ) {
 
     companion object {
 
         @Volatile
-        private var instance: FirestoreInteractor? = null
+        private var instance: FirestoreClient? = null
 
         fun getInstance() = instance ?: synchronized(this) {
-            FirestoreInteractor(db = Firebase.firestore).also { instance = it }
+            FirestoreClient(db = Firebase.firestore).also { instance = it }
         }
 
     }
