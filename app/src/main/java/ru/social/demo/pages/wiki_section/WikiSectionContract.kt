@@ -1,6 +1,5 @@
 package ru.social.demo.pages.wiki_section
 
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import ru.social.demo.base.BaseEvent
 import ru.social.demo.base.BaseViewState
 import ru.social.demo.data.model.rpg.RpgClass
@@ -39,31 +38,6 @@ class WikiSectionContract {
             RpgTab.MONSTER -> monsters.isNullOrEmpty()
             else -> false
         }
-
-        fun copyObj(
-            selectedTab: Int = this.selectedTab,
-            bottomSheetItem: Any? = this.bottomSheetItem,
-            classes: List<RpgClass>? = this.classes,
-            races: List<RpgRace>? = this.races,
-            monsters: List<ShortInfo>? = this.monsters,
-            isClassesLoading: Boolean = this.isClassesLoading,
-            isRacesLoading: Boolean = this.isRacesLoading,
-            isMonstersLoading: Boolean = this.isMonstersLoading,
-            isMonsterLoading: Boolean = this.isMonstersLoading,
-            isError: Boolean = this.isError,
-        ): State =
-            State(
-                selectedTab,
-                bottomSheetItem,
-                classes,
-                races,
-                monsters,
-                isClassesLoading,
-                isRacesLoading,
-                isMonstersLoading,
-                isMonsterLoading,
-                isError
-            )
 
     }
 

@@ -87,22 +87,22 @@ class FirestoreClient(
 //    }
 
 
-//    fun <T : BaseModel> updateData(
-//        path: String,
-//        data: T,
-//        onSuccess: () -> Unit = {},
-//        onError: () -> Unit = {},
-//    ) {
-//        db.collection(path).document(data.id)
-//            .update(data)
-//            .addOnSuccessListener { result ->
-//                Log.d("TEST", "set result: $result ")
-//                onSuccess()
-//            }
-//            .addOnFailureListener { e ->
-//                Log.e("TEST","Firebase.firestore set error: $e")
-//                onError()
-//            }
-//    }
+    fun <T : BaseModel> updateData(
+        path: String,
+        data: T,
+        onSuccess: () -> Unit = {},
+        onError: () -> Unit = {},
+    ) {
+        val key = data.id
+        db.collection(path).document(key).set(data)
+            .addOnSuccessListener { result ->
+                Log.d("TEST", "set result: $result ")
+                onSuccess()
+            }
+            .addOnFailureListener { e ->
+                Log.e("TEST","Firebase.firestore set error: $e")
+                onError()
+            }
+    }
 
 }

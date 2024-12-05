@@ -21,6 +21,7 @@ import ru.social.demo.utils.verticalScrollbar
 fun CTextField(
     modifier: Modifier = Modifier,
     value: String,
+    singleLine: Boolean = false,
     onValueChange: (String) -> Unit,
 ) {
     CompositionLocalProvider(
@@ -33,6 +34,7 @@ fun CTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = modifier,
+            singleLine = singleLine,
             decorationBox = { innerTextField ->
                 val scrollState = rememberScrollState()
                 Column(

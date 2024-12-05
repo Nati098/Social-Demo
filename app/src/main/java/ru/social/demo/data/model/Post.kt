@@ -12,6 +12,7 @@ import java.io.File
 data class Post (
     @SerializedName("id") override var id: String = "",
     @SerializedName("createDate") val createDate: Timestamp? = null,
+    @SerializedName("updateDate") val updateDate: Timestamp? = null,
     @SerializedName("user") val user: User? = null,
     @SerializedName("type") val type: Post.Type? = null,
     @SerializedName("title") val title: String? = null,
