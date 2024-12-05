@@ -86,7 +86,7 @@ fun PostEditorSheet(
                 if (isCreateMode) {
                     CTextButton(
                         label = stringResource(R.string.post_create),
-                        enabled = title.isNotBlank() && text.isNotEmpty(),
+                        enabled = text.isNotEmpty(),
                         onClick = {
                             coroutineScope
                                 .launch { sheetState.hide() }
@@ -98,7 +98,7 @@ fun PostEditorSheet(
                 } else {
                     CTextButton(
                         label = stringResource(R.string.post_edit),
-                        enabled = title.isNotBlank() && text.isNotEmpty(),
+                        enabled = text.isNotEmpty(),
                         onClick = {
                             coroutineScope
                                 .launch { sheetState.hide() }
@@ -126,6 +126,7 @@ fun PostEditorSheet(
                             )
                             .weight(1f),
                         value = title,
+                        textStyle = SDTheme.typography.headingS,
                         singleLine = true,
                         onValueChange = { title = it }
                     )

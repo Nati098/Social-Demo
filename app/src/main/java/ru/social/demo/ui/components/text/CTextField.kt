@@ -13,6 +13,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import ru.social.demo.R
 import ru.social.demo.ui.theme.SDTheme
 import ru.social.demo.utils.verticalScrollbar
@@ -22,6 +23,7 @@ fun CTextField(
     modifier: Modifier = Modifier,
     value: String,
     singleLine: Boolean = false,
+    textStyle: TextStyle = SDTheme.typography.bookL,
     onValueChange: (String) -> Unit,
 ) {
     CompositionLocalProvider(
@@ -52,9 +54,7 @@ fun CTextField(
                 }
 
             },
-            textStyle = SDTheme.typography.bookL.copy(
-                color = SDTheme.colors.fgPrimary
-            ),
+            textStyle = textStyle.copy(color = SDTheme.colors.fgPrimary),
             cursorBrush = SolidColor(SDTheme.colors.fgPrimary)
         )
     }

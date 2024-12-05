@@ -12,15 +12,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import ru.social.demo.ui.theme.SDTheme
 
 @Composable
 fun RoundedContainer(
     parentWidth: Boolean = false,
     paddingHorizontal: Dp = 0.dp,
     paddingVertical: Dp = 0.dp,
-    cornerSize: Dp = 0.dp,
+    shape: Shape = RoundedCornerShape(0.dp),
     bgColor: Color = Color.Transparent,
     modifier: Modifier = Modifier,
     content: @Composable (BoxScope.() -> Unit)
@@ -29,7 +31,7 @@ fun RoundedContainer(
 
     Box(
         modifier = modifierr
-            .clip(shape = RoundedCornerShape(cornerSize))
+            .clip(shape = shape)
             .background(color = bgColor)
             .padding(horizontal = paddingHorizontal, vertical = paddingVertical),
         contentAlignment = Alignment.TopCenter,
@@ -49,7 +51,7 @@ fun DefaultRoundedContainer(
         parentWidth = parentWidth,
         paddingHorizontal = paddingHorizontal,
         paddingVertical = paddingVertical,
-        cornerSize = 20.dp,
+        shape = SDTheme.shapes.corners,
         modifier = modifier,
         content = content
     )
