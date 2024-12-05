@@ -1,6 +1,5 @@
 package ru.social.demo.pages.wiki_section
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.social.demo.base.EventHandler
 import ru.social.demo.data.model.rpg.RpgClass
-import ru.social.demo.data.model.rpg.RpgMonster
 import ru.social.demo.data.model.rpg.RpgRace
 import ru.social.demo.data.model.rpg.RpgTab
 import ru.social.demo.services.retrofit.RpgApiClient
@@ -65,17 +63,17 @@ class WikiSectionViewModel @Inject constructor() : ViewModel(), EventHandler<Wik
     }
 
     private fun handleTabChanged(idx: Int?) {
-        _compendiumState.postValue(_compendiumState.value?.copyObj(selectedTab = idx ?: 0))
+        _compendiumState.postValue(_compendiumState.value?.copy(selectedTab = idx ?: 0))
     }
 
     private fun handleItemClick(event: WikiSectionContract.Event.ItemClicked<*>) {
         when(event.type) {
             RpgTab.ALL -> throw NotImplementedError("Invalid type (ALL) for $event")
             RpgTab.CLASS -> _compendiumState.postValue(
-                _compendiumState.value?.copyObj(bottomSheetItem = _compendiumState.value?.classes?.find { it.id == event.idx })
+                _compendiumState.value?.copy(bottomSheetItem = _compendiumState.value?.classes?.find { it.id == event.idx })
             )
             RpgTab.RACE -> _compendiumState.postValue(
-                _compendiumState.value?.copyObj(bottomSheetItem = _compendiumState.value?.races?.find { it.id == event.idx })
+                _compendiumState.value?.copy(bottomSheetItem = _compendiumState.value?.races?.find { it.id == event.idx })
             )
             RpgTab.MONSTER -> viewModelScope.launch { fetchMonster(event.idx, true) }
         }
@@ -89,7 +87,7 @@ class WikiSectionViewModel @Inject constructor() : ViewModel(), EventHandler<Wik
 
     private suspend fun fetchClasses(isRefresh: Boolean = false) {
         if (isRefresh) {
-            _compendiumState.postValue(_compendiumState.value?.copyObj(isClassesLoading = true))
+            _compendiumState.postValue(_compendiumState.value?.copy(isClassesLoading = true))
         }
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -100,7 +98,7 @@ class WikiSectionViewModel @Inject constructor() : ViewModel(), EventHandler<Wik
                 result.add(res)
             }
             _compendiumState.postValue(
-                _compendiumState.value?.copyObj(classes = result, isClassesLoading = false)
+                _compendiumState.value?.copy(classes = result, isClassesLoading = false)
             )
         }
 
@@ -108,7 +106,7 @@ class WikiSectionViewModel @Inject constructor() : ViewModel(), EventHandler<Wik
 
     private suspend fun fetchRaces(isRefresh: Boolean = false) {
         if (isRefresh) {
-            _compendiumState.postValue(_compendiumState.value?.copyObj(isRacesLoading = true))
+            _compendiumState.postValue(_compendiumState.value?.copy(isRacesLoading = true))
         }
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -119,34 +117,34 @@ class WikiSectionViewModel @Inject constructor() : ViewModel(), EventHandler<Wik
                 result.add(res)
             }
             _compendiumState.postValue(
-                _compendiumState.value?.copyObj(races = result, isRacesLoading = false)
+                _compendiumState.value?.copy(races = result, isRacesLoading = false)
             )
         }
     }
 
     private suspend fun fetchMonsters(isRefresh: Boolean = false) {
         if (isRefresh) {
-            _compendiumState.postValue(_compendiumState.value?.copyObj(isMonstersLoading = true))
+            _compendiumState.postValue(_compendiumState.value?.copy(isMonstersLoading = true))
         }
 
         val result = NetworkUtils
             .makeCall { RpgApiClient.service.getMonsters() }
             .getOrNull()
         _compendiumState.postValue(
-            _compendiumState.value?.copyObj(monsters = result?.results, isMonstersLoading = false)
+            _compendiumState.value?.copy(monsters = result?.results, isMonstersLoading = false)
         )
     }
 
     private suspend fun fetchMonster(id: String, isRefresh: Boolean = false) {
         if (isRefresh) {
-            _compendiumState.postValue(_compendiumState.value?.copyObj(isMonsterLoading = true))
+            _compendiumState.postValue(_compendiumState.value?.copy(isMonsterLoading = true))
         }
 
         val result = NetworkUtils
             .makeCall { RpgApiClient.service.getMonsterById(id) }
             .getOrNull()
         _compendiumState.postValue(
-            _compendiumState.value?.copyObj(bottomSheetItem = result, isMonsterLoading = false)
+            _compendiumState.value?.copy(bottomSheetItem = result, isMonsterLoading = false)
         )
     }
 

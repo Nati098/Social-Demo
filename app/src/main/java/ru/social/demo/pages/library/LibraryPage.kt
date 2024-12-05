@@ -1,6 +1,8 @@
 package ru.social.demo.pages.library
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -48,6 +51,8 @@ import ru.social.demo.data.model.User
 import ru.social.demo.pages.post_editor.POST
 import ru.social.demo.pages.wiki.components.WikiTile
 import ru.social.demo.pages.wiki.components.WikiTypeRes
+import ru.social.demo.services.FirestoreClient
+import ru.social.demo.services.FsPath
 import ru.social.demo.ui.components.ArrowTile
 import ru.social.demo.ui.components.Avatar
 import ru.social.demo.ui.components.InfoBottomSheet
@@ -60,6 +65,7 @@ import ru.social.demo.ui.components.buttons.CTonalButton
 import ru.social.demo.ui.components.containers.OutlinedContainer
 import ru.social.demo.ui.theme.SDTheme
 import java.lang.reflect.Field
+import kotlin.random.Random
 
 private val TEMP_USER = User(
     id = "0",
@@ -68,10 +74,10 @@ private val TEMP_USER = User(
 )
 
 private val TEMP_POST1 = Post(
-    id = "",
+    id = "eGICdxTmM49V90p2o7lF",
     createDate = Timestamp.now(),
-    TEMP_USER,
-    title = "Random God",
+    user = TEMP_USER,
+    title = "Random God UPDATED!",
     text = "tetete",
 )
 
@@ -80,7 +86,7 @@ private val TEMP_POST1 = Post(
 fun LibraryPage(
     navController: NavController
 ) {
-
+    val ctx = LocalContext.current
     val resources = loadDrawables(R.drawable::class.java)
     val scrollState = rememberScrollState()
     Scaffold (
@@ -145,7 +151,19 @@ fun LibraryPage(
                         COutlinedButton(label = "Click me!", enabled = false, onClick = { })
                     }
                     Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        CTextButton(label = "Click me!", onClick = { })
+                        CTextButton(label = "Click me!!", onClick = {
+                            FirestoreClient.getInstance().updateData(
+                                FsPath.POSTS,
+                                TEMP_POST1.copy(text = generateRandomString(Random.nextInt(21)), updateDate = Timestamp.now()),
+                                onSuccess = {
+                                    Toast.makeText(ctx, "Post ${TEMP_POST1.id} updated", Toast.LENGTH_SHORT).show()
+                                },
+                                onError = {
+                                    Toast.makeText(ctx, "Post ${TEMP_POST1.id} - error while updating ", Toast.LENGTH_SHORT).show()
+                                }
+                            )
+
+                        })
                         CTextButton(label = "Click me!", enabled = false, onClick = { })
                     }
                     Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -317,4 +335,9 @@ private fun loadDrawables(clz: Class<*>): List<Pair<String, Int>> {
         }
     }
     return res
+}
+
+private fun generateRandomString(length: Int): String {
+    val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+    return (1..length).map { allowedChars.random() }.joinToString("")
 }
