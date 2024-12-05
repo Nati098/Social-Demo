@@ -7,16 +7,15 @@ import kotlinx.serialization.Serializable
 data class Spellcasting(
     @SerializedName("level") val level: Int? = null,
 
-    @SerializedName("info") val info: List<Description>? = null,
+    @SerializedName("info") val info: List<DescriptionList>? = null,
     @SerializedName("spellcasting_ability ") val ability: AbilityScore? = null
 )
 
 @Serializable
-data class Description(
+data class DescriptionList(
     @SerializedName("name") val name: String? = null,
     @SerializedName("desc") val desc: List<String>? = null
 )
-
 
 @Serializable
 data class AbilityScore(

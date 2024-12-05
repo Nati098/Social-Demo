@@ -10,7 +10,6 @@ import androidx.compose.ui.res.stringResource
 import ru.social.demo.R
 import ru.social.demo.pages.EmptyPage
 import ru.social.demo.pages.wiki.components.WikiTypeRes
-import ru.social.demo.pages.wiki_section.components.CompendiumPage
 import ru.social.demo.ui.components.appbars.CTopBar
 import ru.social.demo.ui.components.buttons.FilterButton
 
