@@ -44,6 +44,7 @@
     <string name="post_type_event">Event</string>
     <string name="post_type_character">Character</string>
 
+    <string name="cancel">Cancel</string>
     <string name="post_create">Create</string>
     <string name="post_edit">Edit</string>
     <string name="post_create_placeholder">Enter text here</string>

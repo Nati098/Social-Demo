@@ -1,7 +1,6 @@
 package ru.social.demo.pages.home
 
 import android.annotation.SuppressLint
-import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
@@ -12,42 +11,44 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 import ru.social.demo.MainViewModel
 import ru.social.demo.R
-import ru.social.demo.base.NavPath
 import ru.social.demo.data.model.Post
 import ru.social.demo.pages.EmptyPage
 import ru.social.demo.pages.home.components.PostTile
-import ru.social.demo.pages.post_editor.POST
 import ru.social.demo.pages.post_editor.PostEditorSheet
 import ru.social.demo.ui.components.CProgressIndicator
-import ru.social.demo.ui.components.buttons.fab.Fab
 import ru.social.demo.ui.components.appbars.CAppBar
+import ru.social.demo.ui.components.buttons.fab.Fab
 import ru.social.demo.ui.components.buttons.fab.FabItem
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -95,6 +96,7 @@ fun HomePage(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Feed(
     data: List<Post>?,
@@ -102,6 +104,10 @@ private fun Feed(
     postsListState: LazyListState,
     navController: NavController
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    var isBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val postState = remember { mutableStateOf<Post?>(null) }
 
     LazyColumn(
         modifier = Modifier.fillMaxHeight(),
@@ -120,19 +126,31 @@ private fun Feed(
                 PostTile(
                     post,
                     onEdit = {
-//                        navController
-//                            .apply {
-//                                Bundle().apply {
-//                                    putParcelable(POST, data.filter { post.id == postToEditId }[0])
-//                                }
-//                            }
-//                            .navigate(NavPath.POST_EDITOR)
+                        coroutineScope.launch {
+                            postState.value = post
+
+                            launch {
+                                isBottomSheetVisible = true
+                                sheetState.expand()
+                            }
+                        }
+
                     }
                 )
                 HorizontalDivider(thickness = 10.dp, color = Color.Transparent)
             }
         }
     }
+
+    PostEditorSheet(
+        post = postState.value,
+        isBottomSheetVisible = isBottomSheetVisible,
+        sheetState = sheetState,
+        onDismissRequest = { coroutineScope
+            .launch { sheetState.hide() }
+            .invokeOnCompletion { isBottomSheetVisible = false }
+        }
+    )
 
 }
 

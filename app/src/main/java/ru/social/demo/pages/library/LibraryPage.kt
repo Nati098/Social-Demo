@@ -1,6 +1,6 @@
 package ru.social.demo.pages.library
 
-import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,7 +27,9 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -40,22 +42,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
 import ru.social.demo.R
-import ru.social.demo.base.NavPath
 import ru.social.demo.data.model.Post
 import ru.social.demo.data.model.User
 import ru.social.demo.pages.home.components.GalleryBlock
-import ru.social.demo.pages.post_editor.POST
+import ru.social.demo.pages.post_editor.PostEditorSheet
 import ru.social.demo.pages.wiki.components.WikiTile
 import ru.social.demo.pages.wiki.components.WikiTypeRes
 import ru.social.demo.services.FirestoreClient
 import ru.social.demo.services.FsPath
 import ru.social.demo.ui.components.ArrowTile
 import ru.social.demo.ui.components.Avatar
-import ru.social.demo.ui.components.InfoBottomSheet
+import ru.social.demo.ui.components.CBottomSheet
 import ru.social.demo.ui.components.buttons.CButton
 import ru.social.demo.ui.components.buttons.CIconButton
 import ru.social.demo.ui.components.buttons.CIconButtonOutlined
@@ -305,7 +307,8 @@ private fun TestInfoBottomSheet(resources: List<Pair<String, Int>>) {
         }
     )
 
-    InfoBottomSheet(
+    CBottomSheet(
+        title = "Icons",
         isBottomSheetVisible = isBottomSheetVisible,
         sheetState = sheetState,
         onDismissRequest = { coroutineScope
@@ -317,20 +320,32 @@ private fun TestInfoBottomSheet(resources: List<Pair<String, Int>>) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ModalBottomSheetTest(navController: NavController) {
+
+    val coroutineScope = rememberCoroutineScope()
+    var isBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val postState = remember { mutableStateOf<Post?>(null) }
+
     ArrowTile(
         title = "ModalBottomSheet. New post",
         description = "Click to show. Post = null",
         iconId = R.drawable.ic_calendar,
         onClick = {
-            navController
-                .apply {
-                    Bundle().apply {
-                        putParcelable(POST, TEMP_POST1)
-                    }
+            coroutineScope.launch {
+                Log.d("TEST", "job1 is starting")
+                postState.value = null
+                Log.d("TEST", "job1 post = ${postState.value}")
+
+                launch {
+                    Log.d("TEST", "job2 is starting")
+                    isBottomSheetVisible = true
+                    sheetState.expand()
+                    Log.d("TEST", "job2 finished")
                 }
-                .navigate(NavPath.POST_EDITOR)
+            }
         }
     )
 
@@ -339,15 +354,34 @@ private fun ModalBottomSheetTest(navController: NavController) {
         description = "Click to show. Post = TEMP_POST1",
         iconId = R.drawable.ic_calendar,
         onClick = {
-            navController
-                .apply {
-                    Bundle().apply {
-                        putParcelable(POST, TEMP_POST1)
+            coroutineScope
+                .launch {
+                    Log.d("TEST", "job1 is starting")
+                    postState.value = TEMP_POST1
+                    Log.d("TEST", "job1 post = ${postState.value}")
+
+                    launch {
+                        Log.d("TEST", "job2 is starting")
+                        isBottomSheetVisible = true
+                        sheetState.expand()
+                        Log.d("TEST", "job2 finished")
                     }
                 }
-                .navigate(NavPath.POST_EDITOR)
+
         }
     )
+
+
+    PostEditorSheet(
+        post = postState.value,
+        isBottomSheetVisible = isBottomSheetVisible,
+        sheetState = sheetState,
+        onDismissRequest = { coroutineScope
+            .launch { sheetState.hide() }
+            .invokeOnCompletion { isBottomSheetVisible = false }
+        }
+    )
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -370,7 +404,8 @@ private fun GalleryBlockTest() {
         }
     )
 
-    InfoBottomSheet(
+    CBottomSheet(
+        title = "Gallery Blocks",
         isBottomSheetVisible = isBottomSheetVisible,
         sheetState = sheetState,
         onDismissRequest = { coroutineScope
@@ -378,20 +413,26 @@ private fun GalleryBlockTest() {
             .invokeOnCompletion { isBottomSheetVisible = false }
         }
     ) {
-        Text("Images count: ${IMAGES.subList(0, 1).size}")
-        GalleryBlock(IMAGES.subList(0, 1))
 
-        Text("Images count: ${IMAGES.subList(0, 2).size}")
-        GalleryBlock(IMAGES.subList(0, 2))
+        Column(
+            modifier = Modifier.verticalScroll(rememberScrollState())
+        ) {
+            Text("Images count: ${IMAGES.subList(0, 1).size}")
+            GalleryBlock(IMAGES.subList(0, 1))
 
-        Text("Images count: ${IMAGES.subList(0, 3).size}")
-        GalleryBlock(IMAGES.subList(0, 3))
+            Text("Images count: ${IMAGES.subList(0, 2).size}")
+            GalleryBlock(IMAGES.subList(0, 2))
 
-        Text("Images count: ${IMAGES.subList(0, 4).size}")
-        GalleryBlock(IMAGES.subList(0, 4))
+            Text("Images count: ${IMAGES.subList(0, 3).size}")
+            GalleryBlock(IMAGES.subList(0, 3))
 
-        Text("Images count: ${IMAGES.size}")
-        GalleryBlock(IMAGES)
+            Text("Images count: ${IMAGES.subList(0, 4).size}")
+            GalleryBlock(IMAGES.subList(0, 4))
+
+            Text("Images count: ${IMAGES.size}")
+            GalleryBlock(IMAGES)
+        }
+
 
     }
 

@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import ru.social.demo.R
 import ru.social.demo.ui.theme.SDTheme
+import ru.social.demo.utils.conditional
 import ru.social.demo.utils.verticalScrollbar
 
 @Composable
@@ -26,6 +27,8 @@ fun CTextField(
     textStyle: TextStyle = SDTheme.typography.bookL,
     onValueChange: (String) -> Unit,
 ) {
+    val scrollbarColor = SDTheme.colors.fgActionEmphasis
+
     CompositionLocalProvider(
         LocalTextSelectionColors provides TextSelectionColors(
             handleColor = SDTheme.colors.fgPrimary,
@@ -42,8 +45,11 @@ fun CTextField(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .verticalScrollbar(scrollState, color = SDTheme.colors.fgActionEmphasis)
-                        .verticalScroll(state = scrollState)
+                        .conditional(!singleLine) {
+                            verticalScrollbar(scrollState, color = scrollbarColor)
+                            .verticalScroll(state = scrollState)
+                        }
+
                 ) {
                     if (value.isEmpty())
                         Text(
