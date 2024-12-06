@@ -1,7 +1,6 @@
 package ru.social.demo.pages.library
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -48,6 +47,7 @@ import ru.social.demo.R
 import ru.social.demo.base.NavPath
 import ru.social.demo.data.model.Post
 import ru.social.demo.data.model.User
+import ru.social.demo.pages.home.components.GalleryBlock
 import ru.social.demo.pages.post_editor.POST
 import ru.social.demo.pages.wiki.components.WikiTile
 import ru.social.demo.pages.wiki.components.WikiTypeRes
@@ -81,12 +81,21 @@ private val TEMP_POST1 = Post(
     text = "tetete",
 )
 
+private val IMAGES = listOf(
+    "https://www.dndspeak.com/wp-content/uploads/2021/03/Landscapes-1.jpg",
+    "https://i.etsystatic.com/13900895/r/il/d88470/4982312733/il_fullxfull.4982312733_nmb7.jpg",
+    "https://i.ytimg.com/vi/my8p4pZ_FIk/maxresdefault.jpg",
+    "https://images.nightcafe.studio/jobs/U1lMCCZWHTbRZfeKkke7/U1lMCCZWHTbRZfeKkke7--1--hsd0o_2x.jpg",
+    "https://i.pinimg.com/originals/a0/39/1b/a0391b038aa65ac3261079211ed030eb.jpg",
+    "https://i.pinimg.com/originals/a0/39/1b/a0391b038aa65ac3261079211ed030eb.jpg",
+    "https://i.pinimg.com/originals/a0/39/1b/a0391b038aa65ac3261079211ed030eb.jpg"
+)
+
 
 @Composable
 fun LibraryPage(
     navController: NavController
 ) {
-    val ctx = LocalContext.current
     val resources = loadDrawables(R.drawable::class.java)
     val scrollState = rememberScrollState()
     Scaffold (
@@ -101,24 +110,7 @@ fun LibraryPage(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
 
-            OutlinedContainer(
-                parentWidth = true,
-                paddingHorizontal = 16.dp,
-                paddingVertical = 16.dp
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "Avatar",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Avatar(imgUrl = TEMP_USER.imageUrl, char = TEMP_USER.name!![0], size = 96.dp)
-                        Avatar(char = 'A', size = 64.dp)
-                        Avatar(char = 'B', size = 44.dp, inactive = false)
-                        Avatar(imgUrl = TEMP_USER.imageUrl, char = TEMP_USER.name!![0], size = 40.dp, inactive = true)
-                    }
-                }
-            }
+            AvatarsTest()
 
             OutlinedContainer(
                 parentWidth = true,
@@ -128,126 +120,39 @@ fun LibraryPage(
                 IconsGrid(resources)
             }
 
-            OutlinedContainer(
-                parentWidth = true,
-                paddingHorizontal = 16.dp,
-                paddingVertical = 16.dp
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "Buttons",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        CButton(label = "Click me!", onClick = { })
-                        CButton(label = "Click me!", enabled = false, onClick = { })
-                    }
-                    Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        CTonalButton(label = "Click me!", onClick = { })
-                        CTonalButton(label = "Click me!", enabled = false, onClick = { })
-                    }
-                    Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        COutlinedButton(label = "Click me!", onClick = { })
-                        COutlinedButton(label = "Click me!", enabled = false, onClick = { })
-                    }
-                    Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        CTextButton(label = "Click me!!", onClick = {
-                            FirestoreClient.getInstance().updateData(
-                                FsPath.POSTS,
-                                TEMP_POST1.copy(text = generateRandomString(Random.nextInt(21)), updateDate = Timestamp.now()),
-                                onSuccess = {
-                                    Toast.makeText(ctx, "Post ${TEMP_POST1.id} updated", Toast.LENGTH_SHORT).show()
-                                },
-                                onError = {
-                                    Toast.makeText(ctx, "Post ${TEMP_POST1.id} - error while updating ", Toast.LENGTH_SHORT).show()
-                                }
-                            )
-
-                        })
-                        CTextButton(label = "Click me!", enabled = false, onClick = { })
-                    }
-                    Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        CIconButton(iconId = R.drawable.ic_bell, onClick = { })
-                        CIconButton(iconId = R.drawable.ic_bell, enabled = false,  contentColor = SDTheme.colors.bgActionPrimary, onClick = { })
-                        CIconButtonOutlined(iconId = R.drawable.ic_bell, onClick = { })
-                        CIconButtonOutlined(iconId = R.drawable.ic_bell, borderColor = SDTheme.colors.bgActionPrimary, onClick = { })
-                        CIconButtonOutlined(iconId = R.drawable.ic_bell, contentColor = SDTheme.colors.bgActionPrimary, onClick = { })
-                        CIconButtonOutlined(iconId = R.drawable.ic_bell, onClick = { })
-                        CIconButtonOutlined(iconId = R.drawable.ic_bell, bgColor = SDTheme.colors.bgFab, contentColor = SDTheme.colors.fgOnColor, onClick = { })
-                    }
-
-                }
-            }
-
-            OutlinedContainer(
-                parentWidth = true,
-                paddingHorizontal = 16.dp,
-                paddingVertical = 16.dp
-            ) {
-                Column(
-                    Modifier.padding(horizontal = 16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    ArrowTile(title = "Tile 1", iconId = null)
-                    ArrowTile(title = "Tile 2", description = "Description", icon = null)
-                    ArrowTile(title = "Tile 3", iconId = R.drawable.ic_user_edit)
-                    ArrowTile(
-                        title = "Tile 4",
-                        description = "Description",
-                        icon = {
-                            Image(
-                                painterResource(R.drawable.book),
-                                null,
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .paint(
-                                        painter = painterResource(R.drawable.bg_image_3),
-                                        colorFilter = ColorFilter.tint(colorResource(R.color.avatar_blue)),
-                                        alpha = 0.3f
-                                    )
-                            )
-                        }
-                    )
-                }
-            }
+            ButtonsTest()
+            TilesTest()
 
             WikiTile(type = WikiTypeRes.CHARACTER)
 
             TestInfoBottomSheet(resources)
-
-            ArrowTile(
-                title = "ModalBottomSheet. New post",
-                description = "Click to show. Post = null",
-                iconId = R.drawable.ic_calendar,
-                onClick = {
-                    navController
-                        .apply {
-                            Bundle().apply {
-                                putParcelable(POST, TEMP_POST1)
-                            }
-                        }
-                        .navigate(NavPath.POST_EDITOR)
-                }
-            )
-
-            ArrowTile(
-                title = "ModalBottomSheet. Edit post",
-                description = "Click to show. Post = TEMP_POST1",
-                iconId = R.drawable.ic_calendar,
-                onClick = {
-                    navController
-                        .apply {
-                            Bundle().apply {
-                                putParcelable(POST, TEMP_POST1)
-                            }
-                        }
-                        .navigate(NavPath.POST_EDITOR)
-                }
-            )
-
+            ModalBottomSheetTest(navController)
+            GalleryBlockTest()
         }
     }
 
+}
+
+@Composable
+private fun AvatarsTest() {
+    OutlinedContainer(
+        parentWidth = true,
+        paddingHorizontal = 16.dp,
+        paddingVertical = 16.dp
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "Avatar",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Avatar(imgUrl = TEMP_USER.imageUrl, char = TEMP_USER.name!![0], size = 96.dp)
+                Avatar(char = 'A', size = 64.dp)
+                Avatar(char = 'B', size = 44.dp, inactive = false)
+                Avatar(imgUrl = TEMP_USER.imageUrl, char = TEMP_USER.name!![0], size = 40.dp, inactive = true)
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -291,6 +196,96 @@ private fun IconsGrid(resources: List<Pair<String, Int>>) {
     }
 }
 
+@Composable
+private fun ButtonsTest() {
+    val ctx = LocalContext.current
+    OutlinedContainer(
+        parentWidth = true,
+        paddingHorizontal = 16.dp,
+        paddingVertical = 16.dp
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "Buttons",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                CButton(label = "Click me!", onClick = { })
+                CButton(label = "Click me!", enabled = false, onClick = { })
+            }
+            Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                CTonalButton(label = "Click me!", onClick = { })
+                CTonalButton(label = "Click me!", enabled = false, onClick = { })
+            }
+            Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                COutlinedButton(label = "Click me!", onClick = { })
+                COutlinedButton(label = "Click me!", enabled = false, onClick = { })
+            }
+            Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                CTextButton(label = "Click me!!", onClick = {
+                    FirestoreClient.getInstance().updateData(
+                        FsPath.POSTS,
+                        TEMP_POST1.copy(text = generateRandomString(Random.nextInt(21)), updateDate = Timestamp.now()),
+                        onSuccess = {
+                            Toast.makeText(ctx, "Post ${TEMP_POST1.id} updated", Toast.LENGTH_SHORT).show()
+                        },
+                        onError = {
+                            Toast.makeText(ctx, "Post ${TEMP_POST1.id} - error while updating ", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+
+                })
+                CTextButton(label = "Click me!", enabled = false, onClick = { })
+            }
+            Row (horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                CIconButton(iconId = R.drawable.ic_bell, onClick = { })
+                CIconButton(iconId = R.drawable.ic_bell, enabled = false,  contentColor = SDTheme.colors.bgActionPrimary, onClick = { })
+                CIconButtonOutlined(iconId = R.drawable.ic_bell, onClick = { })
+                CIconButtonOutlined(iconId = R.drawable.ic_bell, borderColor = SDTheme.colors.bgActionPrimary, onClick = { })
+                CIconButtonOutlined(iconId = R.drawable.ic_bell, contentColor = SDTheme.colors.bgActionPrimary, onClick = { })
+                CIconButtonOutlined(iconId = R.drawable.ic_bell, onClick = { })
+                CIconButtonOutlined(iconId = R.drawable.ic_bell, bgColor = SDTheme.colors.bgFab, contentColor = SDTheme.colors.fgOnColor, onClick = { })
+            }
+
+        }
+    }
+}
+
+@Composable
+private fun TilesTest() {
+    OutlinedContainer(
+        parentWidth = true,
+        paddingHorizontal = 16.dp,
+        paddingVertical = 16.dp
+    ) {
+        Column(
+            Modifier.padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            ArrowTile(title = "Tile 1", iconId = null)
+            ArrowTile(title = "Tile 2", description = "Description", icon = null)
+            ArrowTile(title = "Tile 3", iconId = R.drawable.ic_user_edit)
+            ArrowTile(
+                title = "Tile 4",
+                description = "Description",
+                icon = {
+                    Image(
+                        painterResource(R.drawable.book),
+                        null,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .paint(
+                                painter = painterResource(R.drawable.bg_image_3),
+                                colorFilter = ColorFilter.tint(colorResource(R.color.avatar_blue)),
+                                alpha = 0.3f
+                            )
+                    )
+                }
+            )
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TestInfoBottomSheet(resources: List<Pair<String, Int>>) {
@@ -321,6 +316,87 @@ private fun TestInfoBottomSheet(resources: List<Pair<String, Int>>) {
         IconsGrid(resources)
     }
 }
+
+@Composable
+private fun ModalBottomSheetTest(navController: NavController) {
+    ArrowTile(
+        title = "ModalBottomSheet. New post",
+        description = "Click to show. Post = null",
+        iconId = R.drawable.ic_calendar,
+        onClick = {
+            navController
+                .apply {
+                    Bundle().apply {
+                        putParcelable(POST, TEMP_POST1)
+                    }
+                }
+                .navigate(NavPath.POST_EDITOR)
+        }
+    )
+
+    ArrowTile(
+        title = "ModalBottomSheet. Edit post",
+        description = "Click to show. Post = TEMP_POST1",
+        iconId = R.drawable.ic_calendar,
+        onClick = {
+            navController
+                .apply {
+                    Bundle().apply {
+                        putParcelable(POST, TEMP_POST1)
+                    }
+                }
+                .navigate(NavPath.POST_EDITOR)
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun GalleryBlockTest() {
+
+    val coroutineScope = rememberCoroutineScope()
+    var isBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    ArrowTile(
+        title = "GalleryBlock Test",
+        description = "Click to show",
+        iconId = R.drawable.ic_calendar,
+        onClick = {
+            coroutineScope.launch {
+                isBottomSheetVisible = true
+                sheetState.expand()
+            }
+        }
+    )
+
+    InfoBottomSheet(
+        isBottomSheetVisible = isBottomSheetVisible,
+        sheetState = sheetState,
+        onDismissRequest = { coroutineScope
+            .launch { sheetState.hide() }
+            .invokeOnCompletion { isBottomSheetVisible = false }
+        }
+    ) {
+        Text("Images count: ${IMAGES.subList(0, 1).size}")
+        GalleryBlock(IMAGES.subList(0, 1))
+
+        Text("Images count: ${IMAGES.subList(0, 2).size}")
+        GalleryBlock(IMAGES.subList(0, 2))
+
+        Text("Images count: ${IMAGES.subList(0, 3).size}")
+        GalleryBlock(IMAGES.subList(0, 3))
+
+        Text("Images count: ${IMAGES.subList(0, 4).size}")
+        GalleryBlock(IMAGES.subList(0, 4))
+
+        Text("Images count: ${IMAGES.size}")
+        GalleryBlock(IMAGES)
+
+    }
+
+}
+
 
 private fun loadDrawables(clz: Class<*>): List<Pair<String, Int>> {
     val res = mutableListOf<Pair<String, Int>>()

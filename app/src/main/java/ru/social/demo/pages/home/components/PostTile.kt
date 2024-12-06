@@ -22,6 +22,10 @@ fun PostTile(
         ) {
             UserBlock(post.user, post.createDate, onEdit)
 
+            if (post.containsMedia()) {
+                GalleryBlock(post.media!!)
+            }
+
             TextBlock(post.title, post.text)
 
             ReactionBlock(post.reactionCounts, post.commentsCount)
