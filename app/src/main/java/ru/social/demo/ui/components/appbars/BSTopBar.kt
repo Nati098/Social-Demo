@@ -33,8 +33,7 @@ fun BSTopBar(
     BoxWithConstraints {
         val maxWidth = maxWidth
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {

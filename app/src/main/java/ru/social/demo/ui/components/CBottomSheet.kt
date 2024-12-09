@@ -4,11 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -20,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import ru.social.demo.ui.components.appbars.BSTopBar
 import ru.social.demo.ui.theme.SDTheme
@@ -35,7 +33,8 @@ fun CBottomSheet(
     title: String? = null,
     onBack: (() -> Unit)? = null,
     actions: @Composable (RowScope.() -> Unit)? = null,
-    content: @Composable ColumnScope.() -> Unit
+    contentPadding: PaddingValues = PaddingValues(24.dp),
+    content: (@Composable ColumnScope.() -> Unit)
 ) {
     if (isBottomSheetVisible) {
 
@@ -46,20 +45,18 @@ fun CBottomSheet(
             dragHandle = null,
             shape = RectangleShape,
             containerColor = Color.Transparent,
-            contentWindowInsets = { WindowInsets(0,0,0,0) },
         ) {
 
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .heightIn(max = LocalConfiguration.current.screenHeightDp.dp)
                     .statusBarsPadding()
                     .navigationBarsPadding()
                     .padding(16.dp)
                     .clip(SDTheme.shapes.corners)
                     .background(color = SDTheme.colors.bgPrimary)
                     .fillMaxWidth()
-                    .padding(24.dp),
+                    .padding(contentPadding),
                 verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
                 BSTopBar(
@@ -67,7 +64,7 @@ fun CBottomSheet(
                     onBack = onBack,
                     actions = actions
                 )
-                content(this)
+                content()
             }
         }
     }

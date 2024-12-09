@@ -27,7 +27,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,8 +40,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
@@ -75,14 +74,6 @@ private val TEMP_USER = User(
     imageUrl = "https://media.istockphoto.com/id/1326417862/photo/young-woman-laughing-while-relaxing-at-home.jpg?s=612x612&w=0&k=20&c=cd8e6RBGOe4b8a8vTcKW0Jo9JONv1bKSMTKcxaCra8c="
 )
 
-private val TEMP_POST1 = Post(
-    id = "eGICdxTmM49V90p2o7lF",
-    createDate = Timestamp.now(),
-    user = TEMP_USER,
-    title = "Random God UPDATED!",
-    text = "tetete",
-)
-
 private val IMAGES = listOf(
     "https://www.dndspeak.com/wp-content/uploads/2021/03/Landscapes-1.jpg",
     "https://i.etsystatic.com/13900895/r/il/d88470/4982312733/il_fullxfull.4982312733_nmb7.jpg",
@@ -91,6 +82,15 @@ private val IMAGES = listOf(
     "https://i.pinimg.com/originals/a0/39/1b/a0391b038aa65ac3261079211ed030eb.jpg",
     "https://i.pinimg.com/originals/a0/39/1b/a0391b038aa65ac3261079211ed030eb.jpg",
     "https://i.pinimg.com/originals/a0/39/1b/a0391b038aa65ac3261079211ed030eb.jpg"
+)
+
+private val TEMP_POST1 = Post(
+    id = "eGICdxTmM49V90p2o7lF",
+    createDate = Timestamp.now(),
+    user = TEMP_USER,
+    title = "Random God UPDATED!",
+    text = "tetete",
+    media = IMAGES
 )
 
 
@@ -128,7 +128,8 @@ fun LibraryPage(
             WikiTile(type = WikiTypeRes.CHARACTER)
 
             TestInfoBottomSheet(resources)
-            ModalBottomSheetTest(navController)
+            ModalBottomSheetNullTest()
+            ModalBottomSheetTest()
             GalleryBlockTest()
         }
     }
@@ -322,12 +323,11 @@ private fun TestInfoBottomSheet(resources: List<Pair<String, Int>>) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ModalBottomSheetTest(navController: NavController) {
+private fun ModalBottomSheetNullTest() {
 
     val coroutineScope = rememberCoroutineScope()
     var isBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val postState = remember { mutableStateOf<Post?>(null) }
 
     ArrowTile(
         title = "ModalBottomSheet. New post",
@@ -335,45 +335,47 @@ private fun ModalBottomSheetTest(navController: NavController) {
         iconId = R.drawable.ic_calendar,
         onClick = {
             coroutineScope.launch {
-                Log.d("TEST", "job1 is starting")
-                postState.value = null
-                Log.d("TEST", "job1 post = ${postState.value}")
-
-                launch {
-                    Log.d("TEST", "job2 is starting")
-                    isBottomSheetVisible = true
-                    sheetState.expand()
-                    Log.d("TEST", "job2 finished")
-                }
+                isBottomSheetVisible = true
+                sheetState.expand()
             }
         }
     )
+
+    PostEditorSheet(
+        post = null,
+        isBottomSheetVisible = isBottomSheetVisible,
+        sheetState = sheetState,
+        onDismissRequest = { coroutineScope
+            .launch { sheetState.hide() }
+            .invokeOnCompletion { isBottomSheetVisible = false }
+        }
+    )
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ModalBottomSheetTest() {
+
+    val coroutineScope = rememberCoroutineScope()
+    var isBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     ArrowTile(
         title = "ModalBottomSheet. Edit post",
         description = "Click to show. Post = TEMP_POST1",
         iconId = R.drawable.ic_calendar,
         onClick = {
-            coroutineScope
-                .launch {
-                    Log.d("TEST", "job1 is starting")
-                    postState.value = TEMP_POST1
-                    Log.d("TEST", "job1 post = ${postState.value}")
-
-                    launch {
-                        Log.d("TEST", "job2 is starting")
-                        isBottomSheetVisible = true
-                        sheetState.expand()
-                        Log.d("TEST", "job2 finished")
-                    }
-                }
+            coroutineScope.launch {
+                isBottomSheetVisible = true
+                sheetState.expand()
+            }
 
         }
     )
 
-
     PostEditorSheet(
-        post = postState.value,
+        post = TEMP_POST1,
         isBottomSheetVisible = isBottomSheetVisible,
         sheetState = sheetState,
         onDismissRequest = { coroutineScope
