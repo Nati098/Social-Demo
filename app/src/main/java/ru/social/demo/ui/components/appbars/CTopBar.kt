@@ -15,6 +15,10 @@ import ru.social.demo.ui.theme.SDTheme
  * TopBar with back button, title and some functions
  *
  * @param title String, name of the page
+ * @param bgColor background color
+ * @param modifier
+ * @param topInset true if you need extra padding from top (= statusBar height)
+ * @param onBack on back button pressure function
  * @param actions list of actions
  * @param content LazyColumn (!) with scrolling content
  */

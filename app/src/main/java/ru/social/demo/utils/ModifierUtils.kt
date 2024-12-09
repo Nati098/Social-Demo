@@ -18,12 +18,21 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import kotlin.math.max
 
+fun Modifier.conditional(
+    condition: Boolean,
+    modifier: Modifier.() -> Modifier
+): Modifier =
+    if (condition) {
+        then(modifier(Modifier))
+    } else {
+        this
+    }
+
 fun Modifier.verticalScrollbar(
     scrollState: ScrollState,
     color: Color,
     width: Float = 8f,
     minHeight: Float = 8f
-
 ): Modifier = composed {
     val duration = if (scrollState.isScrollInProgress) 150 else 500
     val alpha by animateFloatAsState(
@@ -41,7 +50,8 @@ fun Modifier.verticalScrollbar(
             val visibleHeight = this.size.height - scrollState.maxValue
             val scrollBarHeight = max(visibleHeight * (visibleHeight / this.size.height), minHeight)
             val scrollPercent = scrollState.value.toFloat() / scrollState.maxValue
-            val scrollBarOffsetY = scrollState.value + (visibleHeight - scrollBarHeight) * scrollPercent
+            val scrollBarOffsetY =
+                scrollState.value + (visibleHeight - scrollBarHeight) * scrollPercent
 
             drawRoundRect(
                 color = color,

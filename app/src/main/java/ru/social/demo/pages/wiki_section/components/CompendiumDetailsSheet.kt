@@ -4,10 +4,13 @@ import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.social.demo.R
@@ -16,7 +19,7 @@ import ru.social.demo.data.model.rpg.RpgMonster
 import ru.social.demo.data.model.rpg.RpgRace
 import ru.social.demo.pages.EmptyPage
 import ru.social.demo.ui.components.CProgressIndicator
-import ru.social.demo.ui.components.InfoBottomSheet
+import ru.social.demo.ui.components.CBottomSheet
 import ru.social.demo.ui.theme.SDTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,20 +30,25 @@ fun CompendiumDetailsSheet(
     sheetState: SheetState,
     onDismissRequest: () -> Unit
 ) {
-    InfoBottomSheet(
+    CBottomSheet(
         isBottomSheetVisible = isBottomSheetVisible,
         sheetState = sheetState,
-        onDismissRequest = onDismissRequest
+        onDismissRequest = onDismissRequest,
+        title = stringResource(R.string.details)
     ) {
-        when(data) {
-            is RpgClass -> ClassDetails(data)
-            is RpgRace -> RaceDetails(data)
-            is RpgMonster -> MonsterDetails(data)
-            null -> EmptyPage(
-                title = "Oops!",
-                description = stringResource(R.string.error_loading_desc)
-            )
-            else -> CProgressIndicator()
+        Column(
+            modifier = Modifier.verticalScroll(rememberScrollState())
+        ) {
+            when(data) {
+                is RpgClass -> ClassDetails(data)
+                is RpgRace -> RaceDetails(data)
+                is RpgMonster -> MonsterDetails(data)
+                null -> EmptyPage(
+                    title = "Oops!",
+                    description = stringResource(R.string.error_loading_desc)
+                )
+                else -> CProgressIndicator()
+            }
         }
     }
 
