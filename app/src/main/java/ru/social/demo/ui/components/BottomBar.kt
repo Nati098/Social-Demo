@@ -89,7 +89,7 @@ fun BottomBar() {
                 homeFlow(navController)
                 libraryFlow(navController)
                 wikiFlow(navController)
-                eventsFlow()
+                eventsFlow(navController)
 
             }
         }

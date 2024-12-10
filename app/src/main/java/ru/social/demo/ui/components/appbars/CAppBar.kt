@@ -63,9 +63,7 @@ fun CAppBar(
                     CIconButtonOutlined(
                         iconId = R.drawable.ic_search,
                         bgColor = CWhite,
-                        onClick = {
-//                            FirestoreInteractor.getInstance().setData(FsPath.POSTS, TEMP_POST1)
-                        }
+                        onClick = { }
                     )
                     CIconButtonOutlined(
                         iconId = R.drawable.ic_bell,
