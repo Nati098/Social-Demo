@@ -3,34 +3,24 @@ package ru.social.demo.pages.post_editor
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.firebase.Timestamp
 import ru.social.demo.R
@@ -43,7 +33,9 @@ import ru.social.demo.ui.components.buttons.CIconButton
 import ru.social.demo.ui.components.buttons.CTextButton
 import ru.social.demo.ui.components.text.CTextField
 import ru.social.demo.ui.theme.SDTheme
+import ru.social.demo.utils.ImageUtils
 import ru.social.demo.utils.NetworkUtils
+import ru.social.demo.utils.toBase64
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,6 +46,7 @@ fun PostEditorSheet(
     onDismissRequest: () -> Unit = {}
 ) {
     Log.d("TEST", "PostEditorSheet starts")
+    val context = LocalContext.current
 
     val isCreateMode = post == null
     var title = remember { mutableStateOf(post?.title ?: "") }
@@ -64,7 +57,13 @@ fun PostEditorSheet(
             post?.media?.let { media -> addAll(media) }
         }
     }
-    val mediaUris = remember { mutableStateListOf<Uri>() }
+    val mediaUris = remember {
+        mutableStateListOf<Uri>().apply {
+            post?.mediaBase64?.let { media ->
+                addAll(media.mapNotNull { m -> ImageUtils.base64ToUri(m) })
+            }
+        }
+    }
 
     fun prepareData() =
         Post(
@@ -72,7 +71,9 @@ fun PostEditorSheet(
             type = type.value,
             title = title.value,
             text = text.value,
-            media = mediaUrls + mediaUris.mapNotNull { it.path })
+            media = mediaUrls,
+            mediaBase64 = mediaUris.map { it.toBase64(context) }
+        )
 
     fun prepareCopy() =
         post!!.copy(
@@ -80,7 +81,9 @@ fun PostEditorSheet(
             type = type.value,
             title = title.value,
             text = text.value,
-            media = mediaUrls + mediaUris.mapNotNull { it.path })
+            media = mediaUrls,
+            mediaBase64 = mediaUris.map { it.toBase64(context) }
+        )
 
     CBottomSheet(
         isBottomSheetVisible = isBottomSheetVisible,

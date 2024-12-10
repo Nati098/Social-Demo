@@ -17,6 +17,7 @@ data class Post (
     @SerializedName("title") val title: String? = null,
     @SerializedName("text") val text: String? = null,
     @SerializedName("media") val media: List<String>? = null,
+    @SerializedName("mediaBase64") val mediaBase64: List<String>? = null,
 //    val audios: List<File>? = null,
 //    val files: List<File>? = null,
 //    val survey: Survey? = null,

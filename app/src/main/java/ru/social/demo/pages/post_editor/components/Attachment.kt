@@ -14,12 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.placeholder
 import ru.social.demo.R
 import ru.social.demo.ui.components.buttons.CIconButtonFilled
 import ru.social.demo.ui.components.containers.DefaultRoundedContainer
@@ -31,19 +28,9 @@ fun AttachmentMedia(
     onClose: () -> Unit
 ) {
     AttachmentInternal(
+        model = uri,
         onClose = onClose
-    ) {
-        AsyncImage(
-            model = ImageRequest
-                .Builder(LocalContext.current)
-                .placeholder(R.drawable.img_placeholder)
-                .data(uri)
-                .build(),
-            contentDescription = uri.path,
-            contentScale = ContentScale.Crop,
-            error = painterResource(R.drawable.img_placeholder)
-        )
-    }
+    )
 }
 
 @Composable
@@ -52,15 +39,10 @@ fun AttachmentMedia(
     onClose: () -> Unit
 ) {
     AttachmentInternal(
+        model = url,
+        contentDescription = url,
         onClose = onClose
-    ) {
-        AsyncImage(
-            model = url,
-            contentDescription = url,
-            contentScale = ContentScale.Crop,
-            error = painterResource(R.drawable.img_placeholder)
-        )
-    }
+    )
 }
 
 @Composable
@@ -69,28 +51,29 @@ fun AttachmentVideo(
     onClose: () -> Unit
 ) {
     AttachmentInternal(
+        model = url,
+        contentDescription = url,
         onClose = onClose,
 //        desc = time
-    ) {
-        AsyncImage(
-            model = url,
-            contentDescription = url,
-            contentScale = ContentScale.Crop,
-            error = painterResource(R.drawable.img_placeholder)
-        )
-    }
+    )
 }
 
 @Composable
 private fun AttachmentInternal(
     onClose: () -> Unit,
     desc: String? = null,
-    image: @Composable () -> Unit
+    model: Any?,
+    contentDescription: String? = null
 ) {
     DefaultRoundedContainer(
         modifier = Modifier.size(84.dp).aspectRatio(1f)
     ) {
-        image()
+        AsyncImage(
+            model = model,
+            contentDescription = contentDescription,
+            contentScale = ContentScale.Crop,
+            error = painterResource(R.drawable.img_placeholder)
+        )
 
         Box(Modifier.padding(6.dp).fillMaxSize()) {
             CIconButtonFilled (
