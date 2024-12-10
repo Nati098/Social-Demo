@@ -17,24 +17,24 @@ class WikiSectionContract {
     }
 
     data class State(
-        val selectedTab: Int,
-        val bottomSheetItem: Any?,
-        val classes: List<RpgClass>?,
-        val races: List<RpgRace>?,
-        val monsters: List<ShortInfo>?,
-        val isClassesLoading: Boolean,
-        val isRacesLoading: Boolean,
-        val isMonstersLoading: Boolean,
-        val isMonsterLoading: Boolean,
-        val isError: Boolean
+        val selectedTab: Int = 0,
+        val bottomSheetItem: Any? = null,
+        val classes: List<RpgClass> = emptyList(),
+        val races: List<RpgRace> = emptyList(),
+        val monsters: List<ShortInfo>? = null,
+        val isClassesLoading: Boolean = false,
+        val isRacesLoading: Boolean = false,
+        val isMonstersLoading: Boolean = false,
+        val isMonsterLoading: Boolean = false,
+        val isError: Boolean = false
     ): BaseViewState {
 
         fun isEmptyState() =
-            classes.isNullOrEmpty() && races.isNullOrEmpty() && monsters.isNullOrEmpty()
+            classes.isEmpty() && races.isEmpty() && monsters.isNullOrEmpty()
 
         fun isDataEmpty(type: RpgTab) = when(type) {
-            RpgTab.CLASS -> classes.isNullOrEmpty()
-            RpgTab.RACE -> races.isNullOrEmpty()
+            RpgTab.CLASS -> classes.isEmpty()
+            RpgTab.RACE -> races.isEmpty()
             RpgTab.MONSTER -> monsters.isNullOrEmpty()
             else -> false
         }

@@ -26,7 +26,7 @@ fun AllList(state: WikiSectionContract.State?, onClick: (RpgTab, String?) -> Uni
             modifier = Modifier.fillMaxSize(),
             state = listState
         ) {
-            items(state.classes ?: emptyList()) {
+            items(state.classes) {
                 ArrowTile(
                     title = "${it.name}",
                     description = "Class",
@@ -34,7 +34,7 @@ fun AllList(state: WikiSectionContract.State?, onClick: (RpgTab, String?) -> Uni
                     onClick = { onClick.invoke(RpgTab.CLASS, it.id) }
                 )
             }
-            items(state.races ?: emptyList()) {
+            items(state.races) {
                 ArrowTile(
                     title = "${it.name}",
                     description = "Race",

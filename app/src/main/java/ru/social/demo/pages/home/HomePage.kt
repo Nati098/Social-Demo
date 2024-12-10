@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -63,7 +62,11 @@ fun HomePage(
     val postsListState = rememberLazyListState()
 
     Scaffold(
-        floatingActionButton = { FabButton() }
+        floatingActionButton = {
+            FabButton(
+                reloadData = { viewModel.handle(HomeContract.Event.ReloadData) }
+            )
+        }
     ) { _ ->
         CAppBar(
             title = stringResource(R.string.home),
@@ -71,7 +74,7 @@ fun HomePage(
             navController = navController,
             topBarContent = { Carousel() },
             columnContent = { insets ->
-                when(viewState) {
+                when (viewState) {
                     is HomeContract.State.LoadingData -> CProgressIndicator()
                     is HomeContract.State.SuccessData -> Feed(
                         (viewState as HomeContract.State.SuccessData).data,
@@ -79,6 +82,7 @@ fun HomePage(
                         postsListState,
                         navController
                     )
+
                     else -> EmptyPage(
                         title = "Oops!",
                         description = stringResource(R.string.error_loading_desc)
@@ -146,9 +150,10 @@ private fun Feed(
         post = postState.value,
         isBottomSheetVisible = isBottomSheetVisible,
         sheetState = sheetState,
-        onDismissRequest = { coroutineScope
-            .launch { sheetState.hide() }
-            .invokeOnCompletion { isBottomSheetVisible = false }
+        onDismissRequest = {
+            coroutineScope
+                .launch { sheetState.hide() }
+                .invokeOnCompletion { isBottomSheetVisible = false }
         }
     )
 
@@ -162,10 +167,12 @@ private fun Carousel() {
             .fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .height(156.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .height(156.dp)
+        ) {
             Text(
                 text = "News, notifications and stories as list of cards",
                 textAlign = TextAlign.Center,
@@ -175,8 +182,13 @@ private fun Carousel() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun FabButton() {
+private fun FabButton(reloadData: () -> Unit) {
+    val coroutineScope = rememberCoroutineScope()
+    var isBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
     Fab(
         items = listOf(
             object : FabItem(
@@ -184,15 +196,39 @@ private fun FabButton() {
                 iconId = R.drawable.ic_plus_circle,
                 label = R.string.post_type_default
             ) {
-                override fun onClick() { }
+                override fun onClick() {
+                    coroutineScope.launch {
+                        isBottomSheetVisible = true
+                        sheetState.expand()
+                    }
+                }
             },
             object : FabItem(
                 id = "new_post_event",
                 iconId = R.drawable.ic_calendar,
                 label = R.string.post_type_event
             ) {
-                override fun onClick() { }
+                override fun onClick() {
+                    coroutineScope.launch {
+                        isBottomSheetVisible = true
+                        sheetState.expand()
+                    }
+                }
             }
         )
+    )
+
+    PostEditorSheet(
+        post = null,
+        isBottomSheetVisible = isBottomSheetVisible,
+        sheetState = sheetState,
+        onDismissRequest = {
+            coroutineScope
+                .launch { sheetState.hide() }
+                .invokeOnCompletion {
+                    isBottomSheetVisible = false
+                    reloadData.invoke()
+                }
+        }
     )
 }

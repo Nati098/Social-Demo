@@ -158,7 +158,7 @@ fun CIconButtonFilled(
         enabled = enabled,
         size = size,
         bgColor = bgColor,
-        borderColor = bgColor,
+        borderColor = Color.Transparent,
         contentColor = contentColor,
         modifier = modifier,
         onClick = onClick

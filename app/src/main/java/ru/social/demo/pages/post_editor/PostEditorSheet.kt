@@ -2,6 +2,9 @@ package ru.social.demo.pages.post_editor
 
 import android.net.Uri
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -50,17 +54,33 @@ fun PostEditorSheet(
     onDismissRequest: () -> Unit = {}
 ) {
     Log.d("TEST", "PostEditorSheet starts")
-    val padding = 24.dp
 
     val isCreateMode = post == null
-    var title by remember { mutableStateOf(post?.title ?: "") }
-    var text by remember { mutableStateOf(post?.text ?: "") }
-    var type by remember { mutableStateOf(post?.type ?: Post.Type.POST) }
-    var mediaUrls by remember { mutableStateOf(post?.media ?: listOf()) }
-    var mediaUris by remember { mutableStateOf(listOf<Uri>()) }
+    var title = remember { mutableStateOf(post?.title ?: "") }
+    var text = remember { mutableStateOf(post?.text ?: "") }
+    val type = remember { mutableStateOf(post?.type ?: Post.Type.POST) }
+    val mediaUrls = remember {
+        mutableStateListOf<String>().apply {
+            post?.media?.let { media -> addAll(media) }
+        }
+    }
+    val mediaUris = remember { mutableStateListOf<Uri>() }
 
-    fun prepareData() = Post(createDate = Timestamp.now(), type = type, title = title, text = text)
-    fun prepareCopy() = post!!.copy(updateDate = Timestamp.now(), type = type, title = title, text = text)
+    fun prepareData() =
+        Post(
+            createDate = Timestamp.now(),
+            type = type.value,
+            title = title.value,
+            text = text.value,
+            media = mediaUrls + mediaUris.mapNotNull { it.path })
+
+    fun prepareCopy() =
+        post!!.copy(
+            updateDate = Timestamp.now(),
+            type = type.value,
+            title = title.value,
+            text = text.value,
+            media = mediaUrls + mediaUris.mapNotNull { it.path })
 
     CBottomSheet(
         isBottomSheetVisible = isBottomSheetVisible,
@@ -72,7 +92,7 @@ fun PostEditorSheet(
             if (isCreateMode) {
                 CTextButton(
                     label = stringResource(R.string.post_create),
-                    enabled = text.isNotEmpty(),
+                    enabled = text.value.isNotEmpty(),
                     onClick = {
                         onDismissRequest()
                         NetworkUtils.makeCallIO {
@@ -84,7 +104,7 @@ fun PostEditorSheet(
             } else {
                 CTextButton(
                     label = stringResource(R.string.post_edit),
-                    enabled = text.isNotEmpty(),
+                    enabled = text.value.isNotEmpty(),
                     onClick = {
                         onDismissRequest()
                         NetworkUtils.makeCallIO {
@@ -99,19 +119,19 @@ fun PostEditorSheet(
 
         Column {
             CTextField(
-                value = title,
+                value = title.value,
                 textStyle = SDTheme.typography.headingS,
                 singleLine = true,
-                onValueChange = { title = it }
+                onValueChange = { title.value = it }
             )
             CTextField(
                 modifier = Modifier.weight(1f),
-                value = text,
-                onValueChange = { text = it }
+                value = text.value,
+                onValueChange = { text.value = it }
             )
 
             AttachmentsList(mediaUrls, mediaUris)
-            BottomMenu()
+            BottomMenu(uris = mediaUris)
         }
 
     }
@@ -119,23 +139,33 @@ fun PostEditorSheet(
 }
 
 @Composable
-private fun AttachmentsList(urls: List<String>, uris: List<Uri>) {
+private fun AttachmentsList(urls: MutableList<String>, uris: MutableList<Uri>) {
     LazyRow(
         modifier = Modifier.padding(vertical = 30.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(urls) {
-            AttachmentMedia(it) { }
+            AttachmentMedia(it) { urls.remove(it) }
         }
 
         items(uris) {
-            AttachmentMedia(it) { }
+            AttachmentMedia(it) { uris.remove(it) }
         }
     }
 }
 
 @Composable
-private fun BottomMenu() {
+private fun BottomMenu(uris: MutableList<Uri>) {
+    val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
+//        if (it) {
+//          uris.add()
+//        }
+    }
+
+    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) {
+        uris.addAll(it)
+    }
+
     Row(
         modifier = Modifier
             .wrapContentHeight()
@@ -154,7 +184,7 @@ private fun BottomMenu() {
             iconId = R.drawable.ic_image,
             contentColor = SDTheme.colors.fgSecondary
         ) {
-
+            galleryLauncher.launch("image/*")
         }
     }
 }

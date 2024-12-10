@@ -21,16 +21,9 @@ class WikiSectionViewModel @Inject constructor() : ViewModel(), EventHandler<Wik
 
     private val _compendiumState: MutableLiveData<WikiSectionContract.State> =
         MutableLiveData(WikiSectionContract.State(
-            selectedTab = 0,
-            bottomSheetItem = null,
-            classes = null,
-            races = null,
-            monsters = null,
             isClassesLoading = true,
             isRacesLoading = true,
-            isMonstersLoading = true,
-            isMonsterLoading = false,
-            isError = false
+            isMonstersLoading = true
         ))
     val compendiumState: LiveData<WikiSectionContract.State> = _compendiumState
 

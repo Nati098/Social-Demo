@@ -81,7 +81,7 @@ private val IMAGES = listOf(
     "https://images.nightcafe.studio/jobs/U1lMCCZWHTbRZfeKkke7/U1lMCCZWHTbRZfeKkke7--1--hsd0o_2x.jpg",
     "https://i.pinimg.com/originals/a0/39/1b/a0391b038aa65ac3261079211ed030eb.jpg",
     "https://i.pinimg.com/originals/a0/39/1b/a0391b038aa65ac3261079211ed030eb.jpg",
-    "https://i.pinimg.com/originals/a0/39/1b/a0391b038aa65ac3261079211ed030eb.jpg"
+    "https://i.pinimg.com/originals/a0/39/1b/a0391b038aa65ac3261079211ed030b"
 )
 
 private val TEMP_POST1 = Post(
