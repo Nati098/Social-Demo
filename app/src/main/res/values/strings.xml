@@ -48,6 +48,7 @@
     <string name="post_create">Create</string>
     <string name="post_edit">Edit</string>
     <string name="post_create_placeholder">Enter text here</string>
+    <string name="required">* Required</string>
 
 
     <string name="share_profile">Share profile…</string>

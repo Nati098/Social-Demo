@@ -64,6 +64,7 @@ import ru.social.demo.ui.components.buttons.COutlinedButton
 import ru.social.demo.ui.components.buttons.CTextButton
 import ru.social.demo.ui.components.buttons.CTonalButton
 import ru.social.demo.ui.components.containers.OutlinedContainer
+import ru.social.demo.ui.components.text.RoundedTextField
 import ru.social.demo.ui.theme.SDTheme
 import java.lang.reflect.Field
 import kotlin.random.Random
@@ -122,6 +123,7 @@ fun LibraryPage(
                 IconsGrid(resources)
             }
 
+            TextFieldsTest()
             ButtonsTest()
             TilesTest()
 
@@ -197,6 +199,45 @@ private fun IconsGrid(resources: List<Pair<String, Int>>) {
         }
 
     }
+}
+
+@Composable
+private fun TextFieldsTest() {
+
+    val value1 = remember { mutableStateOf("") }
+    val value2 = remember { mutableStateOf("") }
+
+    OutlinedContainer(
+        parentWidth = true,
+        paddingHorizontal = 16.dp,
+        paddingVertical = 16.dp
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            RoundedTextField(value = value1.value) {
+                value1.value = it
+            }
+
+            RoundedTextField(
+                value = value1.value,
+                hint = "Value1 2.0"
+            ) {
+                value1.value = it
+            }
+
+            RoundedTextField(
+                value = value2.value,
+                hint = "Value2",
+                required = true
+            ) {
+                value2.value = it
+            }
+
+        }
+    }
+
 }
 
 @Composable

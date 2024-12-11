@@ -49,8 +49,8 @@ fun PostEditorSheet(
     val context = LocalContext.current
 
     val isCreateMode = post == null
-    var title = remember { mutableStateOf(post?.title ?: "") }
-    var text = remember { mutableStateOf(post?.text ?: "") }
+    val title = remember { mutableStateOf(post?.title ?: "") }
+    val text = remember { mutableStateOf(post?.text ?: "") }
     val type = remember { mutableStateOf(post?.type ?: Post.Type.POST) }
     val mediaUrls = remember {
         mutableStateListOf<String>().apply {
