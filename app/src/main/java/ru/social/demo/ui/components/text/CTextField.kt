@@ -53,7 +53,7 @@ fun CTextField(
                 ) {
                     if (value.isEmpty())
                         Text(
-                            stringResource(R.string.post_create_placeholder),
+                            stringResource(R.string.text_field_placeholder),
                             color = SDTheme.colors.fgTertiary
                         )
                     innerTextField()

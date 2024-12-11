@@ -27,6 +27,7 @@ fun RoundedTextField(
     value: String,
     hint: String? = null,
     required: Boolean = false,
+    enabled: Boolean = true,
     onValueChange: (String) -> Unit,
 ) {
 
@@ -41,6 +42,7 @@ fun RoundedTextField(
             onValueChange = onValueChange,
             modifier = modifier,
             singleLine = true,
+            enabled = enabled,
             decorationBox = { innerTextField ->
                 Row(
                     modifier = Modifier

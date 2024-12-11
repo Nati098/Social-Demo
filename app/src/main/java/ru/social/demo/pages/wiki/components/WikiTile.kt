@@ -49,9 +49,9 @@ enum class WikiTypeRes(
     @StringRes val descriptionId: Int?
 ) {
     COMPENDIUM(R.color.wiki_compendium, R.drawable.bg_image_1, R.string.wiki_compendium, R.string.wiki_compendium_desc),
-    EVENT(R.color.wiki_event, R.drawable.bg_image_7, R.string.wiki_event, R.string.wiki_event_desc),
-    WORLD(R.color.wiki_world, R.drawable.bg_image_6, R.string.wiki_world, R.string.wiki_world_desc),
-    CHARACTER(R.color.wiki_character, R.drawable.bg_image_1, R.string.wiki_character, R.string.wiki_character_desc),
+    EVENT(R.color.wiki_event, R.drawable.bg_image_7, R.string.events, R.string.wiki_event_desc),
+    WORLD(R.color.wiki_world, R.drawable.bg_image_6, R.string.worlds, R.string.wiki_world_desc),
+    CHARACTER(R.color.wiki_character, R.drawable.bg_image_1, R.string.characters, R.string.wiki_character_desc),
     TALE(R.color.wiki_tale, R.drawable.bg_image_3, R.string.wiki_tales, R.string.wiki_tales_desc)
 }
 

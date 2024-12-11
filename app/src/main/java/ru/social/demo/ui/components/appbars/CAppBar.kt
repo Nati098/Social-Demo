@@ -12,6 +12,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -24,7 +25,6 @@ import ru.social.demo.ui.components.appbars.utils.CollapsibleScaffold
 import ru.social.demo.ui.components.appbars.utils.CollapsibleTopAppBarScope
 import ru.social.demo.ui.components.appbars.utils.TopBar
 import ru.social.demo.ui.components.buttons.CIconButtonOutlined
-import ru.social.demo.ui.theme.CWhite
 import ru.social.demo.ui.theme.SDTheme
 
 /**
@@ -62,12 +62,12 @@ fun CAppBar(
                 actions = {
                     CIconButtonOutlined(
                         iconId = R.drawable.ic_search,
-                        bgColor = CWhite,
+                        bgColor = colorResource(R.color.white),
                         onClick = { }
                     )
                     CIconButtonOutlined(
                         iconId = R.drawable.ic_bell,
-                        bgColor = CWhite,
+                        bgColor = colorResource(R.color.white),
                         onClick = { }
                     )
                     when (userViewState) {
