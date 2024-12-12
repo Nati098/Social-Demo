@@ -1,7 +1,7 @@
 package ru.social.demo.pages.post_editor
 
 import android.net.Uri
-import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +15,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,7 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.Timestamp
+import ru.social.demo.MainContract
+import ru.social.demo.MainViewModel
 import ru.social.demo.R
 import ru.social.demo.data.model.Post
 import ru.social.demo.pages.post_editor.components.AttachmentMedia
@@ -45,12 +50,13 @@ fun PostEditorSheet(
     sheetState: SheetState,
     onDismissRequest: () -> Unit = {}
 ) {
-    Log.d("TEST", "PostEditorSheet starts")
     val context = LocalContext.current
+    val mainViewModel: MainViewModel = viewModel(context as ComponentActivity)
+    val userViewState by mainViewModel.userViewState.observeAsState()
 
     val isCreateMode = post == null
-    var title = remember { mutableStateOf(post?.title ?: "") }
-    var text = remember { mutableStateOf(post?.text ?: "") }
+    val title = remember { mutableStateOf(post?.title ?: "") }
+    val text = remember { mutableStateOf(post?.text ?: "") }
     val type = remember { mutableStateOf(post?.type ?: Post.Type.POST) }
     val mediaUrls = remember {
         mutableStateListOf<String>().apply {
@@ -72,7 +78,8 @@ fun PostEditorSheet(
             title = title.value,
             text = text.value,
             media = mediaUrls,
-            mediaBase64 = mediaUris.map { it.toBase64(context) }
+            mediaBase64 = mediaUris.map { it.toBase64(context) },
+            user = (userViewState as? MainContract.State.SuccessUser)?.data
         )
 
     fun prepareCopy() =
@@ -82,7 +89,8 @@ fun PostEditorSheet(
             title = title.value,
             text = text.value,
             media = mediaUrls,
-            mediaBase64 = mediaUris.map { it.toBase64(context) }
+            mediaBase64 = mediaUris.map { it.toBase64(context) },
+            user = (userViewState as? MainContract.State.SuccessUser)?.data
         )
 
     CBottomSheet(

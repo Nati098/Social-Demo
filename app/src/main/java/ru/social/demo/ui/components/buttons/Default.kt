@@ -32,12 +32,12 @@ fun CButton(
     enabled: Boolean = true,
     iconId: Int? = null,
     label: String? = null,
-    onClick: () -> Unit
+    onClick: (() -> Unit)? = null
 ) {
     Button(
         modifier = modifier,
-        enabled = enabled,
-        onClick = onClick,
+        enabled = enabled && onClick != null,
+        onClick = { onClick?.invoke() },
         shape = SDTheme.shapes.buttonCorners,
         colors = ButtonColors(
             containerColor = SDTheme.colors.bgActionPrimary,
@@ -81,13 +81,13 @@ fun CTonalButton(
 @Composable
 fun COutlinedButton(
     enabled: Boolean = true,
-    onClick: () -> Unit,
+    onClick: (() -> Unit)? = null,
     iconId: Int? = null,
     label: String? = null
 ) {
     OutlinedButton (
-        enabled = enabled,
-        onClick = onClick,
+        enabled = enabled && onClick != null,
+        onClick = { onClick?.invoke() },
         shape = SDTheme.shapes.buttonCorners,
         border = BorderStroke(width = 1.5.dp, color = SDTheme.colors.borderColor),
         colors =  ButtonDefaults.outlinedButtonColors(
@@ -107,11 +107,11 @@ fun CTextButton(
     label: String,
     enabled: Boolean = true,
     contentColor: Color = SDTheme.colors.fgActionEmphasis,
-    onClick: () -> Unit
+    onClick: (() -> Unit)? = null
 ) {
     TextButton (
-        enabled = enabled,
-        onClick = onClick,
+        enabled = enabled && onClick != null,
+        onClick = { onClick?.invoke() },
         colors =  ButtonDefaults.outlinedButtonColors(
             contentColor = contentColor,
             disabledContentColor = SDTheme.colors.fgTertiary

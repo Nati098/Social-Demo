@@ -2,8 +2,6 @@ package ru.social.demo.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val CBlack = Color.Black
-val CWhite = Color.White
 //val BorderPrimary = Color(0x1F1F120A)
 
 val LightColorScheme = SDColors(

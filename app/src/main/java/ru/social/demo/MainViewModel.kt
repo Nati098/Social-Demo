@@ -1,5 +1,6 @@
 package ru.social.demo
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,16 +8,17 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.social.demo.base.EventHandler
+import ru.social.demo.data.SharedPrefs
 import ru.social.demo.data.model.User
 import ru.social.demo.services.FirestoreClient
 import ru.social.demo.services.FsPath
 import ru.social.demo.utils.NetworkUtils
 import javax.inject.Inject
 
-private const val USER_ID = "muggRsDlSSfuP5Zv1mlHXHxHlZg1"
-
 @HiltViewModel
-class MainViewModel @Inject constructor(): ViewModel(), EventHandler<MainContract.Event> {
+class MainViewModel @Inject constructor(
+    private val sharedPrefs: SharedPrefs
+): ViewModel(), EventHandler<MainContract.Event> {
 
     private val _userViewState: MutableLiveData<MainContract.State> = MutableLiveData(MainContract.State.LoadingUser)
     val userViewState: LiveData<MainContract.State> = _userViewState
@@ -26,6 +28,7 @@ class MainViewModel @Inject constructor(): ViewModel(), EventHandler<MainContrac
             is MainContract.Event.LoadUser -> handleUserState(event)
             is MainContract.Event.Reload -> viewModelScope.launch { fetchUser() }
             is MainContract.Event.UserClicked -> {}
+            is MainContract.Event.UserRemoved -> clearUser()
         }
     }
 
@@ -46,9 +49,21 @@ class MainViewModel @Inject constructor(): ViewModel(), EventHandler<MainContrac
 
     private suspend fun fetchUser() {
         NetworkUtils.makeCall {
+            val userId = sharedPrefs.getUserId()
+            if (userId.isNullOrBlank()) {
+                _userViewState.postValue(MainContract.State.Error)
+                return@makeCall
+            }
+
+            Log.d("TEST", "MainVM fetchUser isHost = ${sharedPrefs.isHost()}")
+            if (sharedPrefs.isHost()) {
+                _userViewState.postValue(MainContract.State.SuccessUser(data = null))
+                return@makeCall
+            }
+
             FirestoreClient.getInstance().readData<User>(
                 path = FsPath.USERS,
-                docId = USER_ID,
+                docId = userId,
                 onSuccess = { result ->
                     _userViewState.postValue(MainContract.State.SuccessUser(data = result))
                 },
@@ -57,6 +72,11 @@ class MainViewModel @Inject constructor(): ViewModel(), EventHandler<MainContrac
                 }
             )
         }
+    }
+
+    private fun clearUser() {
+        sharedPrefs.clearUserId()
+        sharedPrefs.setIsHost(false)
     }
 
 }

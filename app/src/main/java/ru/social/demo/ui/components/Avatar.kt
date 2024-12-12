@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import ru.social.demo.R
-import ru.social.demo.ui.theme.CWhite
 
 enum class AvatarRes(@ColorRes val color: Int, val placeholder: Int) {
     BLUE(R.color.avatar_blue, R.drawable.bg_image_6),
@@ -132,7 +131,7 @@ private fun Placeholder(size: Dp, char: Char) {
             fontWeight = FontWeight.ExtraBold,
             fontSize = (size.value/3).sp,
             textAlign = TextAlign.Center,
-            color = CWhite,
+            color = colorResource(R.color.white),
             modifier = Modifier.align(Alignment.Center)
         )
     }

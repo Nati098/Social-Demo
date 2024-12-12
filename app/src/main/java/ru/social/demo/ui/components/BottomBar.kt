@@ -23,6 +23,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import ru.social.demo.base.AppState
 import ru.social.demo.base.NavBarPath
+import ru.social.demo.base.NavPath
+import ru.social.demo.pages.auth.authFlow
 import ru.social.demo.pages.events.eventsFlow
 import ru.social.demo.pages.home.homeFlow
 import ru.social.demo.pages.library.libraryFlow
@@ -31,7 +33,9 @@ import ru.social.demo.ui.theme.SDTheme
 import ru.social.demo.utils.topBorder
 
 @Composable
-fun BottomBar() {
+fun BottomBar(
+    needAuth: Boolean
+) {
     val navController = rememberNavController()
     val appState = remember(rememberNavController()) { AppState(navController) }
 
@@ -83,9 +87,10 @@ fun BottomBar() {
         ) {
             NavHost(
                 navController = navController,
-                startDestination = NavBarPath.LIBRARY.route
+                startDestination = if (needAuth) NavPath.AUTH else NavBarPath.LIBRARY.route
             ) {
 
+                authFlow(navController)
                 homeFlow(navController)
                 libraryFlow(navController)
                 wikiFlow(navController)

@@ -29,10 +29,11 @@ class FirestoreClient(
     fun <T : BaseModel> setData(
         path: String,
         data: T,
+        id: String? = null,
         onSuccess: () -> Unit = {},
-        onError: () -> Unit = {},
+        onError: (String) -> Unit = {},
     ) {
-        val key = db.collection(path).document().id
+        val key = id ?: db.collection(path).document().id
         db.collection(path)
             .document(key).set(data.apply { this.id = key })
             .addOnSuccessListener { result ->
@@ -41,7 +42,7 @@ class FirestoreClient(
             }
             .addOnFailureListener { e ->
                 Log.e("TEST","Firebase.firestore set error: $e")
-                onError()
+                onError(e.message ?: "Can't set data to Firebase")
             }
     }
 
