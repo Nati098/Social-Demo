@@ -28,7 +28,7 @@ class AuthViewModel @Inject constructor(
     override fun handle(event: AuthContract.Event) {
         when(event) {
             is AuthContract.Event.SignInClicked -> handleSignIn(event)
-            is AuthContract.Event.SignInHostClicked -> handleSignInHost()
+            is AuthContract.Event.SignInHostClicked -> handleSignInHost(event)
             is AuthContract.Event.SignUpToggle -> handleSignUp()
             is AuthContract.Event.FinishSignUpClicked -> handleFinishSignUp(event)
         }
@@ -54,8 +54,9 @@ class AuthViewModel @Inject constructor(
 
     }
 
-    private fun handleSignInHost() {
+    private fun handleSignInHost(event: AuthContract.Event.SignInHostClicked) {
         sharedPrefs.setIsHost(true)
+        event.onSuccess.invoke()
     }
 
     private fun handleSignUp() {

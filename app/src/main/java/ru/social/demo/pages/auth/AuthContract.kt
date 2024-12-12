@@ -7,7 +7,7 @@ class AuthContract {
 
     sealed interface Event : BaseEvent {
         data class SignInClicked(val onSuccess: () -> Unit) : Event
-        object SignInHostClicked : Event
+        data class SignInHostClicked(val onSuccess: () -> Unit) : Event
         object SignUpToggle : Event
         data class FinishSignUpClicked(val onSuccess: () -> Unit) : Event
     }

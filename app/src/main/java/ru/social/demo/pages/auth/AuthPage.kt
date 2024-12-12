@@ -168,10 +168,13 @@ fun AuthPage(
                 CTextButton(
                     label = stringResource(R.string.signInHost)
                 ) {
-                    viewModel.handle(AuthContract.Event.SignInHostClicked)
-                    if (error.isNullOrBlank()) {
-                        navController.navigate(NavBarPath.HOME.route)
-                    }
+                    viewModel.handle(AuthContract.Event.SignInHostClicked(
+                        onSuccess = {
+                            if (error.isNullOrBlank()) {
+                                navController.navigate(NavBarPath.HOME.route)
+                            }
+                        }
+                    ))
                 }
 
             }
