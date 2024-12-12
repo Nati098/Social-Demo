@@ -25,7 +25,6 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onStop() {
-        viewModel.handle(MainContract.Event.UserRemoved)
         super.onStop()
     }
 

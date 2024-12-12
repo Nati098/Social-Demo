@@ -3,6 +3,7 @@ package ru.social.demo.pages.profile
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,6 +37,7 @@ import ru.social.demo.ui.components.ArrowTile
 import ru.social.demo.ui.components.Avatar
 import ru.social.demo.ui.components.CAlertDialog
 import ru.social.demo.ui.components.appbars.CTopBar
+import ru.social.demo.ui.components.buttons.CButton
 import ru.social.demo.ui.components.buttons.ShareButton
 import ru.social.demo.ui.components.buttons.UserEditButton
 import ru.social.demo.ui.components.containers.RefreshContainer
@@ -47,6 +49,11 @@ fun ProfilePage(
 ) {
     val mainViewModel: MainViewModel = viewModel(LocalContext.current as ComponentActivity)
     val userViewState by mainViewModel.userViewState.observeAsState()
+
+    fun clearUser() {
+        mainViewModel.handle(MainContract.Event.UserRemoved)
+        navController.navigate(NavPath.AUTH)
+    }
 
     val isAlertDialogVisible = userViewState !is MainContract.State.LoadingUser
             && (userViewState as? MainContract.State.SuccessUser)?.data == null
@@ -80,7 +87,6 @@ fun ProfilePage(
                     }
 
                     item { DetailsSpacer() }
-
                     when (userViewState) {
                         is MainContract.State.SuccessUser -> item {
                             DetailsBlock((userViewState as MainContract.State.SuccessUser).data)
@@ -89,8 +95,10 @@ fun ProfilePage(
                     }
 
                     item { DetailsSpacer() }
-
                     items(userSections()) { it.invoke() }
+
+                    item { DetailsSpacer() }
+                    item { LogoutBlock(onLogout = ::clearUser) }
 
                 }
             }
@@ -104,10 +112,7 @@ fun ProfilePage(
         onDismissRequest = { navController.navigateUp() },
         onBack = { navController.navigateUp() },
         actionLabel = "To auth page",
-        onAction = {
-            mainViewModel.handle(MainContract.Event.UserRemoved)
-            navController.navigate(NavPath.AUTH)
-        }
+        onAction = ::clearUser
     )
 
 }
@@ -172,6 +177,19 @@ private fun userSections(): List<@Composable () -> Unit> = listOf(
     { ArrowTile(title = stringResource(R.string.worlds), iconId = R.drawable.ic_image) },
     { ArrowTile(title = stringResource(R.string.characters), iconId = R.drawable.ic_bird) },
 )
+
+@Composable
+private fun LogoutBlock(onLogout: () -> Unit) {
+    Box(
+        Modifier.fillMaxWidth().padding(vertical = 20.dp)
+    ) {
+        CButton(
+            modifier = Modifier.align(Alignment.Center),
+            label = stringResource(R.string.logout),
+            onClick = onLogout
+        )
+    }
+}
 
 @Composable
 private fun DetailsSpacer() {

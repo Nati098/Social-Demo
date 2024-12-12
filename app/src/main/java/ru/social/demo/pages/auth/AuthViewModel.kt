@@ -1,6 +1,5 @@
 package ru.social.demo.pages.auth
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,17 +20,21 @@ class AuthViewModel @Inject constructor(
     private val _userState: MutableLiveData<AuthContract.State> = MutableLiveData(AuthContract.State())
     val userState: LiveData<AuthContract.State> = _userState
 
+    init {
+        sharedPrefs.clearUserId()
+        sharedPrefs.setIsHost(false)
+    }
+
     override fun handle(event: AuthContract.Event) {
-//        Log.d("TEST", "Auth, event = $event, state = ${_userState.value}")
         when(event) {
-            AuthContract.Event.SignInClicked -> handleSignIn()
-            AuthContract.Event.SignInHostClicked -> handleSignInHost()
-            AuthContract.Event.SignUpToggle -> handleSignUp()
-            AuthContract.Event.FinishSignUpClicked -> handleFinishSignUp()
+            is AuthContract.Event.SignInClicked -> handleSignIn(event)
+            is AuthContract.Event.SignInHostClicked -> handleSignInHost()
+            is AuthContract.Event.SignUpToggle -> handleSignUp()
+            is AuthContract.Event.FinishSignUpClicked -> handleFinishSignUp(event)
         }
     }
 
-    private fun handleSignIn() {
+    private fun handleSignIn(event: AuthContract.Event.SignInClicked) {
         _userState.postValue(_userState.value?.copy(error = ""))
 
         _userState.value?.let { state ->
@@ -42,6 +45,7 @@ class AuthViewModel @Inject constructor(
                         _userState.postValue(_userState.value?.copy(error = "Wrong user id"))
                     } else {
                         sharedPrefs.setUserId(it?.uid)
+                        event.onSuccess.invoke()
                     }
                 },
                 onError = { _userState.postValue(_userState.value?.copy(error = it)) }
@@ -51,7 +55,6 @@ class AuthViewModel @Inject constructor(
     }
 
     private fun handleSignInHost() {
-        Log.d("TEST", "AuthVM SET HOST AS TRUE")
         sharedPrefs.setIsHost(true)
     }
 
@@ -60,7 +63,7 @@ class AuthViewModel @Inject constructor(
         _userState.postValue(_userState.value?.copy(isSignUp = !flag))
     }
 
-    private fun handleFinishSignUp() {
+    private fun handleFinishSignUp(event: AuthContract.Event.FinishSignUpClicked) {
         _userState.postValue(_userState.value?.copy(error = ""))
 
         _userState.value?.let { state ->

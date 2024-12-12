@@ -21,6 +21,7 @@
     <string name="signIn">Sign In</string>
     <string name="signInHost">Sign In as host</string>
     <string name="signUp">Sign Up</string>
+    <string name="logout">Log out</string>
     <string name="finish">Finish</string>
 
 

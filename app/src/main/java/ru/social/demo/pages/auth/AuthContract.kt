@@ -6,10 +6,10 @@ import ru.social.demo.base.BaseViewState
 class AuthContract {
 
     sealed interface Event : BaseEvent {
-        object SignInClicked : Event
+        data class SignInClicked(val onSuccess: () -> Unit) : Event
         object SignInHostClicked : Event
         object SignUpToggle : Event
-        object FinishSignUpClicked : Event
+        data class FinishSignUpClicked(val onSuccess: () -> Unit) : Event
     }
 
     data class State(

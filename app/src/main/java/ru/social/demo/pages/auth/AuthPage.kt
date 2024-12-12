@@ -1,5 +1,6 @@
 package ru.social.demo.pages.auth
 
+import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -14,27 +15,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import kotlinx.coroutines.coroutineScope
+import ru.social.demo.MainContract
+import ru.social.demo.MainViewModel
 import ru.social.demo.R
 import ru.social.demo.base.NavBarPath
-import ru.social.demo.base.NavPath
 import ru.social.demo.ui.components.buttons.CButton
 import ru.social.demo.ui.components.buttons.CTextButton
 import ru.social.demo.ui.components.text.RoundedTextField
 import ru.social.demo.ui.theme.SDTheme
-import ru.social.demo.utils.NetworkUtils
 
 @Composable
 fun AuthPage(
     navController: NavController,
     viewModel: AuthViewModel
 ) {
+    val mainViewModel: MainViewModel = viewModel(LocalContext.current as ComponentActivity)
 
     val userState = viewModel.userState.observeAsState()
     val isSignUp = userState.value?.isSignUp == true
@@ -120,10 +123,14 @@ fun AuthPage(
                         label = stringResource(R.string.signIn),
                         enabled = userState.value?.isValid() == true
                     ) {
-                        viewModel.handle(AuthContract.Event.SignInClicked)
-                        if (error.isNullOrBlank()) {
-                            navController.navigate(NavBarPath.HOME.route)
-                        }
+                        viewModel.handle(AuthContract.Event.SignInClicked(
+                            onSuccess = {
+                                if (error.isNullOrBlank()) {
+                                    mainViewModel.handle(MainContract.Event.LoadUser)
+                                    navController.navigate(NavBarPath.HOME.route)
+                                }
+                            }
+                        ))
                     }
 
                     CTextButton(
@@ -140,12 +147,14 @@ fun AuthPage(
                         label = stringResource(R.string.finish),
                         enabled = userState.value?.isValidUserData() == true
                     ) {
-                        NetworkUtils.makeCallIO {
-                            viewModel.handle(AuthContract.Event.FinishSignUpClicked)
-                            if (error.isNullOrBlank()) {
-                                navController.navigate(NavBarPath.HOME.route)
+                        viewModel.handle(AuthContract.Event.FinishSignUpClicked(
+                            onSuccess = {
+                                if (error.isNullOrBlank()) {
+                                    mainViewModel.handle(MainContract.Event.LoadUser)
+                                    navController.navigate(NavBarPath.HOME.route)
+                                }
                             }
-                        }
+                        ))
 
                     }
 
