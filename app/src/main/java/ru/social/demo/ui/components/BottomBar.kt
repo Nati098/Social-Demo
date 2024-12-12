@@ -33,7 +33,9 @@ import ru.social.demo.ui.theme.SDTheme
 import ru.social.demo.utils.topBorder
 
 @Composable
-fun BottomBar() {
+fun BottomBar(
+    needAuth: Boolean
+) {
     val navController = rememberNavController()
     val appState = remember(rememberNavController()) { AppState(navController) }
 
@@ -85,7 +87,7 @@ fun BottomBar() {
         ) {
             NavHost(
                 navController = navController,
-                startDestination = NavPath.AUTH
+                startDestination = if (needAuth) NavPath.AUTH else NavBarPath.LIBRARY.route
             ) {
 
                 authFlow(navController)
