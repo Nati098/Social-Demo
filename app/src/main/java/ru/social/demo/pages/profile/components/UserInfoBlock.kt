@@ -23,7 +23,7 @@ fun UserInfoBlock(
         DetailsDataItem(
             iconId = R.drawable.ic_cake,
             { Text(
-                user?.birthday?.parseBirthdayDate() ?: "",
+                user?.birthday?.parseBirthdayDate() ?: "-",
                 style = SDTheme.typography.bodyMediumL,
                 color = SDTheme.colors.fgPrimary
             ) },
@@ -32,19 +32,21 @@ fun UserInfoBlock(
                 style = SDTheme.typography.bodyMediumL,
                 color = SDTheme.colors.fgTertiary
             ) },
-            { Text (
-                "${user?.birthday?.calculateAge()} years",
-                style = SDTheme.typography.bodyMediumL,
-                color = SDTheme.colors.fgSecondary
+            { user?.birthday?.let{
+                Text (
+                    "${it.calculateAge()} years",
+                    style = SDTheme.typography.bodyMediumL,
+                    color = SDTheme.colors.fgSecondary
 
-            ) }   // TODO: word depends on number!
+                )
+            } }   // TODO: word depends on number!
         )
         DetailsDataItem(
             iconId = user?.gender?.iconId ?: R.drawable.ic_gender_male,
             { Text(
                 String.format(
                     stringResource(R.string.gender),
-                    user?.gender?.stringId?.let { stringResource(it) } ?: ""
+                    user?.gender?.stringId?.let { stringResource(it) } ?: "-"
                 ),
                 style = SDTheme.typography.bodyMediumL,
                 color = SDTheme.colors.fgPrimary

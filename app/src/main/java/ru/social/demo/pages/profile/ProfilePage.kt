@@ -24,14 +24,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import ru.social.demo.MainContract
 import ru.social.demo.MainViewModel
 import ru.social.demo.R
+import ru.social.demo.base.NavPath
 import ru.social.demo.data.model.User
 import ru.social.demo.pages.profile.components.FriendsInfoBlock
 import ru.social.demo.pages.profile.components.UserInfoBlock
 import ru.social.demo.ui.components.ArrowTile
 import ru.social.demo.ui.components.Avatar
+import ru.social.demo.ui.components.CAlertDialog
 import ru.social.demo.ui.components.appbars.CTopBar
 import ru.social.demo.ui.components.buttons.ShareButton
 import ru.social.demo.ui.components.buttons.UserEditButton
@@ -40,17 +43,18 @@ import ru.social.demo.ui.theme.SDTheme
 
 @Composable
 fun ProfilePage(
-    navigateBack: () -> Unit
+    navController: NavController
 ) {
-
     val mainViewModel: MainViewModel = viewModel(LocalContext.current as ComponentActivity)
     val userViewState by mainViewModel.userViewState.observeAsState()
 
+    val isAlertDialogVisible = userViewState !is MainContract.State.LoadingUser
+            && (userViewState as? MainContract.State.SuccessUser)?.data == null
     val listState = rememberLazyListState()
 
     CTopBar(
         title = stringResource(R.string.profile),
-        onBack = navigateBack,
+        onBack = { navController.navigateUp() },
         actions = {
             UserEditButton(onClick = { })
             ShareButton(
@@ -91,6 +95,18 @@ fun ProfilePage(
                 }
             }
 
+        }
+    )
+
+    CAlertDialog(
+        isDialogVisible = isAlertDialogVisible,
+        subTitle = stringResource(R.string.no_profile_access),
+        onDismissRequest = { navController.navigateUp() },
+        onBack = { navController.navigateUp() },
+        actionLabel = "To auth page",
+        onAction = {
+            mainViewModel.handle(MainContract.Event.UserRemoved)
+            navController.navigate(NavPath.AUTH)
         }
     )
 

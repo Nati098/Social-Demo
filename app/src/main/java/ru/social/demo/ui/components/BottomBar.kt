@@ -88,7 +88,7 @@ fun BottomBar() {
                 startDestination = NavPath.AUTH
             ) {
 
-                authFlow()
+                authFlow(navController)
                 homeFlow(navController)
                 libraryFlow(navController)
                 wikiFlow(navController)

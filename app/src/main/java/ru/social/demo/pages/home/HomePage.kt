@@ -130,14 +130,14 @@ private fun Feed(
                 PostTile(
                     post,
                     onEdit = {
-                        coroutineScope.launch {
-                            postState.value = post
-
-                            launch {
-                                isBottomSheetVisible = true
-                                sheetState.expand()
-                            }
-                        }
+//                        coroutineScope.launch {
+//                            postState.value = post
+//
+//                            launch {
+//                                isBottomSheetVisible = true
+//                                sheetState.expand()
+//                            }
+//                        }
 
                     }
                 )

@@ -7,6 +7,7 @@ class AuthContract {
 
     sealed interface Event : BaseEvent {
         object SignInClicked : Event
+        object SignInHostClicked : Event
         object SignUpToggle : Event
         object FinishSignUpClicked : Event
     }

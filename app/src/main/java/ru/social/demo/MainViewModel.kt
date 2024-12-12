@@ -1,5 +1,6 @@
 package ru.social.demo
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,6 +28,7 @@ class MainViewModel @Inject constructor(
             is MainContract.Event.LoadUser -> handleUserState(event)
             is MainContract.Event.Reload -> viewModelScope.launch { fetchUser() }
             is MainContract.Event.UserClicked -> {}
+            is MainContract.Event.UserRemoved -> clearUser()
         }
     }
 
@@ -53,6 +55,12 @@ class MainViewModel @Inject constructor(
                 return@makeCall
             }
 
+            Log.d("TEST", "MainVM fetchUser isHost = ${sharedPrefs.isHost()}")
+            if (sharedPrefs.isHost()) {
+                _userViewState.postValue(MainContract.State.SuccessUser(data = null))
+                return@makeCall
+            }
+
             FirestoreClient.getInstance().readData<User>(
                 path = FsPath.USERS,
                 docId = userId,
@@ -64,6 +72,11 @@ class MainViewModel @Inject constructor(
                 }
             )
         }
+    }
+
+    private fun clearUser() {
+        sharedPrefs.clearUserId()
+        sharedPrefs.setIsHost(false)
     }
 
 }

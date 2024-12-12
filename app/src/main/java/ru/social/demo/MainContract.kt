@@ -10,6 +10,7 @@ class MainContract {
         object LoadUser : Event
         object Reload : Event
         object UserClicked : Event
+        object UserRemoved : Event
     }
 
     sealed interface State : BaseViewState {

@@ -1,5 +1,6 @@
 package ru.social.demo.pages.auth
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,8 +22,10 @@ class AuthViewModel @Inject constructor(
     val userState: LiveData<AuthContract.State> = _userState
 
     override fun handle(event: AuthContract.Event) {
+//        Log.d("TEST", "Auth, event = $event, state = ${_userState.value}")
         when(event) {
             AuthContract.Event.SignInClicked -> handleSignIn()
+            AuthContract.Event.SignInHostClicked -> handleSignInHost()
             AuthContract.Event.SignUpToggle -> handleSignUp()
             AuthContract.Event.FinishSignUpClicked -> handleFinishSignUp()
         }
@@ -45,6 +48,11 @@ class AuthViewModel @Inject constructor(
             )
         }
 
+    }
+
+    private fun handleSignInHost() {
+        Log.d("TEST", "AuthVM SET HOST AS TRUE")
+        sharedPrefs.setIsHost(true)
     }
 
     private fun handleSignUp() {
@@ -81,6 +89,23 @@ class AuthViewModel @Inject constructor(
             )
         }
 
+    }
+
+
+    fun onEmailChanged(str: String) {
+        _userState.postValue(_userState.value?.copy(email = str))
+    }
+
+    fun onPasswordChanged(str: String) {
+        _userState.postValue(_userState.value?.copy(password = str))
+    }
+
+    fun onNameChanged(str: String) {
+        _userState.postValue(_userState.value?.copy(name = str))
+    }
+
+    fun onImageUrlChanged(str: String) {
+        _userState.postValue(_userState.value?.copy(imageUrl = str))
     }
 
 }

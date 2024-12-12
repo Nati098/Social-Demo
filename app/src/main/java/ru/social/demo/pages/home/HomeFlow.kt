@@ -22,7 +22,7 @@ fun NavGraphBuilder.homeFlow(
         }
         composable(NavPath.PROFILE) {
             ProfilePage(
-                navigateBack = { navController.navigateUp() }
+                navController = navController
             )
         }
 
