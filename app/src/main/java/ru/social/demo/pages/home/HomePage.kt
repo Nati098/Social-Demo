@@ -64,7 +64,7 @@ fun HomePage(
     Scaffold(
         floatingActionButton = {
             FabButton(
-                reloadData = { viewModel.handle(HomeContract.Event.ReloadData) }
+                reloadData = { viewModel.handle(HomeContract.Event.Reload) }
             )
         }
     ) { _ ->
@@ -75,12 +75,12 @@ fun HomePage(
             topBarContent = { Carousel() },
             columnContent = { insets ->
                 when (viewState) {
-                    is HomeContract.State.LoadingData -> CProgressIndicator()
-                    is HomeContract.State.SuccessData -> Feed(
-                        (viewState as HomeContract.State.SuccessData).data,
+                    is HomeContract.State.LoadingFeed -> CProgressIndicator()
+                    is HomeContract.State.SuccessFeed -> Feed(
+                        (viewState as HomeContract.State.SuccessFeed).data,
                         insets,
                         postsListState,
-                        navController
+                        viewModel
                     )
 
                     else -> EmptyPage(
@@ -94,7 +94,7 @@ fun HomePage(
 
     LaunchedEffect(Unit) {
         Log.d("TEST", "Home, viewModel is $viewModel, mainVM $mainViewModel")
-        viewModel.handle(HomeContract.Event.LoadData)
+        viewModel.handle(HomeContract.Event.LoadFeed)
     }
 
 }
@@ -106,12 +106,13 @@ private fun Feed(
     data: List<Post>?,
     insets: PaddingValues,
     postsListState: LazyListState,
-    navController: NavController
+    viewModel: HomeViewModel
 ) {
+    val postToEditState by viewModel.postToEditState.observeAsState()
+
     val coroutineScope = rememberCoroutineScope()
     var isBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val postState = remember { mutableStateOf<Post?>(null) }
 
     LazyColumn(
         modifier = Modifier.fillMaxHeight(),
@@ -129,16 +130,13 @@ private fun Feed(
             items(data) { post ->
                 PostTile(
                     post,
-                    onEdit = {
-//                        coroutineScope.launch {
-//                            postState.value = post
-//
-//                            launch {
-//                                isBottomSheetVisible = true
-//                                sheetState.expand()
-//                            }
-//                        }
-
+                    onEdit = //if (post.isMine())
+                    {
+                        coroutineScope.launch {
+                            viewModel.handle(HomeContract.Event.EditPostClicked(post))
+                            isBottomSheetVisible = true
+                            sheetState.expand()
+                        }
                     }
                 )
                 HorizontalDivider(thickness = 10.dp, color = Color.Transparent)
@@ -146,16 +144,23 @@ private fun Feed(
         }
     }
 
-    PostEditorSheet(
-        post = postState.value,
-        isBottomSheetVisible = isBottomSheetVisible,
-        sheetState = sheetState,
-        onDismissRequest = {
-            coroutineScope
-                .launch { sheetState.hide() }
-                .invokeOnCompletion { isBottomSheetVisible = false }
-        }
-    )
+    (postToEditState as? HomeContract.State.PostToEdit)?.data?.let {
+        PostEditorSheet(
+            post = it,
+            isBottomSheetVisible = isBottomSheetVisible,
+            sheetState = sheetState,
+            onDismissRequest = {
+                coroutineScope
+                    .launch {
+                        sheetState.hide()
+                        viewModel.handle(HomeContract.Event.EditPostClicked(null))
+                    }
+                    .invokeOnCompletion { isBottomSheetVisible = false }
+
+            }
+        )
+    }
+
 
 }
 
@@ -185,6 +190,7 @@ private fun Carousel() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FabButton(reloadData: () -> Unit) {
+    val type = remember { mutableStateOf(Post.Type.POST) }
     val coroutineScope = rememberCoroutineScope()
     var isBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -198,6 +204,7 @@ private fun FabButton(reloadData: () -> Unit) {
             ) {
                 override fun onClick() {
                     coroutineScope.launch {
+                        type.value = Post.Type.POST
                         isBottomSheetVisible = true
                         sheetState.expand()
                     }
@@ -210,6 +217,7 @@ private fun FabButton(reloadData: () -> Unit) {
             ) {
                 override fun onClick() {
                     coroutineScope.launch {
+                        type.value = Post.Type.EVENT
                         isBottomSheetVisible = true
                         sheetState.expand()
                     }
@@ -219,7 +227,8 @@ private fun FabButton(reloadData: () -> Unit) {
     )
 
     PostEditorSheet(
-        post = null,
+        isCreateMode = true,
+        type = type.value,
         isBottomSheetVisible = isBottomSheetVisible,
         sheetState = sheetState,
         onDismissRequest = {

@@ -45,7 +45,9 @@ import ru.social.demo.utils.toBase64
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostEditorSheet(
-    post: Post?,
+    isCreateMode: Boolean = false,
+    type: Post.Type = Post.Type.POST,
+    post: Post = Post(type = type),
     isBottomSheetVisible: Boolean,
     sheetState: SheetState,
     onDismissRequest: () -> Unit = {}
@@ -54,27 +56,23 @@ fun PostEditorSheet(
     val mainViewModel: MainViewModel = viewModel(context as ComponentActivity)
     val userViewState by mainViewModel.userViewState.observeAsState()
 
-    val isCreateMode = post == null
-    val title = remember { mutableStateOf(post?.title ?: "") }
-    val text = remember { mutableStateOf(post?.text ?: "") }
-    val type = remember { mutableStateOf(post?.type ?: Post.Type.POST) }
-    val mediaUrls = remember {
-        mutableStateListOf<String>().apply {
-            post?.media?.let { media -> addAll(media) }
-        }
-    }
-    val mediaUris = remember {
-        mutableStateListOf<Uri>().apply {
-            post?.mediaBase64?.let { media ->
-                addAll(media.mapNotNull { m -> ImageUtils.base64ToUri(m) })
-            }
-        }
+    val title = remember { mutableStateOf("") }
+    val text = remember { mutableStateOf("") }
+    val typee = post?.type ?: type
+    val mediaUrls = remember { mutableStateListOf<String>() }
+    val mediaUris = remember { mutableStateListOf<Uri>() }
+
+    title.value = post?.title ?: ""
+    text.value = post?.text ?: ""
+    post?.media?.let { media -> mediaUrls.addAll(media) }
+    post?.mediaBase64?.let { media ->
+        mediaUris.addAll(media.mapNotNull { m -> ImageUtils.base64ToUri(m) })
     }
 
     fun prepareData() =
         Post(
             createDate = Timestamp.now(),
-            type = type.value,
+            type = typee,
             title = title.value,
             text = text.value,
             media = mediaUrls,
@@ -85,7 +83,7 @@ fun PostEditorSheet(
     fun prepareCopy() =
         post!!.copy(
             updateDate = Timestamp.now(),
-            type = type.value,
+            type = typee,
             title = title.value,
             text = text.value,
             media = mediaUrls,
@@ -97,7 +95,7 @@ fun PostEditorSheet(
         isBottomSheetVisible = isBottomSheetVisible,
         sheetState = sheetState,
         onDismissRequest = onDismissRequest,
-        title = stringResource((post?.type ?: Post.Type.POST).idString),
+        title = stringResource(typee.idString),
         onBack = onDismissRequest,
         actions = {
             if (isCreateMode) {

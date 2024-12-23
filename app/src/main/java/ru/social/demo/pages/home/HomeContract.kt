@@ -7,14 +7,18 @@ import ru.social.demo.data.model.Post
 class HomeContract {
 
     sealed interface Event : BaseEvent {
-        object LoadData : Event
-        object ReloadData : Event
+        object LoadFeed : Event
+        object Reload : Event
+        data class EditPostClicked(val post: Post?) : Event
         object UserClicked : Event
     }
 
     sealed interface State : BaseViewState {
-        data class SuccessData(val data: List<Post>) : State
-        object LoadingData : State
+        data class SuccessFeed(val data: List<Post>) : State
+        object LoadingFeed : State
+
+        data class PostToEdit(val data: Post?) : State
+
         object Error : State
     }
 

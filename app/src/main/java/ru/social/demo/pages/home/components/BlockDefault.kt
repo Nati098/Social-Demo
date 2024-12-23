@@ -38,7 +38,7 @@ import ru.social.demo.ui.theme.SDTheme
 fun UserBlock(
     user: User?,
     createDate: Timestamp?,
-    onEdit: () -> Unit = {}
+    onEdit: (() -> Unit)? = null
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -130,7 +130,7 @@ fun ReactionBlock(reactionsCount: Int?, commentsCount: Int?) {
 
 
 @Composable
-private fun MoreButton(onEdit: () -> Unit = {}) {
+private fun MoreButton(onEdit: (() -> Unit)? = null) {
     var expandedMore by remember { mutableStateOf(false) }
 
     Column {
@@ -147,7 +147,9 @@ private fun MoreButton(onEdit: () -> Unit = {}) {
             shape = SDTheme.shapes.corners,
             containerColor = SDTheme.colors.bgPrimary
         ) {
-            LabelTile(type = LabelType.SMALL, label = "Edit", iconId = R.drawable.ic_edit, onClick = onEdit)
+            onEdit?.let {
+                LabelTile(type = LabelType.SMALL, label = "Edit", iconId = R.drawable.ic_edit, onClick = onEdit)
+            }
         }
     }
 }

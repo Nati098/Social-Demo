@@ -25,6 +25,9 @@ data class Post (
     @SerializedName("reactionCounts") var reactionCounts: Int? = null,
     @SerializedName("commentsCount") val commentsCount: Int? = null,
 ) : BaseModel(), Parcelable {
+
+    fun isMine(uid: String) = id == uid
+
     fun containsMedia() = !media.isNullOrEmpty()
 
 //    fun containsAudios() = !audios.isNullOrEmpty()

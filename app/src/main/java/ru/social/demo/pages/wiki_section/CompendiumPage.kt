@@ -42,7 +42,6 @@ fun CompendiumPage(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     fun onItemClick(type: RpgTab, id: String?) {
-        Log.d("TEST", "Compendium item $id clicked")
         viewModel.handle(WikiSectionContract.Event.ItemClicked(type, id ?: ""))
         coroutineScope.launch {
             isBottomSheetVisible = true
