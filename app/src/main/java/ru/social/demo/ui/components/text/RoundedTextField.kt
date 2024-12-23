@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import ru.social.demo.R
 import ru.social.demo.ui.theme.SDTheme
@@ -28,6 +29,7 @@ fun RoundedTextField(
     hint: String? = null,
     required: Boolean = false,
     enabled: Boolean = true,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     onValueChange: (String) -> Unit,
 ) {
 
@@ -81,7 +83,8 @@ fun RoundedTextField(
 
             },
             textStyle = SDTheme.typography.bodyMediumM.copy(color = SDTheme.colors.fgPrimary),
-            cursorBrush = SolidColor(SDTheme.colors.fgPrimary)
+            cursorBrush = SolidColor(SDTheme.colors.fgPrimary),
+            visualTransformation = visualTransformation
         )
     }
 }

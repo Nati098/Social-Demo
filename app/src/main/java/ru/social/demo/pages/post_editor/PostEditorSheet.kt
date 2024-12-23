@@ -62,10 +62,10 @@ fun PostEditorSheet(
     val mediaUrls = remember { mutableStateListOf<String>() }
     val mediaUris = remember { mutableStateListOf<Uri>() }
 
-    title.value = post?.title ?: ""
-    text.value = post?.text ?: ""
-    post?.media?.let { media -> mediaUrls.addAll(media) }
-    post?.mediaBase64?.let { media ->
+    title.value = post.title ?: ""
+    text.value = post.text ?: ""
+    post.media?.let { media -> mediaUrls.addAll(media) }
+    post.mediaBase64?.let { media ->
         mediaUris.addAll(media.mapNotNull { m -> ImageUtils.base64ToUri(m) })
     }
 
@@ -81,7 +81,7 @@ fun PostEditorSheet(
         )
 
     fun prepareCopy() =
-        post!!.copy(
+        post.copy(
             updateDate = Timestamp.now(),
             type = typee,
             title = title.value,

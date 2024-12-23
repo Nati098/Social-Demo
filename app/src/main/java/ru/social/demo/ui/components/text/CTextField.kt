@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.VisualTransformation
 import ru.social.demo.R
 import ru.social.demo.ui.theme.SDTheme
 import ru.social.demo.utils.conditional
@@ -25,6 +26,7 @@ fun CTextField(
     value: String,
     singleLine: Boolean = false,
     textStyle: TextStyle = SDTheme.typography.bookL,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     onValueChange: (String) -> Unit,
 ) {
     val scrollbarColor = SDTheme.colors.fgActionEmphasis
@@ -61,7 +63,8 @@ fun CTextField(
 
             },
             textStyle = textStyle.copy(color = SDTheme.colors.fgPrimary),
-            cursorBrush = SolidColor(SDTheme.colors.fgPrimary)
+            cursorBrush = SolidColor(SDTheme.colors.fgPrimary),
+            visualTransformation = visualTransformation
         )
     }
 }
