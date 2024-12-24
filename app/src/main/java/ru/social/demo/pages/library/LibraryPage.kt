@@ -221,7 +221,7 @@ private fun ChipsTest() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                ChipButton("Female", true, modifier = Modifier.weight(1f))
+                ChipButton("Female", false, modifier = Modifier.weight(1f))
                 ChipButton("Male", true, modifier = Modifier.weight(1f))
             }
 

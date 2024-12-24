@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import ru.social.demo.ui.components.containers.OutlinedContainer
+import ru.social.demo.ui.components.containers.ChipContainer
 import ru.social.demo.ui.theme.SDTheme
 
 @Composable
@@ -18,9 +18,9 @@ fun ChipButton(
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    OutlinedContainer(
+    ChipContainer(
         parentWidth = true,
-        paddingVertical = 12.dp,
+        paddingVertical = 14.dp,
         modifier = modifier.clickable(
             interactionSource = remember { MutableInteractionSource() },
             indication = null,

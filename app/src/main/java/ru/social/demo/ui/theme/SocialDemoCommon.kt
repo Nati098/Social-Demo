@@ -45,6 +45,7 @@ data class SDTypography(
 
 data class SDShape(
     val corners: Shape,
+    val textCorners: Shape,
     val buttonCorners: Shape,
     val appBarCorners: Shape,
 )
