@@ -57,7 +57,8 @@ fun ProfilePage(
 ) {
     val mainViewModel: MainViewModel = viewModel(LocalContext.current as ComponentActivity)
     val userViewState by mainViewModel.userViewState.observeAsState()
-
+    val isUserHost = userViewState !is MainContract.State.LoadingUser
+            && (userViewState as? MainContract.State.SuccessUser)?.data == null
     fun clearUser() {
         mainViewModel.handle(MainContract.Event.UserRemoved)
         navController.navigate(NavPath.AUTH)
@@ -105,20 +106,22 @@ fun ProfilePage(
                         }
                         else -> item { HeaderBlock() }
                     }
-
                     item { DetailsSpacer() }
-                    when (userViewState) {
-                        is MainContract.State.SuccessUser -> item {
-                            DetailsBlock((userViewState as MainContract.State.SuccessUser).data)
+
+                    if (isUserHost) {
+                        item { SignInUpBlock(onSignInUp = ::clearUser) }
+                    } else {
+                        when (userViewState) {
+                            is MainContract.State.SuccessUser -> item {
+                                DetailsBlock((userViewState as MainContract.State.SuccessUser).data)
+                            }
+                            else -> item { DetailsBlock() }
                         }
-                        else -> item { DetailsBlock() }
+                        item { DetailsSpacer() }
+                        items(userSections()) { it.invoke() }
+                        item { DetailsSpacer() }
+                        item { LogoutBlock(onLogout = ::clearUser) }
                     }
-
-                    item { DetailsSpacer() }
-                    items(userSections()) { it.invoke() }
-
-                    item { DetailsSpacer() }
-                    item { LogoutBlock(onLogout = ::clearUser) }
 
                 }
             }
@@ -175,7 +178,7 @@ private fun HeaderBlock(user: User? = null) {
                 textAlign = TextAlign.Center
             )
         }
-        if(!user?.about.isNullOrBlank())
+        if (!user?.about.isNullOrBlank())
             Text(
                 user?.about!!,
                 style = SDTheme.typography.bodyMediumM,
@@ -212,9 +215,34 @@ private fun userSections(): List<@Composable () -> Unit> = listOf(
 )
 
 @Composable
+private fun SignInUpBlock(onSignInUp: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(vertical = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            stringResource(R.string.no_profile_access),
+            style = SDTheme.typography.headingS,
+            color = SDTheme.colors.fgSecondary,
+            textAlign = TextAlign.Center
+        )
+        CButton(
+            label = "${stringResource(R.string.signIn)}/${stringResource(R.string.signUp)}",
+            onClick = onSignInUp
+        )
+    }
+}
+
+@Composable
 private fun LogoutBlock(onLogout: () -> Unit) {
     Box(
-        Modifier.fillMaxWidth().padding(vertical = 20.dp)
+        Modifier
+            .fillMaxWidth()
+            .padding(vertical = 20.dp)
     ) {
         CButton(
             modifier = Modifier.align(Alignment.Center),
