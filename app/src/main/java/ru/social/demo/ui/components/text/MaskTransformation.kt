@@ -12,8 +12,7 @@ class MaskTransformation(
     private val maxLength: Int = Int.MAX_VALUE
 ) : VisualTransformation {
 
-    private val maskSym = '#'
-    private val specialSymbolsIndices = mask.indices.filter { mask[it] != maskSym }
+    private val specialSymbolsIndices = mask.indices.filter { mask[it] != MASK_SYM }
 
     override fun filter(text: AnnotatedString): TransformedText {
         var out = ""
@@ -36,22 +35,44 @@ class MaskTransformation(
             if (offsetValue == 0) return 0
             var numberOfHashtags = 0
             val masked = mask.takeWhile {
-                if (it == maskSym) numberOfHashtags++
+                if (it == MASK_SYM) numberOfHashtags++
                 numberOfHashtags < offsetValue
             }
             return masked.length + 1
         }
 
         override fun transformedToOriginal(offset: Int): Int =
-            mask.take(offset.absoluteValue).count { it == maskSym }
+            mask.take(offset.absoluteValue).count { it == MASK_SYM }
 
     }
 
 
     companion object {
 
+        private const val MASK_SYM = '#'
+
         const val DATA_MASK = "##.##.####"
         const val DATA_MASK_COUNT = 8
+
+        fun maskDataText(text: String) = maskText(text, DATA_MASK, MASK_SYM, '.')
+
+        private fun maskText(text: String, mask: String, maskSym: Char = MASK_SYM, constSym: Char): String {
+            val result = StringBuilder()
+
+            var i = 0
+            var j = 0
+            while (i < mask.length && j < text.length) {
+                if (mask[i] == maskSym) {
+                    result.append(text[j])
+                    j++
+                } else {
+                    result.append(constSym)
+                }
+                i++
+            }
+
+            return result.toString()
+        }
 
     }
 

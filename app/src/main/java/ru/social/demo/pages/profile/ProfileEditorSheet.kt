@@ -1,32 +1,23 @@
 package ru.social.demo.pages.profile
 
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.social.demo.MainViewModel
 import ru.social.demo.R
 import ru.social.demo.data.model.User
 import ru.social.demo.services.FirestoreClient
 import ru.social.demo.services.FsPath
 import ru.social.demo.ui.components.CBottomSheet
 import ru.social.demo.ui.components.buttons.CTextButton
-import ru.social.demo.ui.components.text.CTextField
 import ru.social.demo.ui.components.text.DataTextField
 import ru.social.demo.ui.components.text.MaskTransformation
 import ru.social.demo.ui.components.text.RoundedTextField
-import ru.social.demo.ui.theme.SDTheme
 import ru.social.demo.utils.NetworkUtils
 import ru.social.demo.utils.birthdayInputToTimestamp
 import ru.social.demo.utils.parseBirthdayDate
@@ -39,10 +30,6 @@ fun ProfileEditorSheet(
     sheetState: SheetState,
     onDismissRequest: () -> Unit = {}
 ) {
-//    val context = LocalContext.current
-//    val mainViewModel: MainViewModel = viewModel(context as ComponentActivity)
-//    val userViewState by mainViewModel.userViewState.observeAsState()
-
     val name = remember { mutableStateOf("") }
     val imageUrl = remember { mutableStateOf("") }
     val birth = remember { mutableStateOf("") }
@@ -67,7 +54,11 @@ fun ProfileEditorSheet(
                     NetworkUtils.makeCallIO {
                         FirestoreClient.getInstance().updateData(
                             FsPath.USERS,
-                            user.copy(name = name.value, imageUrl = imageUrl.value, birthday = birth.value.birthdayInputToTimestamp())
+                            user.copy(
+                                name = name.value,
+                                imageUrl = imageUrl.value,
+                                birthday = MaskTransformation.maskDataText(birth.value).birthdayInputToTimestamp()
+                            )
                         )
                     }
                 }

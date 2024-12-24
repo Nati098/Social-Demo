@@ -1,7 +1,6 @@
 package ru.social.demo.utils
 
 import android.text.format.DateUtils
-import android.util.Log
 import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -27,11 +26,8 @@ fun Timestamp.parseDate(): String {
 fun Timestamp.parseBirthdayDate(): String =
     SimpleDateFormat(BIRTHDAY_DATE_FORMAT, Locale.getDefault()).format(this.toDate())
 
-fun String.birthdayInputToTimestamp(): Timestamp? {
-    Log.d("TEST", "birthdayInputToTimestamp $this")
-    Log.d("TEST", "birthdayInputToTimestamp ${SimpleDateFormat(BIRTHDAY_DATE_INPUT_FORMAT).parse(this)}")
-    return SimpleDateFormat(BIRTHDAY_DATE_INPUT_FORMAT).parse(this)?.let { Timestamp(it) }
-}
+fun String.birthdayInputToTimestamp(): Timestamp? =
+    SimpleDateFormat(BIRTHDAY_DATE_INPUT_FORMAT).parse(this)?.let { Timestamp(it) }
 
 fun Timestamp.calculateAge(): Int {
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
