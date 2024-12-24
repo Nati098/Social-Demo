@@ -10,7 +10,7 @@ import ru.social.demo.ui.components.containers.OutlinedContainer
 @Composable
 fun PostTile(
     post: Post,
-    onEdit: () -> Unit = {}
+    onEdit: (() -> Unit)? = null
 ) {
     OutlinedContainer(
         parentWidth = true,

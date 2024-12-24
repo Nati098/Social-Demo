@@ -27,7 +27,7 @@ fun LabelTile(
     label: String,
     @DrawableRes iconId: Int? = null,
     type: LabelType = LabelType.MEDIUM,
-    onClick: () -> Unit = {}
+    onClick: (() -> Unit)? = null
 ) {
     val iconSize = when(type) {
         LabelType.SMALL -> 16.dp
@@ -47,7 +47,7 @@ fun LabelTile(
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
-                onClick = onClick
+                onClick = { onClick?.invoke() }
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween

@@ -46,19 +46,6 @@ fun AttachmentMedia(
 }
 
 @Composable
-fun AttachmentVideo(
-    url: String,
-    onClose: () -> Unit
-) {
-    AttachmentInternal(
-        model = url,
-        contentDescription = url,
-        onClose = onClose,
-//        desc = time
-    )
-}
-
-@Composable
 private fun AttachmentInternal(
     onClose: () -> Unit,
     desc: String? = null,

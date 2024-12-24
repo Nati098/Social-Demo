@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 import ru.social.demo.MainContract
 import ru.social.demo.MainViewModel
 import ru.social.demo.R
@@ -41,6 +42,7 @@ import ru.social.demo.pages.profile.components.FriendsInfoBlock
 import ru.social.demo.pages.profile.components.UserInfoBlock
 import ru.social.demo.ui.components.ArrowTile
 import ru.social.demo.ui.components.Avatar
+import ru.social.demo.ui.components.CAlertDialog
 import ru.social.demo.ui.components.appbars.CTopBar
 import ru.social.demo.ui.components.buttons.CButton
 import ru.social.demo.ui.components.buttons.ShareButton
@@ -62,6 +64,9 @@ fun ProfilePage(
         navController.navigate(NavPath.AUTH)
     }
 
+    val isAlertDialogVisible = userViewState !is MainContract.State.LoadingUser
+            && (userViewState as? MainContract.State.SuccessUser)?.data == null
+
     val coroutineScope = rememberCoroutineScope()
     var isBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -71,18 +76,21 @@ fun ProfilePage(
     CTopBar(
         title = stringResource(R.string.profile),
         onBack = { navController.navigateUp() },
-        actions = if (isUserHost) {
-            null
-        } else {
-            {
-                UserEditButton(onClick = { })
-                ShareButton(
-                    LocalContext.current,
-                    bundleOf(
-                        "user" to ((userViewState as? MainContract.State.SuccessUser)?.data)
-                    )
+        actions = {
+            UserEditButton(
+                onClick = {
+                    coroutineScope.launch {
+                        isBottomSheetVisible = true
+                        sheetState.expand()
+                    }
+                }
+            )
+            ShareButton(
+                LocalContext.current,
+                bundleOf(
+                    "user" to ((userViewState as? MainContract.State.SuccessUser)?.data)
                 )
-            }
+            )
         },
         content = { insets ->
             RefreshContainer(
@@ -120,6 +128,28 @@ fun ProfilePage(
 
         }
     )
+
+    CAlertDialog(
+        isDialogVisible = isAlertDialogVisible,
+        subTitle = stringResource(R.string.no_profile_access),
+        onDismissRequest = { navController.navigateUp() },
+        onBack = { navController.navigateUp() },
+        actionLabel = "To auth page",
+        onAction = ::clearUser
+    )
+
+    (userViewState as? MainContract.State.SuccessUser)?.data?.let {
+        ProfileEditorSheet(
+            user = it,
+            isBottomSheetVisible = isBottomSheetVisible,
+            sheetState = sheetState,
+            onDismissRequest = { coroutineScope
+                .launch { sheetState.hide() }
+                .invokeOnCompletion { isBottomSheetVisible = false }
+            }
+        )
+    }
+
 
 }
 

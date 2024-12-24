@@ -184,7 +184,6 @@ private fun Block(title: String, subblocks: List<@Composable () -> Unit>? = null
 
 @Composable
 private fun SubBlock(title: String? = null, desc: String?) {
-    Log.d("TEST", "$title desc $desc")
     Column {
         title?.let {
             Text(

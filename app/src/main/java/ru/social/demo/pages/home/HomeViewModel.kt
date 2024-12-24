@@ -17,21 +17,25 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(): ViewModel(), EventHandler<HomeContract.Event> {
 
-    private val _postsViewState: MutableLiveData<HomeContract.State> = MutableLiveData(HomeContract.State.LoadingData)
+    private val _postsViewState: MutableLiveData<HomeContract.State> = MutableLiveData(HomeContract.State.LoadingFeed)
     val postsViewState: LiveData<HomeContract.State> = _postsViewState
+
+    private val _postToEditState: MutableLiveData<HomeContract.State> = MutableLiveData(HomeContract.State.PostToEdit(null))
+    val postToEditState: LiveData<HomeContract.State> = _postToEditState
 
     override fun handle(event: HomeContract.Event) {
         when(event) {
-            is HomeContract.Event.LoadData -> handlePostsState(event)
-            is HomeContract.Event.ReloadData -> viewModelScope.launch { fetchPosts(true) }
+            is HomeContract.Event.LoadFeed -> handlePostsState(event)
+            is HomeContract.Event.Reload -> viewModelScope.launch { fetchPosts(true) }
+            is HomeContract.Event.EditPostClicked -> onPostEditClick(event)
             is HomeContract.Event.UserClicked -> onUserClick()
         }
     }
 
     private fun handlePostsState(event: HomeContract.Event) {
         when(_postsViewState.value) {
-            is HomeContract.State.SuccessData -> {}
-            is HomeContract.State.LoadingData -> viewModelScope.launch { fetchPosts() }
+            is HomeContract.State.SuccessFeed -> {}
+            is HomeContract.State.LoadingFeed -> viewModelScope.launch { fetchPosts() }
             is HomeContract.State.Error -> handleError(event)
             else -> handleError(event)
         }
@@ -39,15 +43,14 @@ class HomeViewModel @Inject constructor(): ViewModel(), EventHandler<HomeContrac
 
     private fun handleError(event: HomeContract.Event) {
         when(event) {
-            HomeContract.Event.LoadData -> viewModelScope.launch { fetchPosts(isRefresh = true) }
+            HomeContract.Event.LoadFeed -> viewModelScope.launch { fetchPosts(isRefresh = true) }
             else -> throw NotImplementedError("Invalid event ($event) for ViewState.Loading")
         }
     }
 
     private suspend fun fetchPosts(isRefresh: Boolean = false) {
-        Log.d("TEST", "HomeVM $this state = ${_postsViewState.value}")
         if (isRefresh) {
-            _postsViewState.postValue(HomeContract.State.LoadingData)
+            _postsViewState.postValue(HomeContract.State.LoadingFeed)
         }
 
         NetworkUtils.makeCall {
@@ -55,7 +58,7 @@ class HomeViewModel @Inject constructor(): ViewModel(), EventHandler<HomeContrac
                 path = FsPath.POSTS,
                 onSuccess = { result ->
                     val data = result?.sortedByDescending { it.createDate } ?: emptyList()
-                    _postsViewState.postValue(HomeContract.State.SuccessData(data = data))
+                    _postsViewState.postValue(HomeContract.State.SuccessFeed(data = data))
                 },
                 onError = {
                     _postsViewState.postValue(HomeContract.State.Error)
@@ -63,6 +66,10 @@ class HomeViewModel @Inject constructor(): ViewModel(), EventHandler<HomeContrac
             )
         }
 
+    }
+
+    private fun onPostEditClick(event: HomeContract.Event.EditPostClicked) {
+        _postToEditState.postValue(HomeContract.State.PostToEdit(event.post))
     }
 
     private fun onUserClick() {

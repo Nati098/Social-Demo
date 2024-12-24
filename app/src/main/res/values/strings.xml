@@ -18,6 +18,7 @@
     <string name="password">Password</string>
     <string name="name">Name</string>
     <string name="image_url">Image url</string>
+    <string name="birthday">Birthday</string>
     <string name="signIn">Sign In</string>
     <string name="signInHost">Sign In as host</string>
     <string name="signUp">Sign Up</string>

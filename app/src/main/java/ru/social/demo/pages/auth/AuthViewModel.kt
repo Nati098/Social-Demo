@@ -88,6 +88,8 @@ class AuthViewModel @Inject constructor(
                         ),
                         onError = { _userState.postValue(_userState.value?.copy(error = it)) }
                     )
+
+                    event.onSuccess.invoke()
                 },
                 onError = { _userState.postValue(_userState.value?.copy(error = it)) }
             )
