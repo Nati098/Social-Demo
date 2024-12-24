@@ -62,6 +62,8 @@ import ru.social.demo.ui.components.buttons.CIconButtonOutlined
 import ru.social.demo.ui.components.buttons.COutlinedButton
 import ru.social.demo.ui.components.buttons.CTextButton
 import ru.social.demo.ui.components.buttons.CTonalButton
+import ru.social.demo.ui.components.buttons.ChipButton
+import ru.social.demo.ui.components.buttons.ChipGroup
 import ru.social.demo.ui.components.containers.OutlinedContainer
 import ru.social.demo.ui.components.text.RoundedTextField
 import ru.social.demo.ui.theme.SDTheme
@@ -122,6 +124,7 @@ fun LibraryPage(
                 IconsGrid(resources)
             }
 
+            ChipsTest()
             TextFieldsTest()
             ButtonsTest()
             TilesTest()
@@ -198,6 +201,38 @@ private fun IconsGrid(resources: List<Pair<String, Int>>) {
         }
 
     }
+}
+
+@Composable
+private fun ChipsTest() {
+
+    val items = listOf("Female", "Male", "Other")
+    val selected = remember { mutableStateOf("Male") }
+
+    OutlinedContainer(
+        parentWidth = true,
+        paddingHorizontal = 16.dp,
+        paddingVertical = 16.dp
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                ChipButton("Female", true, modifier = Modifier.weight(1f))
+                ChipButton("Male", true, modifier = Modifier.weight(1f))
+            }
+
+            ChipGroup(
+                items = items,
+                selected = selected.value,
+                onItemChanged = { selected.value = it }
+            )
+        }
+    }
+
 }
 
 @Composable

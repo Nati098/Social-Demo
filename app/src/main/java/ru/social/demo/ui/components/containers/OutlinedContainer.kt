@@ -4,6 +4,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import ru.social.demo.ui.theme.SDTheme
@@ -14,6 +15,7 @@ fun OutlinedContainer(
     paddingHorizontal: Dp = 0.dp,
     paddingVertical: Dp = 0.dp,
     modifier: Modifier = Modifier,
+    borderColor: Color = SDTheme.colors.borderColor,
     content: @Composable (BoxScope.() -> Unit)
 ) {
 
@@ -25,7 +27,7 @@ fun OutlinedContainer(
         bgColor = SDTheme.colors.bgPrimary,
         modifier = modifier.border(
             1.5.dp,
-            SDTheme.colors.borderColor,
+            borderColor,
             shape = SDTheme.shapes.corners
         ),
         content = content
